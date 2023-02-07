@@ -1,0 +1,46 @@
+// MEDIA QUERY MANAGER
+/*
+0 - 576px:      phone
+576 - 768px:    phone landscape
+768 - 992px:    tablet 
+992 - 1200px:   tablet landscape and small laptop
+[1200 - 1800]:  is where our normal styles apply
+1800px + :      large device
+
+$breakpoint arguement choices:
+- phone
+- phone-land
+- tablet
+- tablet-land
+- desktop
+- large desktop
+
+1em = 16px
+*/
+@mixin respond($breakpoint) {
+  @if $breakpoint == phone {
+    @media only screen and (max-width: 36em) {
+      @content;
+    } //576px
+  }
+  @if $breakpoint == phone-land {
+    @media only screen and (max-width: 48em) {
+      @content;
+    } //768px
+  }
+  @if $breakpoint == tablet {
+    @media only screen and (max-width: 62em) {
+      @content;
+    } //992px
+  }
+  @if $breakpoint == tablet-land {
+    @media only screen and (max-width: 75em) {
+      @content;
+    } //1200px
+  }
+  @if $breakpoint == large-desktop {
+    @media only screen and (min-width: 112.5em) {
+      @content;
+    } //1800px
+  }
+}

@@ -1,1 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
 //1 rem = 10px; 10px/16px = 62.5%
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-family: $primary-font;
+    box-sizing: border-box;
+    font-size: 62.5%; // 10px/16px = 62.5% -> 1rem = 10px
+}
+
+:global(body) {
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+.container {
+    background-color: var(--color-primary-dark);
+
+    height: 100vh;
+  
+    display: grid;
+  
+    grid-template-columns:
+      [full-start] minmax(6rem, 1fr) [center-start] repeat(
+        9,
+        [col-start] minmax(min-content, 14rem) [col-end]
+      )
+      [center-end] minmax(6rem, 1fr) [full-end];
+  
+    @include respond(phone) {
+      grid-template-columns:
+        [full-start] 1fr [center-start] repeat(9, [col-start] minmax(min-content, 14rem) [col-end])
+        [center-end] 1fr [full-end];
+    }
+  }

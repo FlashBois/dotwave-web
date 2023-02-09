@@ -1,0 +1,55 @@
+.header {
+    font-size: 1.4rem;
+    height: 8rem;
+    background-color: transparent;
+
+    grid-column: full-start / full-end;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .nav {
+        font-size: 1.4rem;
+
+        display: flex;
+        align-items: center;
+
+        .logo-box {
+            padding: 0 6rem 0 3rem;
+        }
+
+        &__list {
+            list-style: none;
+        }
+    
+        &__item {
+            display: inline-block;
+    
+            &:not(:last-child) {
+                margin-right: 4rem;
+            }
+        }
+    
+        &__link {
+            &:link,
+            &:visited {
+                color: white;
+                text-decoration: none;
+                text-transform: uppercase;
+                display: inline-block;
+                transition: all .2s;
+            }
+    
+            &:hover,
+            &:active {
+                transform: rotate(5deg) scale(1.3);
+            }
+        }
+    }
+
+    .wallet-wrapper {
+        padding-right: 3rem;
+    }
+}
+

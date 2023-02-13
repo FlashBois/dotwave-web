@@ -22,7 +22,7 @@
 }
 
 .wallet-adapter-button:not([disabled]):hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-dark);
 }
 
 .wallet-adapter-button[disabled] {
@@ -124,11 +124,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    opacity: 0;
-    transition: opacity linear 150ms;
-    background: rgba(0, 0, 0, 0.5);
     z-index: 1040;
     overflow-y: auto;
+
+    @supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        background-color: rgba(rgba(0, 0, 0), .3);
+    }
 }
 
 .wallet-adapter-modal.wallet-adapter-modal-fade-in {

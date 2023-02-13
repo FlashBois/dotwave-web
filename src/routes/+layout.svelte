@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import WalletProvider from '../components/Wallet/WalletProvider.svelte';
 	import WalletMultiButton from '../components/Wallet/WalletMultiButton.svelte';
-
+	import type { Adapter } from '@solana/wallet-adapter-base';
 	import {
 		BraveWalletAdapter,
 		LedgerWalletAdapter,
@@ -13,12 +13,7 @@
 	} from '@solana/wallet-adapter-wallets';
 
 	const localStorageKey = 'walletAdapter';
-	let wallets: (
-		| PhantomWalletAdapter
-		| TrustWalletAdapter
-		| BraveWalletAdapter
-		| LedgerWalletAdapter
-	)[];
+	let wallets: Adapter[];
 
 	onMount(async () => {
 		wallets = [
@@ -61,7 +56,5 @@
 		</div>
 	</header>
 	
-	<div>
-		<slot />
-	</div>	
+	<slot />
 </div>

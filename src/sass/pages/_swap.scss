@@ -1,0 +1,11 @@
+.swap-page {
+    background-color: transparent;
+    height: 100%;
+
+    grid-column: center-start / center-end;
+    grid-row: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

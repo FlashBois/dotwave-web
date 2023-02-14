@@ -1,16 +1,20 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-export default defineConfig({
+/** @type {import('vite').UserConfig} */
+const config: import('vite').UserConfig = {
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			'$styles': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'styles'),
+			$src: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src'),
+			$stores: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'stores'),
+			$components: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'components')
 		}
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
-});
+};
+
+export default config;

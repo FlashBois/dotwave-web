@@ -1,0 +1,28 @@
+.trade-page {
+    background-color: transparent;
+    height: 100%;
+
+    grid-column: center-start / center-end;
+    grid-row: 2;
+
+    display: grid;
+    grid-template-rows: 8rem 3fr 1.5fr;
+    grid-template-columns:
+    [left-start]
+    minmax(6rem, 1fr)
+    [middle-start]
+      repeat(
+        9,
+        [col-start] minmax(min-content, 12rem) [col-end]
+      )
+    [middle-end]
+    minmax(6rem, 1fr)
+    [right-end]; 
+
+    .lightweight-section {
+        height: 100%;
+    
+        grid-column: middle-start / middle-end;
+        grid-row: 2;
+    }
+}

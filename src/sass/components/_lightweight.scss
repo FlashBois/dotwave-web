@@ -1,0 +1,46 @@
+.lightweight {
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 4rem 1fr;
+    grid-template-columns: 1fr;
+
+    &__utils {
+        grid-row: 1;
+
+        border-top: .5px solid grey;
+        border-bottom: .5px solid grey;
+
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    &__time {
+        list-style: none;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        
+        li {
+            display: inline-block;
+            cursor: pointer;
+    
+            &:not(:last-child) {
+                margin-right: 2rem;
+            }
+
+            &:hover {
+                color: var(--color-primary);
+            }
+        }
+    }
+
+    &__chart {
+        grid-row: 2;
+
+        width: 100%;
+        height: 100%;
+    }
+}

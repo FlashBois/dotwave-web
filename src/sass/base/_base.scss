@@ -28,11 +28,12 @@ html {
   
     display: grid;
   
+    gap: 1rem 5rem;
     grid-template-rows: 8rem 1fr;
     grid-template-columns:
       [full-start] minmax(6rem, 1fr) [center-start] repeat(
         9,
-        [col-start] minmax(min-content, 14rem) [col-end]
+        [col-start] minmax(min-content, 15rem) [col-end]
       )
       [center-end] minmax(6rem, 1fr) [full-end];
   

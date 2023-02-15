@@ -1,13 +1,30 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { ColorType, createChart, CrosshairMode } from 'lightweight-charts'
+    import { ColorType, createChart, CrosshairMode, LineStyle } from 'lightweight-charts'
 
     let canvasElement: HTMLDivElement
 
     onMount(() => {
       var chart = createChart(canvasElement, {
+        layout: {
+          background: {
+            color: '#353c40',
+            type: ColorType.Solid
+          },
+          textColor: '#f2dcc2',
+        },
+        grid: {
+          horzLines: {
+            color: '#8c877d2c',
+            style: LineStyle.Dotted
+          },
+          vertLines: {
+            color: '#8c877d2c',
+            style: LineStyle.Dotted
+          }
+        },
         crosshair: {
-          mode: CrosshairMode.Normal,
+          mode: CrosshairMode.Magnet,
         },
       });
 

@@ -28,7 +28,7 @@ html {
   
     display: grid;
   
-    gap: 1rem 5rem;
+    gap: 5rem 5rem;
     grid-template-rows: 8rem 1fr;
     grid-template-columns:
       [full-start] minmax(6rem, 1fr) [center-start] repeat(

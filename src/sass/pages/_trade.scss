@@ -1,28 +1,54 @@
 .trade-page {
-    background-color: transparent;
-    height: 100%;
+	background-color: transparent;
+	height: 100%;
 
-    grid-column: center-start / center-end;
-    grid-row: 2;
+	grid-column: center-start / center-end;
+	grid-row: 2;
 
-    display: grid;
-    grid-template-rows: 8rem 3fr 1.5fr;
-    grid-template-columns:
-    [left-start]
-    minmax(6rem, 1fr)
-    [middle-start]
-      repeat(
-        9,
-        [col-start] minmax(min-content, 12rem) [col-end]
-      )
-    [middle-end]
-    minmax(6rem, 1fr)
-    [right-end]; 
+	display: grid;
+	gap: 15px;
+	grid-template-rows: 7rem 3fr 1.5fr;
+	grid-template-columns:
+		[left-start]
+		minmax(15rem, 1fr)
+		[middle-start]
+		repeat(9, [col-start] minmax(5rem, 11rem) [col-end])
+		[middle-end]
+		minmax(15rem, 1fr)
+		[right-end];
 
-    .lightweight-section {
-        height: 100%;
-    
+    .statistics-section {
         grid-column: middle-start / middle-end;
-        grid-row: 2;
+		grid-row: 1;
+
+		background-color: green;
+    }
+
+	.token-list-section {
+		grid-column: left-start / middle-start;
+		grid-row: 1 / span 2;
+
+		background-color: red;
+	}
+
+	.lightweight-section {
+		grid-column: middle-start / middle-end;
+		grid-row: 2;
+
+		// height: 100%;
+	}
+
+	.buy-sell-section {
+		grid-column: middle-end / right-end;
+		grid-row: 1 / span 2;
+
+		background-color: blue;
+	}
+
+    .positions-section {
+		grid-column: left-start / right-end;
+		grid-row: 3;
+
+		background-color: yellow;
     }
 }

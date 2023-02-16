@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Lightweight from '$components/Lightweight/Lightweight.svelte'
+    import TokenTradeList from '$components/TokenTradeList.svelte';
+	import { tokenListStore } from '$src/stores/tokenListStore';
 </script>
 
 <div class="trade-page">
@@ -10,7 +12,7 @@
 
     <!-- TOKEN LIST -->
     <div class="token-list-section">
-
+        <TokenTradeList listData={$tokenListStore}/>
     </div>
 
     <!-- CHART -->

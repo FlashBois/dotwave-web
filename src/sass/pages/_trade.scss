@@ -28,7 +28,7 @@
 		grid-column: left-start / middle-start;
 		grid-row: 1 / span 2;
 
-		background-color: red;
+		border: 1px dotted var(--color-primary)
 	}
 
 	.lightweight-section {

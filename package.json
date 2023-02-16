@@ -40,6 +40,7 @@
 		"@solana/wallet-adapter-wallets": "^0.19.11",
 		"@solana/web3.js": "^1.73.2",
 		"@svelte-on-solana/wallet-adapter-core": "^1.0.11-alpha.0",
+		"fuse.js": "^6.6.2",
 		"lightweight-charts": "^4.0.0"
 	}
 }

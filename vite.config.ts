@@ -7,7 +7,9 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			'$styles': path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'styles'),
+			$src: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src'),
+			$stores: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'stores'),
+			$components: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'components')
 		}
 	},
 	test: {

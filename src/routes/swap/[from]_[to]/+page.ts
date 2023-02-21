@@ -1,6 +1,6 @@
 import { getTokenList } from '$src/tools/getTokenList';
 
-/** @type {import('./$types').LayoutServerLoad} */
+/** @type {import('./$types').PageLoad} */
 export async function load({ params }: { params: { from: string; to: string } }) {
 	const data = getTokenList()
 

@@ -1,0 +1,45 @@
+.token-list {
+    width: 40rem;
+    height: 70rem;
+
+    border-radius: 10px;
+
+    background-color: var(--color-primary);
+
+    &__search {
+        height: 60px;
+
+        input {
+            margin: 20px;
+        }
+    }
+
+    &__box {
+        width: 100%;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 500px;
+            overflow-x: scroll;
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 15px;
+            cursor: pointer;
+
+            img {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+            }
+
+            &:hover {
+                background-color: white;
+            }
+        }
+    }
+}

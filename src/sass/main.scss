@@ -7,7 +7,11 @@
 @import 'base/topography';
 @import 'base/utilities';
 
-@import 'components/wallet';
+@import '../components/Wallet/wallet';
+@import '../components/Input/input';
+@import '../components/Exchange/exchange';
+@import '../components/Exchange/TokenList/token-list';
+@import '../components/Exchange/Search/searchInput';
 
 @import 'pages/swap';
 

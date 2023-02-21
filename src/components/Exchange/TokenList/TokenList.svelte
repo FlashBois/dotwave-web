@@ -5,9 +5,12 @@
 	import ImageLoader from '$components/Image/ImageLoader.svelte';
 	import SearchInput from '../Search/SearchInput.svelte';
 	import { getTokenList } from '$src/tools/getTokenList';
-	import { PublicKey } from '@solana/web3.js';
+	import { swapStore, TokenListType } from '$src/stores/swapStore';
+	import { goto } from '$app/navigation';
 
 	export let filteredTokenList = getTokenList();
+
+	$: ({ tokenList, from, to } = $swapStore)
 
 	const fuse = new Fuse(tokenlist, {
 		includeScore: true,
@@ -33,6 +36,14 @@
 			});
 		}
 	}
+
+	function onTokenClick(token: string) {
+		if(tokenList.type == TokenListType.FROM)
+			goto(`${token}_${to.symbol}`)
+		else if(tokenList.type == TokenListType.TO){
+			goto(`${from.symbol}_${token}`)
+		}
+	}
 </script>
 
 <div class="token-list">
@@ -43,7 +54,8 @@
 	<div class="token-list__box">
 		<ul>
 			{#each filteredTokenList as { symbol, logoURI }, i}
-				<li><ImageLoader src={logoURI} alt={symbol} /></li>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<li on:click={() => onTokenClick(symbol)}><ImageLoader src={logoURI} alt={symbol} /></li>
 			{/each}
 		</ul>
 	</div>

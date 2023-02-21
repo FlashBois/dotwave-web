@@ -8,4 +8,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .exchange-section {
+        width: 55rem;
+        height: 40rem;
+        border: 2px solid var(--color-primary);
+        border-radius: 2rem;
+    }
+
+    .token-list-section {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1040;
+        overflow-y: auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        @supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background-color: rgba(rgba(0, 0, 0), .3);
+        }
+    }
 }

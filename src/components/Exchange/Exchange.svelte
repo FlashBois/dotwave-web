@@ -1,22 +1,36 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Input from '$components/Input/Input.svelte';
+	import { swapStore, TokenListType } from '$src/stores/swapStore';
 	import { userStore } from '$src/stores/userStore';
 	import { walletStore } from '$stores/walletStore';
 	import { derived, writable } from 'svelte/store';
 
-	export let tokenListVisible: boolean;
+	import Input from '$components/Input/Input.svelte';
+	import ReadonlyInput from '$components/Input/ReadonlyInput.svelte';
 
 	$: ({ wallet } = $walletStore);
 	$: ({ data } = $page);
+
+	$: {
+		if (data) {
+			swapStore.set({
+				from: data.from,
+				to: data.to,
+				tokenList: {
+					visible: false,
+					type: null
+				}
+			});
+		}
+	}
 
 	const fromValue = writable(0);
 	const toValue = derived<typeof fromValue, number>(fromValue, ($fromValue, set) => {
 		set($fromValue);
 	});
 
-	const userData = derived<
+	$: userData = derived<
 		[typeof userStore, typeof page],
 		{ from: { amount: number | bigint }; to: { amount: number | bigint } }
 	>([userStore, page], ([$userStore, $page], set) => {
@@ -26,23 +40,27 @@
 
 			set({
 				from: {
-					amount: from?.amount ?? 1
+					amount: from?.amount ?? 0
 				},
 				to: {
-					amount: to?.amount ?? 1
+					amount: to?.amount ?? 0
 				}
 			});
 		}
 	});
-
 	$: ({ from, to } = $userData);
-
-	userData.subscribe((cos) => {
-		console.log(cos);
-	});
 
 	function replaceTokens() {
 		goto(`${data.to.symbol}_${data.from.symbol}`);
+	}
+
+	function displayTokenList(type: TokenListType) {
+		swapStore.update((e) => {
+			return {
+				...e,
+				tokenList: { type, visible: true }
+			};
+		});
 	}
 </script>
 
@@ -51,12 +69,12 @@
 		<div class="exchange__label">
 			<span>From</span>
 			<span
-				>Balance: {#if !wallet} -- {:else} {from.amount} {/if}</span
+				>Balance: {#if !wallet} -- {:else} {from.amount.toString()} {/if}</span
 			>
 		</div>
 		<div class="exchange__input">
 			<Input bind:value={$fromValue} />
-			<button on:click={() => (tokenListVisible = true)} class="exchange__select">
+			<button on:click={() => displayTokenList(TokenListType.FROM)} class="exchange__select">
 				<img src={data.from.logoURI} alt={data.from.symbol} />
 				<p>{data.from.symbol}</p>
 				<svg
@@ -96,8 +114,8 @@
 			>
 		</div>
 		<div class="exchange__input">
-			<Input bind:value={$toValue} />
-			<button on:click={() => (tokenListVisible = true)} class="exchange__select">
+			<ReadonlyInput value={$toValue} />
+			<button on:click={() => displayTokenList(TokenListType.TO)} class="exchange__select">
 				<img src={data.to.logoURI} alt={data.to.symbol} />
 				<p>{data.to.symbol}</p>
 				<svg

@@ -1,12 +1,14 @@
 import { PublicKey, type Connection, type GetTokenAccountsByOwnerConfig } from '@solana/web3.js';
 import { getAssociatedTokenAccountSync } from './getAssociatedTokenAccountSync';
 import { AccountLayout, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import type Decimal from 'decimal.js';
+import { getDecimalFromBigint } from '../decimal/getDecimalFromBigInt';
 
 export interface ITokenAccount {
     publicKey?: PublicKey,
     mint: PublicKey,
     isAssociated?: boolean,
-    amount: bigint,
+    amount: Decimal,
     isNative: boolean
 }
 
@@ -45,13 +47,13 @@ export async function getWalletTokenAccounts({
 			publicKey: pubkey,
 			mint,
 			isAssociated: associatedTokenAddress.equals(pubkey),
-			amount,
+			amount: getDecimalFromBigint(amount),
 			isNative: false
 		});
 	}
 
 	accounts.push({
-		amount: BigInt(solResp ? String(solResp.lamports) : 0),
+		amount: getDecimalFromBigint(BigInt(solResp ? String(solResp.lamports) : 0)),
 		isNative: true,
 		mint: new PublicKey('So11111111111111111111111111111111111111112')
 	});

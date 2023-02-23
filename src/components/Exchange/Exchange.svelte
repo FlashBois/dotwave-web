@@ -5,6 +5,7 @@
 	import { userStore } from '$src/stores/userStore';
 	import { walletStore } from '$stores/walletStore';
 	import { derived, writable } from 'svelte/store';
+	import Decimal from 'decimal.js';
 
 	import Input from '$components/Inputs/Input/Input.svelte';
 	import ReadonlyInput from '$components/Inputs/Input/ReadonlyInput.svelte';
@@ -34,7 +35,7 @@
 
 	$: userData = derived<
 		[typeof userStore, typeof page],
-		{ from: { amount: number | bigint }; to: { amount: number | bigint } }
+		{ from: { amount: Decimal }; to: { amount: Decimal } }
 	>([userStore, page], ([$userStore, $page], set) => {
 		if ($userStore.accounts) {
 			const from = $userStore.accounts.find((e) => e.mint.toString() == $page.data.from.address);
@@ -42,10 +43,10 @@
 
 			set({
 				from: {
-					amount: from?.amount ?? 0
+					amount: from?.amount ?? new Decimal(0)
 				},
 				to: {
-					amount: to?.amount ?? 0
+					amount: to?.amount ?? new Decimal(0)
 				}
 			});
 		}
@@ -72,7 +73,7 @@
 			<div class="exchange__label">
 				<span>From</span>
 				<span
-					>Balance: {#if !wallet} -- {:else} {Number(from.amount.toString()) / 10**9} {/if}</span
+					>Balance: {#if !wallet} -- {:else} {from.amount.div(new Decimal(10).pow(data.from.decimals))} {/if}</span
 				>
 			</div>
 			<div class="exchange__input">
@@ -113,7 +114,7 @@
 			<div class="exchange__label">
 				<span>To</span>
 				<span
-					>Balance: {#if !wallet} -- {:else} {to.amount.toString()} {/if}</span
+					>Balance: {#if !wallet} -- {:else} {to.amount.div(new Decimal(10).pow(data.to.decimals))} {/if}</span
 				>
 			</div>
 			<div class="exchange__input">

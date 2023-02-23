@@ -1,0 +1,73 @@
+.button {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 20px;
+    transition: background .5s ease-out;
+    overflow: hidden;
+
+
+	&__blur {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+
+		background: linear-gradient(135deg, rgba(1, 157, 154, 0.2), rgba(176, 30, 157, 0));
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		border-radius: 20px;
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+		z-index: 0;
+	}
+
+	&__text {
+		font-size: 2rem;
+		color: #fff;
+		opacity: 0.7;
+		z-index: 1;
+        font-size: 1.5rem;
+	}
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: var(--y);
+        left: var(--x);
+        transform: translate(-50%, -50%);
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background-color: rgba(176, 30, 156, 0.5);
+        // background: linear-gradient(135deg, rgba(1, 157, 154, 0.3), rgba(176, 30, 157, 0.5));
+        transition: width 2s, height 2s;
+    }
+
+    &:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+}
+
+// .btn::before {
+//     content: '';
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+
+//     // background: linear-gradient(135deg, rgba(1, 157, 154, 0.7), rgba(176, 30, 157, 0.5));
+//     backdrop-filter: blur(70px);
+//     -webkit-backdrop-filter: blur(70px);
+//     border-radius: 10px;
+//     // border:1px solid rgba(255, 255, 255, 0.18);
+//     // box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+// }

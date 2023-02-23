@@ -1,0 +1,18 @@
+.input-box {
+    width: 100%;
+    border: 1px solid var(--color-primary-green);
+    background-color: transparent;
+    backdrop-filter: blur(50px);
+    border-radius: 10px;
+
+    input {
+        width: 100%;
+        padding: 1rem;
+        border: none;
+        background-color: transparent;
+        outline: none;
+        font-size: 1.7rem;
+        caret-color: var(--color-primary-white);
+        color: var(--color-primary-white);
+    }
+}

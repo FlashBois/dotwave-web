@@ -8,10 +8,12 @@
 @import 'base/utilities';
 
 @import '../components/Wallet/wallet';
-@import '../components/Input/input';
+@import '../components/Inputs/Input/input';
+@import '../components/Inputs/UnderlineInput/underlineInput';
 @import '../components/Exchange/exchange';
 @import '../components/Exchange/TokenList/token-list';
-@import '../components/Exchange/Search/searchInput';
+@import '../components/Buttons/AnimateButton/animateButton';
+@import '../components/Buttons/GradientButton/gradientButton';
 
 @import 'pages/swap';
 

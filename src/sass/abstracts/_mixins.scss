@@ -18,29 +18,37 @@ $breakpoint arguement choices:
 1em = 16px
 */
 @mixin respond($breakpoint) {
-  @if $breakpoint == phone {
-    @media only screen and (max-width: 36em) {
-      @content;
-    } //576px
-  }
-  @if $breakpoint == phone-land {
-    @media only screen and (max-width: 48em) {
-      @content;
-    } //768px
-  }
-  @if $breakpoint == tablet {
-    @media only screen and (max-width: 62em) {
-      @content;
-    } //992px
-  }
-  @if $breakpoint == tablet-land {
-    @media only screen and (max-width: 75em) {
-      @content;
-    } //1200px
-  }
-  @if $breakpoint == large-desktop {
-    @media only screen and (min-width: 112.5em) {
-      @content;
-    } //1800px
-  }
+	@if $breakpoint == phone {
+		@media only screen and (max-width: 36em) {
+			@content;
+		} //576px
+	}
+	@if $breakpoint == phone-land {
+		@media only screen and (max-width: 48em) {
+			@content;
+		} //768px
+	}
+	@if $breakpoint == tablet {
+		@media only screen and (max-width: 62em) {
+			@content;
+		} //992px
+	}
+	@if $breakpoint == tablet-land {
+		@media only screen and (max-width: 75em) {
+			@content;
+		} //1200px
+	}
+	@if $breakpoint == large-desktop {
+		@media only screen and (min-width: 112.5em) {
+			@content;
+		} //1800px
+	}
+}
+
+@mixin background-blur {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+	backdrop-filter: blur(50px);
+	-webkit-backdrop-filter: blur(50px);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }

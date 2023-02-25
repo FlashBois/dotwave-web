@@ -7,7 +7,6 @@
 
 <button
 	class="wallet-adapter-button {className}"
-	style={`justify-content: space-between;`}
 	{disabled}
 	on:click
 >

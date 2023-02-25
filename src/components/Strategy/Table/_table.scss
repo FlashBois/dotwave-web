@@ -1,0 +1,102 @@
+.strategy-table {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 6rem 1fr;
+    color: var(--color-primary-white);
+    font-size: 1.3rem;    
+
+    &__header {
+        @include background-blur;
+
+        border-radius: 20px;
+        background: linear-gradient(45deg, rgba(1, 157, 154, 0.5), rgba(176, 30, 157, 0.5));
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+    }
+
+    &__header-item {
+        &--strategy {
+            flex: 2 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &--cell {
+            flex: 1 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &--arrow {
+            flex: 0.5 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    &__row {
+        @include background-blur;
+
+        height: 8rem;
+        box-shadow: none;
+        background: none;
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        transition: height 1s ease-in-out;
+
+        &:not(:last-child){
+            border-bottom: none;
+        }
+
+        &.with-details {
+            height: 25rem;
+
+            svg {
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    &__row-items {
+        width: 100%;
+        max-height: 8rem;
+
+        display: flex;
+        align-items: center;
+    }
+
+    &__row-item {
+        &--strategy {
+            flex: 2 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &--cell {
+            flex: 1 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        &--arrow {
+            flex: 0.5 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
+    &__row-details {
+        position: relative;
+        height: 100px;
+    }
+}

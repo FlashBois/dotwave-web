@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { walletStore, type WalletStore } from '@svelte-on-solana/wallet-adapter-core';
+	import { walletStore, type WalletStore } from '$stores/walletStore';
 	import WalletButton from './WalletButton.svelte';
 	import WalletConnectButton from './WalletConnectButton.svelte';
 	import WalletModal from './WalletModal.svelte';
@@ -38,7 +38,7 @@
 
 	async function connectWallet(event: any) {
 		closeModal();
-		await select(event.detail);
+		select(event.detail);
 		await connect();
 	}
 

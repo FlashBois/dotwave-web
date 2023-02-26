@@ -1,6 +1,7 @@
 <script lang="ts">
+	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
+	import Input from '$components/Inputs/Input/Input.svelte';
 	import Decimal from 'decimal.js';
-	import ChevronDown from '$src/assets/svg/chevron-down.svg';
 
 	interface IStrategyTable {
 		strategy: string;
@@ -97,14 +98,13 @@
 	</div>
 	{#each data as row}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div
-			class="strategy-table__row with-details"
-			class:with-details={row.withDetails}
-			on:click={() => {
-				row.withDetails = !row.withDetails;
-			}}
-		>
-			<div class="strategy-table__row-items">
+		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
+			<div
+				class="strategy-table__row-items"
+				on:click={() => {
+					row.withDetails = !row.withDetails;
+				}}
+			>
 				<div class="strategy-table__row-item--strategy">-</div>
 				<div class="strategy-table__row-item--cell">{row.walletBalance}</div>
 				<div class="strategy-table__row-item--cell">{row.deposited}</div>
@@ -129,7 +129,25 @@
 					</svg>
 				</div>
 			</div>
-			<div class="strategy-table_row-details" />
+			<div class="strategy-table__row-details">
+				{#if row.withDetails}
+					<div class="strategy-table__row-details__info" />
+					<div class="strategy-table__row-details__inputs">
+						<div class="strategy-table__row-details__input">
+							<Input />
+							<div class="strategy-table__row-details__button-box">
+								<GradientButton>Deposit</GradientButton>
+							</div>
+						</div>
+						<div class="strategy-table__row-details__input">
+							<Input />
+							<div class="strategy-table__row-details__button-box">
+								<GradientButton>Withdraw</GradientButton>
+							</div>
+						</div>
+					</div>
+				{/if}
+			</div>
 		</div>
 	{/each}
 </div>

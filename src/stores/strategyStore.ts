@@ -29,6 +29,7 @@ export const strategyStore = writable<IStrategyStore>({
 });
 
 export async function loadStrategies(): Promise<void> {
+	console.log('Strategy - update')
 	strategyStore.update((store) => {
 		store.strategyTable = [
 			{

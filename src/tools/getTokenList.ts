@@ -1,5 +1,4 @@
 import tokenList from '$src/assets/data/token-list.json';
-import { PublicKey } from '@solana/web3.js';
 
 export interface ITokenList {
 	address: string;

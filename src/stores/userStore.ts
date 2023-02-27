@@ -50,22 +50,3 @@ export function clearUserStore() {
 		accounts: []
 	});
 }
-
-// export const userData = derived<
-// 	[typeof userStore, typeof swapStore],
-// 	{ fromToken: { amount: number | bigint }; toToken: { amount: number | bigint } }
-// >([userStore, swapStore], ([$userStore, $swapStore], set) => {
-// 	if ($userStore.accounts) {
-// 		const fromToken = $userStore.accounts.find((e) => e.mint.equals($swapStore.from.address));
-// 		const toToken = $userStore.accounts.find((e) => e.mint.equals($swapStore.to.address));
-
-// 		set({
-// 			fromToken: {
-// 				amount: fromToken?.amount ?? 1
-// 			},
-// 			toToken: {
-// 				amount: toToken?.amount ?? 1
-// 			}
-// 		});
-// 	}
-// });

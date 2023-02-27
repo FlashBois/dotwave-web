@@ -1,14 +1,28 @@
 <script lang="ts">
-	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
-	import Sortable from '$components/Sortable/Sortable.svelte';
-	import { strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
-	import { walletStore } from '$src/stores/walletStore';
 	import { ISortable, useAdvancedSorting } from '$src/tools/useAdvancedSorting';
 	import { derived } from 'svelte/store';
 	import { cloneDeep } from 'lodash';
+	import { tweened } from 'svelte/motion';
+
+	import { loadStrategies, strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
+	import { walletStore } from '$src/stores/walletStore';
+
+	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
+	import Input from '$components/Inputs/Input/Input.svelte';
+	import Sortable from '$components/Sortable/Sortable.svelte';
+	import CircleProgressBar from '$components/CircleProgressBar/CircleProgressBar.svelte';
 
 	$: ({ publicKey } = $walletStore);
+
+	let timer = tweened(60);
+
+	setInterval(async () => {
+		if ($timer > 0) $timer--;
+		else {
+			timer.set(60)
+			await loadStrategies()
+		};
+	}, 1000);
 
 	interface IHeader {
 		name: string;
@@ -139,7 +153,9 @@
 					/>{/if}
 			</div>
 		{/each}
-		<div class="strategy-table__header-item--arrow">-</div>
+		<div class="strategy-table__header-item--arrow">
+			<CircleProgressBar max={60} value={$timer} />
+		</div>
 	</div>
 	{#each $filteredStrategies as row}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->

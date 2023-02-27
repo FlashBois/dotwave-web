@@ -1,110 +1,150 @@
 <script lang="ts">
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import Input from '$components/Inputs/Input/Input.svelte';
-	import Decimal from 'decimal.js';
+	import Sortable from '$components/Sortable/Sortable.svelte';
+	import { strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
+	import { walletStore } from '$src/stores/walletStore';
+	import { ISortable, useAdvancedSorting } from '$src/tools/useAdvancedSorting';
+	import { derived } from 'svelte/store';
+	import { cloneDeep } from 'lodash';
 
-	interface IStrategyTable {
-		strategy: string;
-		token: {
-			symbol: string;
-			name: string;
-		};
-		walletBalance: Decimal;
-		deposited: Decimal;
-		locked: Decimal;
-		dailyAPY: Decimal;
-		weeklyAPY: Decimal;
-		yearlyAPY: Decimal;
-		utilization: Decimal;
-		withDetails: boolean;
+	$: ({ publicKey } = $walletStore);
+
+	interface IHeader {
+		name: string;
+		sortingType: ISortable;
+		isSorted: boolean;
+		needWallet: boolean;
+		nameExt: keyof IStrategyTable;
 	}
 
-	let withDetails = false;
-	let data: IStrategyTable[] = [
+	let header: IHeader[] = [
 		{
-			strategy: '',
-			token: {
-				symbol: '',
-				name: ''
-			},
-			walletBalance: new Decimal(100.01),
-			deposited: new Decimal(100.01),
-			locked: new Decimal(100.01),
-			dailyAPY: new Decimal(1.01),
-			weeklyAPY: new Decimal(1.01),
-			yearlyAPY: new Decimal(1.01),
-			utilization: new Decimal(20.5),
-			withDetails: false
+			name: 'Wallet balance',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: true,
+			nameExt: 'walletBalance'
 		},
 		{
-			strategy: '',
-			token: {
-				symbol: '',
-				name: ''
-			},
-			walletBalance: new Decimal(100.01),
-			deposited: new Decimal(100.01),
-			locked: new Decimal(100.01),
-			dailyAPY: new Decimal(1.01),
-			weeklyAPY: new Decimal(1.01),
-			yearlyAPY: new Decimal(1.01),
-			utilization: new Decimal(20.5),
-			withDetails: false
+			name: 'Deposited',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: true,
+			nameExt: 'deposited'
 		},
 		{
-			strategy: '',
-			token: {
-				symbol: '',
-				name: ''
-			},
-			walletBalance: new Decimal(100.01),
-			deposited: new Decimal(100.01),
-			locked: new Decimal(100.01),
-			dailyAPY: new Decimal(1.01),
-			weeklyAPY: new Decimal(1.01),
-			yearlyAPY: new Decimal(1.01),
-			utilization: new Decimal(20.5),
-			withDetails: false
+			name: 'Locked',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: true,
+			nameExt: 'locked'
 		},
 		{
-			strategy: '',
-			token: {
-				symbol: '',
-				name: ''
-			},
-			walletBalance: new Decimal(100.01),
-			deposited: new Decimal(100.01),
-			locked: new Decimal(100.01),
-			dailyAPY: new Decimal(1.01),
-			weeklyAPY: new Decimal(1.01),
-			yearlyAPY: new Decimal(1.01),
-			utilization: new Decimal(20.5),
-			withDetails: false
+			name: 'Daily APY',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: false,
+			nameExt: 'dailyAPY'
+		},
+		{
+			name: 'Weekly APY',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: false,
+			nameExt: 'weeklyAPY'
+		},
+		{
+			name: 'Yearly APY',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: false,
+			nameExt: 'yearlyAPY'
+		},
+		{
+			name: 'Utilization',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: false,
+			nameExt: 'utilization'
 		}
 	];
+
+	$: filteredStrategies = derived<[typeof strategyStore], IStrategyTable[]>(
+		[strategyStore],
+		([$strategyStore], set) => {
+			const { sort, strategyTable } = $strategyStore;
+			const strategyTableCopy = cloneDeep(strategyTable);
+			let result: IStrategyTable[] = [];
+			if (sort) result = useAdvancedSorting(strategyTableCopy, sort.property, sort.type);
+			else result = strategyTableCopy;
+
+			set(result);
+		}
+	);
+
+	function onSortChange(index: number) {
+		const currentSortType = header[index].sortingType;
+
+		const currentSortedIndex = header.findIndex((e) => e.isSorted == true);
+		if (currentSortedIndex != -1 && currentSortedIndex != index) {
+			header[currentSortedIndex].isSorted = false;
+			header[currentSortedIndex].sortingType = ISortable.NONE;
+		}
+
+		if (currentSortType == ISortable.DESC) {
+			header[index].sortingType = ISortable.ASC;
+		} else if (currentSortType == ISortable.ASC) {
+			header[index].sortingType = ISortable.NONE;
+			header[index].isSorted = false;
+		} else if (currentSortType == ISortable.NONE) {
+			header[index].sortingType = ISortable.DESC;
+			header[index].isSorted = true;
+		}
+
+		if (header[index].sortingType != ISortable.NONE) {
+			strategyStore.update((store) => {
+				store.sort = { property: header[index].nameExt, type: header[index].sortingType };
+				return store;
+			});
+		} else {
+			strategyStore.update((store) => {
+				store.sort = null;
+				return store;
+			});
+		}
+	}
+
+	function displayDetails(id: number) {
+		strategyStore.update((store) => {
+			store.strategyTable[id].withDetails = !store.strategyTable[id].withDetails;
+			return store;
+		});
+	}
 </script>
 
 <div class="strategy-table">
 	<div class="strategy-table__header">
 		<div class="strategy-table__header-item--strategy">Strategy</div>
-		<div class="strategy-table__header-item--cell">Wallet balance</div>
-		<div class="strategy-table__header-item--cell">Deposited</div>
-		<div class="strategy-table__header-item--cell">Locked</div>
-		<div class="strategy-table__header-item--cell">Daily APY</div>
-		<div class="strategy-table__header-item--cell">Weekly APY</div>
-		<div class="strategy-table__header-item--cell">Yearly APY</div>
-		<div class="strategy-table__header-item--cell">Utilization</div>
+		{#each header as headerRow, i}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<div
+				class="strategy-table__header-item--cell"
+				class:sortable-div={!headerRow.needWallet || (headerRow.needWallet && publicKey)}
+				on:click={() => onSortChange(i)}
+			>
+				{headerRow.name}
+				{#if !headerRow.needWallet || (headerRow.needWallet && publicKey)}<Sortable
+						sortType={headerRow.sortingType}
+					/>{/if}
+			</div>
+		{/each}
 		<div class="strategy-table__header-item--arrow">-</div>
 	</div>
-	{#each data as row}
+	{#each $filteredStrategies as row}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
-			<div
-				class="strategy-table__row-items"
-				on:click={() => {
-					row.withDetails = !row.withDetails;
-				}}
-			>
+			<div class="strategy-table__row-items" on:click={() => displayDetails(row.id)}>
 				<div class="strategy-table__row-item--strategy">-</div>
 				<div class="strategy-table__row-item--cell">{row.walletBalance}</div>
 				<div class="strategy-table__row-item--cell">{row.deposited}</div>
@@ -129,7 +169,7 @@
 					</svg>
 				</div>
 			</div>
-			<div class="strategy-table__row-details">
+			<div class="strategy-table__row-details" class:delay-animation={row.withDetails}>
 				{#if row.withDetails}
 					<div class="strategy-table__row-details__info" />
 					<div class="strategy-table__row-details__inputs">

@@ -17,6 +17,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/lodash": "^4.14.191",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"eslint": "^8.28.0",
@@ -44,6 +45,7 @@
 		"chartjs-adapter-date-fns": "^3.0.0",
 		"date-fns": "^2.29.3",
 		"decimal.js": "^10.4.3",
-		"fuse.js": "^6.6.2"
+		"fuse.js": "^6.6.2",
+		"lodash": "^4.17.21"
 	}
 }

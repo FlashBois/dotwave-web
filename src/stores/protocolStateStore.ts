@@ -15,6 +15,7 @@ export interface IVaultSupport {
 }
 
 export interface IProtocolStateStore {
+	ready: boolean;
 	stateAddress: PublicKey;
 	vaultsAddress: PublicKey;
 	vaultsAccounts: VaultsAccount | null;
@@ -38,6 +39,7 @@ export async function createProtocolState(): Promise<void> {
 		const vaultsAddress = new PublicKey(state.get_vaults_account());
 
 		protocolStateStore.set({
+			ready: false,
 			stateAddress,
 			vaultsAddress,
 			vaultsAccounts: null,
@@ -70,7 +72,8 @@ export async function loadProtocolState(): Promise<void> {
 				return {
 					...store,
 					vaultsAccounts,
-					vaultsSupport
+					vaultsSupport,
+					ready: true
 				};
 			});
 		}

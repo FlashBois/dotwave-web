@@ -1,0 +1,14 @@
+{
+  "name": "protocol",
+  "description": "Created with Anchor",
+  "version": "0.1.0",
+  "files": [
+    "protocol_bg.wasm",
+    "protocol.js",
+    "protocol_bg.js",
+    "protocol.d.ts"
+  ],
+  "module": "protocol.js",
+  "types": "protocol.d.ts",
+  "sideEffects": false
+}

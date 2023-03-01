@@ -2,7 +2,7 @@
 	import '../sass/main.scss';
 
 	import { onMount } from 'svelte';
-	import { clusterApiUrl } from '@solana/web3.js'
+	import { clusterApiUrl } from '@solana/web3.js';
 	import type { Adapter } from '@solana/wallet-adapter-base';
 	import {
 		BraveWalletAdapter,
@@ -14,9 +14,12 @@
 	import WalletProvider from '$components/Wallet/WalletProvider.svelte';
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import ConnectionProvider from '$components/Web3/ConnectionProvider.svelte';
+	import AnchorConnectionProvider from '$components/AnchorConnectionProvider/AnchorConnectionProvider.svelte';
+	import MintTokens from '$components/MintTokens/MintTokens.svelte';
+	import { walletStore } from '$src/stores/walletStore';
 
 	const localStorageKey = 'walletAdapter';
-	const network = clusterApiUrl('devnet')
+	const network = clusterApiUrl('devnet');
 	let wallets: Adapter[];
 
 	onMount(async () => {
@@ -29,7 +32,8 @@
 	});
 </script>
 
-<ConnectionProvider {network}/>
+<AnchorConnectionProvider {network} />
+<ConnectionProvider {network} />
 <WalletProvider {localStorageKey} {wallets} autoConnect />
 
 <div class="container">
@@ -39,7 +43,7 @@
 				<!-- <a href="/" class="logo-box__link"><img src="" alt="protocol-logo" class="logo-box__logo" /></a> -->
 				<h1 style="color: white;font-size: 40px;">LOGO</h1>
 			</div>
-	
+
 			<ul class="nav__list">
 				<li class="nav__item">
 					<a href="/swap/SOL_USDC" class="nav__link">Swap</a>
@@ -55,11 +59,13 @@
 				</li>
 			</ul>
 		</nav>
-	
+
+		{#if $walletStore.publicKey}<MintTokens/>{/if}
+
 		<div class="wallet-wrapper">
-			<WalletMultiButton/>
+			<WalletMultiButton />
 		</div>
 	</header>
-	
+
 	<slot />
 </div>

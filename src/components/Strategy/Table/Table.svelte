@@ -203,20 +203,25 @@
 			</div>
 			<div class="strategy-table__row-details" class:delay-animation={row.withDetails}>
 				{#if row.withDetails}
-					<div class="strategy-table__row-details__info" />
+					<div class="strategy-table__row-details__strategy-info" />
 					<div class="strategy-table__row-details__inputs">
-						<div class="strategy-table__row-details__input">
-							<Input />
-							<div class="strategy-table__row-details__button-box">
-								<GradientButton>Deposit</GradientButton>
+							<div class="strategy-table__row-details__input">
+								<Input />
+								<div class="strategy-table__row-details__button-box">
+									<GradientButton>Deposit</GradientButton>
+								</div>
 							</div>
-						</div>
-						<div class="strategy-table__row-details__input">
-							<Input />
-							<div class="strategy-table__row-details__button-box">
-								<GradientButton>Withdraw</GradientButton>
+							<div class="strategy-table__row-details__input">
+								<Input />
+								<div class="strategy-table__row-details__button-box">
+									<GradientButton>Withdraw</GradientButton>
+								</div>
 							</div>
-						</div>
+							<div class="strategy-table__row-details__info-box">
+								<div class="strategy-table__row-details__info">
+
+								</div>
+							</div>
 					</div>
 				{/if}
 			</div>

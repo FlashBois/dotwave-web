@@ -1,0 +1,22 @@
+[
+	{
+		"address": "So11111111111111111111111111111111111111112",
+		"chainId": 101,
+		"decimals": 9,
+		"name": "Wrapped SOL",
+		"symbol": "SOL",
+		"logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+		"extensions": { "coingeckoId": "wrapped-solana" },
+		"tags": ["old-registry"]
+	},
+	{
+		"address": "Ad7dphCaAdihFszNYqwHoLyVBThp8UddabPq7tneoTQF",
+		"chainId": 101,
+		"decimals": 6,
+		"name": "Raydium",
+		"symbol": "RAY",
+		"logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
+		"extensions": { "coingeckoId": "raydium" },
+		"tags": ["old-registry"]
+	}
+]

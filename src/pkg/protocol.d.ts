@@ -18,10 +18,13 @@ export class BaseKeyWithId {
   free(): void;
 /**
 */
+  base_key: Uint8Array;
+/**
+*/
   index: number;
 /**
 */
-  key: Uint8Array;
+  quote_key: Uint8Array;
 }
 /**
 */

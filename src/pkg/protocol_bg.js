@@ -171,19 +171,36 @@ export class BaseKeyWithId {
     /**
     * @returns {Uint8Array}
     */
-    get key() {
+    get base_key() {
         if (this.ptr == 0) throw new Error('Attempt to use a moved value');
         _assertNum(this.ptr);
-        const ret = wasm.__wbg_get_basekeywithid_key(this.ptr);
+        const ret = wasm.__wbg_get_basekeywithid_base_key(this.ptr);
         return takeObject(ret);
     }
     /**
     * @param {Uint8Array} arg0
     */
-    set key(arg0) {
+    set base_key(arg0) {
         if (this.ptr == 0) throw new Error('Attempt to use a moved value');
         _assertNum(this.ptr);
-        wasm.__wbg_set_basekeywithid_key(this.ptr, addHeapObject(arg0));
+        wasm.__wbg_set_basekeywithid_base_key(this.ptr, addHeapObject(arg0));
+    }
+    /**
+    * @returns {Uint8Array}
+    */
+    get quote_key() {
+        if (this.ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.ptr);
+        const ret = wasm.__wbg_get_basekeywithid_quote_key(this.ptr);
+        return takeObject(ret);
+    }
+    /**
+    * @param {Uint8Array} arg0
+    */
+    set quote_key(arg0) {
+        if (this.ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.ptr);
+        wasm.__wbg_set_basekeywithid_quote_key(this.ptr, addHeapObject(arg0));
     }
     /**
     * @returns {number}

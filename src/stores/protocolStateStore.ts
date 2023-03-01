@@ -17,13 +17,13 @@ export interface IProtocolStateStore {
 	stateAddress: PublicKey;
 	vaultsAddress: PublicKey;
 	vaultsAccounts: VaultsAccount | null;
-	vaultsSupport: IVaultSupport[]
+	vaultsSupport: IVaultSupport[];
 }
 
 export const protocolStateStore = writable<IProtocolStateStore>(undefined);
 
 export async function createProtocolState(): Promise<void> {
-	const connection = new Connection(clusterApiUrl('devnet'))
+	const connection = new Connection(clusterApiUrl('devnet'));
 
 	const [stateAddress, _] = PublicKey.findProgramAddressSync(
 		[Buffer.from(anchor.utils.bytes.utf8.encode(STATE_SEED))],
@@ -46,7 +46,7 @@ export async function createProtocolState(): Promise<void> {
 }
 
 export async function loadProtocolState(): Promise<void> {
-	const connection = new Connection(clusterApiUrl('devnet'))
+	const connection = new Connection(clusterApiUrl('devnet'));
 	const { vaultsAddress } = get(protocolStateStore);
 
 	if (vaultsAddress) {
@@ -55,14 +55,14 @@ export async function loadProtocolState(): Promise<void> {
 		if (vaultAccountInfo) {
 			const vaultsAccounts = VaultsAccount.load(vaultAccountInfo);
 
-			const vaults = vaultsAccounts.base_token_with_id()
-			const vaultsSupport: IVaultSupport[] = vaults.map(item => {
+			const vaults = vaultsAccounts.base_token_with_id();
+			const vaultsSupport: IVaultSupport[] = vaults.map((item) => {
 				return {
 					baseTokenAddress: new PublicKey(item.key),
 					id: item.index,
 					oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.index))
-				}
-			})
+				};
+			});
 
 			protocolStateStore.update((store) => {
 				return {

@@ -4906,9 +4906,6 @@ warning@^4.0.3:
   dependencies:
     loose-envify "^1.0.0"
 
-wasm@./pkg:
-  version "0.1.0"
-
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"

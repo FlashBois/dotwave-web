@@ -1,5 +1,7 @@
 import type { ISortable } from '$src/tools/useAdvancedSorting';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
+import { protocolStateStore } from './protocolStateStore';
+import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 export interface IStrategyStore {
 	sort: { property: keyof IStrategyTable; type: ISortable } | null;
@@ -7,11 +9,18 @@ export interface IStrategyStore {
 }
 
 export interface IStrategyTable {
-    id: number,
-	strategy: string;
+	id: number;
+	vaultId: number;
+	strategyId: number;
+	strategy: {
+		hasLend: boolean;
+		hasSwap: boolean;
+		hasTrade: boolean;
+	};
 	token: {
 		symbol: string;
 		name: string;
+		logoURI: string;
 	};
 	walletBalance: number;
 	deposited: number;
@@ -29,66 +38,60 @@ export const strategyStore = writable<IStrategyStore>({
 });
 
 export async function loadStrategies(): Promise<void> {
-	console.log('Strategy - update')
-	strategyStore.update((store) => {
-		store.strategyTable = [
-			{
-                id: 0,
-				strategy: '',
-				token: {
-					symbol: '',
-					name: ''
-				},
-				walletBalance: 100.01,
-				deposited: 20.01,
-				locked: 100.01,
-				dailyAPY: 2.01,
-				weeklyAPY: 12.01,
-				yearlyAPY: 1.01,
-				utilization: 20.5,
-				withDetails: false
-			},
-			{
-                id: 1,
-				strategy: '',
-				token: {
-					symbol: '',
-					name: ''
-				},
-				walletBalance: 100.01,
-				deposited: 100.01,
-				locked: 100.01,
-				dailyAPY: 10.01,
-				weeklyAPY: 4.01,
-				yearlyAPY: 1.01,
-				utilization: 20.5,
-				withDetails: false
-			},
-            {
-                id: 2,
-				strategy: '',
-				token: {
-					symbol: '',
-					name: ''
-				},
-				walletBalance: 100.01,
-				deposited: 100.01,
-				locked: 100.01,
-				dailyAPY: 1.01,
-				weeklyAPY: 8.01,
-				yearlyAPY: 1.01,
-				utilization: 20.5,
-				withDetails: false
-			}
-		];
+	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
 
-		return store;
-	});
+	// eslint-disable-next-line prefer-const
+	let extractStrategy: IStrategyTable[] = [];
+
+	if (vaultsAccounts) {
+		for (const vault of vaultsSupport) {
+			const countStrategy = vaultsAccounts.count_strategies(vault.id);
+
+			for (let strategyId = 0; strategyId < countStrategy; strategyId++) {
+				const strategyInfo = vaultsAccounts.strategy_info(vault.id, strategyId);
+				const tokenInfo = tokenListDevnet.find(
+					(e) => e.address == vault.baseTokenAddress.toString()
+				);
+
+				if (strategyInfo && tokenInfo) {
+					extractStrategy.push({
+						id: 0,
+						vaultId: vault.id,
+						strategyId,
+						strategy: {
+							hasLend: strategyInfo.has_lend,
+							hasSwap: strategyInfo.has_swap,
+							hasTrade: strategyInfo.has_trade
+						},
+						token: {
+							symbol: tokenInfo.symbol,
+							name: tokenInfo.name,
+							logoURI: tokenInfo.logoURI
+						},
+						walletBalance: 100.01,
+						deposited: 20.01,
+						locked: 100.01,
+						dailyAPY: 2.01,
+						weeklyAPY: 12.01,
+						yearlyAPY: 1.01,
+						utilization: 20.5,
+						withDetails: false
+					});
+				}
+			}
+		}
+
+		strategyStore.update((store) => {
+			store.strategyTable = extractStrategy;
+
+			return store;
+		});
+	}
 }
 
 export function clearUserStore() {
 	strategyStore.set({
-        sort: null,
-        strategyTable: []
-    });
+		sort: null,
+		strategyTable: []
+	});
 }

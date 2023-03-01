@@ -4,7 +4,7 @@
 	import { cloneDeep } from 'lodash';
 	import { tweened } from 'svelte/motion';
 
-	import { loadStrategies, strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
+	import { strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
 	import { walletStore } from '$src/stores/walletStore';
 
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';

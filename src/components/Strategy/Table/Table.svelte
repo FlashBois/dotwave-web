@@ -19,9 +19,8 @@
 	setInterval(async () => {
 		if ($timer > 0) $timer--;
 		else {
-			timer.set(60)
-			await loadStrategies()
-		};
+			timer.set(60);
+		}
 	}, 1000);
 
 	interface IHeader {

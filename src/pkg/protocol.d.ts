@@ -1,10 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @returns {number}
-*/
-export function ret_error(): number;
-/**
 * @returns {bigint}
 */
 export function price_denominator(): bigint;
@@ -12,17 +8,6 @@ export function price_denominator(): bigint;
 * @returns {bigint}
 */
 export function fraction_denominator(): bigint;
-/**
-*/
-export class BaseKeyWithId {
-  free(): void;
-/**
-*/
-  index: number;
-/**
-*/
-  key: Uint8Array;
-}
 /**
 */
 export class StateAccount {
@@ -185,6 +170,21 @@ export class VaultsAccount {
 */
   utilization_quote(vault: number, strategy: number): bigint;
 /**
+* @param {number} vault
+* @param {bigint} amount
+* @param {boolean} from_base
+* @param {boolean} by_amount_out
+* @param {number} now
+* @returns {bigint}
+*/
+  swap(vault: number, amount: bigint, from_base: boolean, by_amount_out: boolean, now: number): bigint;
+/**
+* @param {number} vault
+* @param {boolean} base
+* @returns {bigint}
+*/
+  liquidity(vault: number, base: boolean): bigint;
+/**
 * @param {Uint8Array} account_info
 * @returns {VaultsAccount}
 */
@@ -200,7 +200,7 @@ export class VaultsAccount {
 /**
 * @returns {Array<any>}
 */
-  base_token_with_id(): Array<any>;
+  vaults_keys_with_id(): Array<any>;
 /**
 * @param {number} index
 * @returns {Uint8Array}
@@ -253,22 +253,26 @@ export class VaultsAccount {
   has_swap(index: number): boolean;
 /**
 * @param {number} index
+* @param {number} current_time
+*/
+  refresh(index: number, current_time: number): void;
+/**
+* @param {number} index
 * @returns {bigint}
 */
   lending_apy(index: number): bigint;
+}
 /**
-* @param {number} vault
-* @param {bigint} amount
-* @param {boolean} from_base
-* @param {boolean} by_amount_out
-* @param {number} now
-* @returns {bigint}
 */
-  swap(vault: number, amount: bigint, from_base: boolean, by_amount_out: boolean, now: number): bigint;
+export class VaultsKeysWithId {
+  free(): void;
 /**
-* @param {number} vault
-* @param {boolean} base
-* @returns {bigint}
 */
-  liquidity(vault: number, base: boolean): bigint;
+  base_key: Uint8Array;
+/**
+*/
+  index: number;
+/**
+*/
+  quote_key: Uint8Array;
 }

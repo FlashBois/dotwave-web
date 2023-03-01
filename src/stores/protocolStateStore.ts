@@ -9,6 +9,7 @@ const STATE_SEED = 'state';
 export interface IVaultSupport {
 	id: number;
 	baseTokenAddress: PublicKey;
+	quoteTokenAddress: PublicKey;
 	oracleAddress: PublicKey;
 	// updateOracle: () => void;
 }
@@ -55,10 +56,11 @@ export async function loadProtocolState(): Promise<void> {
 		if (vaultAccountInfo) {
 			const vaultsAccounts = VaultsAccount.load(vaultAccountInfo);
 
-			const vaults = vaultsAccounts.base_token_with_id();
+			const vaults = vaultsAccounts.vaults_keys_with_id();
 			const vaultsSupport: IVaultSupport[] = vaults.map((item) => {
 				return {
-					baseTokenAddress: new PublicKey(item.key),
+					baseTokenAddress: new PublicKey(item.base_key),
+					quoteTokenAddress: new PublicKey(item.quote_key),
 					id: item.index,
 					oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.index))
 				};

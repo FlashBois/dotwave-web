@@ -17,7 +17,12 @@ export interface IStrategyTable {
 		hasSwap: boolean;
 		hasTrade: boolean;
 	};
-	token: {
+	tokenBase: {
+		symbol: string;
+		name: string;
+		logoURI: string;
+	};
+	tokenQuote: {
 		symbol: string;
 		name: string;
 		logoURI: string;
@@ -49,11 +54,14 @@ export async function loadStrategies(): Promise<void> {
 
 			for (let strategyId = 0; strategyId < countStrategy; strategyId++) {
 				const strategyInfo = vaultsAccounts.strategy_info(vault.id, strategyId);
-				const tokenInfo = tokenListDevnet.find(
+				const baseTokenInfo = tokenListDevnet.find(
 					(e) => e.address == vault.baseTokenAddress.toString()
 				);
+				const quoteTokenInfo = tokenListDevnet.find(
+					(e) => e.address == vault.quoteTokenAddress.toString()
+				);
 
-				if (strategyInfo && tokenInfo) {
+				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
 						id: 0,
 						vaultId: vault.id,
@@ -63,10 +71,15 @@ export async function loadStrategies(): Promise<void> {
 							hasSwap: strategyInfo.has_swap,
 							hasTrade: strategyInfo.has_trade
 						},
-						token: {
-							symbol: tokenInfo.symbol,
-							name: tokenInfo.name,
-							logoURI: tokenInfo.logoURI
+						tokenBase: {
+							symbol: baseTokenInfo.symbol,
+							name: baseTokenInfo.name,
+							logoURI: baseTokenInfo.logoURI
+						},
+						tokenQuote: {
+							symbol: quoteTokenInfo.symbol,
+							name: quoteTokenInfo.name,
+							logoURI: quoteTokenInfo.logoURI
 						},
 						walletBalance: 100.01,
 						deposited: 20.01,

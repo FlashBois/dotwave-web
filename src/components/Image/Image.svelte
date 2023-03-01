@@ -7,6 +7,9 @@
 	let loaded = false;
 	let thisImage: any;
 
+	let className: string = '';
+	export { className as class };
+
 	onMount(() => {
 		thisImage.onload = () => {
 			loaded = true;
@@ -14,7 +17,7 @@
 	});
 </script>
 
-<img {src} {alt} class:loaded bind:this={thisImage} />
+<img {src} {alt} class="{className}" class:loaded bind:this={thisImage} />
 
 <style>
 	img {

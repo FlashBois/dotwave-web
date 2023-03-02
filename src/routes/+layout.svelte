@@ -15,8 +15,6 @@
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import ConnectionProvider from '$components/Web3/ConnectionProvider.svelte';
 	import AnchorConnectionProvider from '$components/AnchorConnectionProvider/AnchorConnectionProvider.svelte';
-	import MintTokens from '$components/MintTokens/MintTokens.svelte';
-	import { walletStore } from '$src/stores/walletStore';
 
 	const localStorageKey = 'walletAdapter';
 	const network = clusterApiUrl('devnet');
@@ -59,8 +57,6 @@
 				</li>
 			</ul>
 		</nav>
-
-		{#if $walletStore.publicKey}<MintTokens/>{/if}
 
 		<div class="wallet-wrapper">
 			<WalletMultiButton />

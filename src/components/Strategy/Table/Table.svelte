@@ -7,12 +7,11 @@
 	import { strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
 	import { walletStore } from '$src/stores/walletStore';
 
-	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
 	import Sortable from '$components/Sortable/Sortable.svelte';
 	import CircleProgressBar from '$components/CircleProgressBar/CircleProgressBar.svelte';
 	import ImageLoader from '$components/Image/ImageLoader.svelte';
 	import StrategyType from '../StrategyType/StrategyType.svelte';
+	import RowDetails from '../RowDetails/RowDetails.svelte';
 
 	$: ({ publicKey } = $walletStore);
 
@@ -158,22 +157,30 @@
 			<CircleProgressBar max={60} value={$timer} />
 		</div>
 	</div>
-	{#each $filteredStrategies as row}
+	{#each $filteredStrategies as row, i}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
 			<div class="strategy-table__row-items" on:click={() => displayDetails(row.id)}>
 				<div class="strategy-table__row-item--strategy">
 					<div class="strategy-table__strategy-cell">
 						<div class="strategy-table__strategy-cell__img-box">
-							<ImageLoader class="strategy-table__strategy-cell__img-box--base-token" src={row.tokenBase.logoURI} alt={row.tokenBase.symbol} />
-							<ImageLoader class="strategy-table__strategy-cell__img-box--quote-token" src={row.tokenQuote.logoURI} alt={row.tokenQuote.symbol} />
+							<ImageLoader
+								class="strategy-table__strategy-cell__img-box--base-token"
+								src={row.tokenBase.logoURI}
+								alt={row.tokenBase.symbol}
+							/>
+							<ImageLoader
+								class="strategy-table__strategy-cell__img-box--quote-token"
+								src={row.tokenQuote.logoURI}
+								alt={row.tokenQuote.symbol}
+							/>
 						</div>
 						<div class="strategy-table__strategy-cell__details">
 							<span class="strategy-table__strategy-cell__details__name">
 								{row.tokenBase.symbol} - {row.tokenQuote.symbol}
 							</span>
 							<span class="strategy-table__strategy-cell__details__strategy-type">
-								<StrategyType strategy={row.strategy}/>
+								<StrategyType strategy={row.strategy} />
 							</span>
 						</div>
 					</div>
@@ -201,30 +208,9 @@
 					</svg>
 				</div>
 			</div>
-			<div class="strategy-table__row-details" class:delay-animation={row.withDetails}>
-				{#if row.withDetails}
-					<div class="strategy-table__row-details__strategy-info" />
-					<div class="strategy-table__row-details__inputs">
-							<div class="strategy-table__row-details__input">
-								<Input />
-								<div class="strategy-table__row-details__button-box">
-									<GradientButton>Deposit</GradientButton>
-								</div>
-							</div>
-							<div class="strategy-table__row-details__input">
-								<Input />
-								<div class="strategy-table__row-details__button-box">
-									<GradientButton>Withdraw</GradientButton>
-								</div>
-							</div>
-							<div class="strategy-table__row-details__info-box">
-								<div class="strategy-table__row-details__info">
-
-								</div>
-							</div>
-					</div>
-				{/if}
-			</div>
+			{#if row.withDetails}
+				<RowDetails row={row}/>
+			{/if}
 		</div>
 	{/each}
 </div>

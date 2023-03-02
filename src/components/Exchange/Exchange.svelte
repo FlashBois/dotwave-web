@@ -51,9 +51,22 @@
 			});
 		} catch (error: any) {
 			let msg = 'simulation failed';
+
+			if (error.message.includes('[DecimalError]')) {
+				msg = 'Invalid input amount';
+			}
+
 			switch (error.message) {
 				case 'Not enough available quote quantity':
 					msg = 'Not enough liquidity';
+				case 'Vault not found':
+					msg = 'There is not vault for this token yet';
+				case 'Cannot swap a token for itself':
+					msg = error.message;
+				case 'invalid BigInt syntax':
+					msg = 'Input quantity is too great';
+				case 'recursive use of an object detected which would lead to unsafe aliasing in rust':
+					msg = 'Simulation failed';
 			}
 
 			console.log(error.message);
@@ -185,7 +198,7 @@
 		{:else if $toValue.ok == false}
 			<AnimateButton>{$toValue.msg}</AnimateButton>
 		{:else}
-			<AnimateButton on:onClick={() => console.log('wanna exchange?')}>EXCHANGE</AnimateButton>
+			<AnimateButton on:swap={(e) => console.log('wanna exchange?')}>EXCHANGE</AnimateButton>
 		{/if}
 	</div>
 </div>

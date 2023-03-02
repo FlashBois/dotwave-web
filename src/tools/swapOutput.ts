@@ -1,9 +1,11 @@
 import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { swapStore } from '$src/stores/swapStore';
 import { PublicKey } from '@solana/web3.js';
+import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
+import { findVault } from './findVault';
 
-export const swapOutput = (input: bigint) => {
+export const swapOutput = (input: number) => {
 	const { vaultsSupport, vaultsAccounts, ready } = get(protocolStateStore);
 	const { from, to } = get(swapStore);
 
@@ -11,19 +13,15 @@ export const swapOutput = (input: bigint) => {
 		return;
 	}
 
-	const address = new PublicKey(from.address);
-	console.log('swapOutput', input, address, vaultsSupport);
-	const vault = vaultsSupport.find(
-		(s) => s.baseTokenAddress.equals(address) || s.quoteTokenAddress.equals(address)
-	);
-
-	if (!vault) {
+	const found = findVault(vaultsSupport, new PublicKey(from.address));
+	if (!found) {
 		throw new Error('Vault not found');
 	}
 
-	const fromBase = vault.baseTokenAddress.equals(new PublicKey(from.address));
+	const parsedAmount = new Decimal(input)
+		.mul(10 ** from.decimals)
+		.floor()
+		.toString();
 
-	console.log('swap params', vault.id, BigInt(input), fromBase, false, 0);
-
-	return vaultsAccounts?.swap(vault.id, BigInt(input), fromBase, false, 0);
+	return vaultsAccounts?.swap(found.index, BigInt(parsedAmount), found.base, false, 0);
 };

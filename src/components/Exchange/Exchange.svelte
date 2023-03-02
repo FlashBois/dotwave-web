@@ -23,6 +23,7 @@
 			swapStore.set({
 				from: data.from,
 				to: data.to,
+				slippagePercentage: 0.5,
 				tokenList: {
 					visible: false,
 					type: null
@@ -41,7 +42,7 @@
 	const fromValue = writable(0);
 	const toValue = derived<typeof fromValue, ISimulationData>(fromValue, ($fromValue, set) => {
 		try {
-			const out = swapOutput(BigInt($fromValue));
+			const out = swapOutput($fromValue);
 			set({
 				in: $fromValue,
 				out: Number(out),
@@ -184,7 +185,7 @@
 		{:else if $toValue.ok == false}
 			<AnimateButton>{$toValue.msg}</AnimateButton>
 		{:else}
-			<AnimateButton>EXCHANGE</AnimateButton>
+			<AnimateButton on:onClick={() => console.log('wanna exchange?')}>EXCHANGE</AnimateButton>
 		{/if}
 	</div>
 </div>

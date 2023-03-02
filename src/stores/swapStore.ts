@@ -10,6 +10,7 @@ export enum TokenListType {
 export const swapStore = writable<{
 	from: ITokenList;
 	to: ITokenList;
+	slippagePercentage: number;
 	tokenList: {
 		visible: boolean;
 		type: TokenListType | null;

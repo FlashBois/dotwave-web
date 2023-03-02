@@ -142,38 +142,6 @@
             height: 8rem;
         }
     }
-
-    &__row-details {
-        height: 100%;
-        width: 100%;
-
-        display: grid;
-        grid-template-columns: 2fr 3fr;
-
-
-        &__inputs {
-            display: flex;
-        }
-
-        &__input {
-            flex: 1 1;
-            padding: 1.5rem 3rem;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-        }
-
-        &__button-box {
-            width: 100%;
-            height: 25%;
-        }
-
-
-        &.delay-animation {
-            animation: change-opacity 1.5s ease-in-out;
-        }
-    }
 }
 
 @keyframes change-opacity {

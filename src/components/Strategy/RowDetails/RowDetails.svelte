@@ -4,7 +4,7 @@
 	import type { IStrategyTable } from '$src/stores/strategyStore';
 	import Switch from '$components/Inputs/Switch/Switch.svelte';
 	import { derived, get } from 'svelte/store';
-	import { userStore } from '$src/stores/userStore';
+	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
 	import { walletStore } from '$src/stores/walletStore';
 	import { useDeposit } from '$src/tools/instructions/useDeposit';
@@ -13,7 +13,7 @@
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import { BN } from '@project-serum/anchor';
+	import { BN, web3 } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { web3Store } from '$src/stores/web3Store';
 
@@ -62,9 +62,11 @@
 			const { publicKey } = walletCopy;
 
 			const tx = new Transaction();
-			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey)
+			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
 
-			const userStatemantAccount = await web3Copy.connection.getAccountInfo(statementProgramAddress)
+			const userStatemantAccount = await web3Copy.connection.getAccountInfo(
+				statementProgramAddress
+			);
 			if (!userStatemantAccount) {
 				tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
 			}
@@ -75,12 +77,12 @@
 					vaultId,
 					strategyId,
 					{
-						statement: useCreateStatementProgramAddress(program, publicKey),
-						accountQuote: userStoreCopy.getTokenAccountAddress(
-							vaultsSupport[vaultId].baseTokenAddress
-						)!,
+						statement: statementProgramAddress,
 						accountBase: userStoreCopy.getTokenAccountAddress(
 							vaultsSupport[vaultId].baseTokenAddress
+						)!,
+						accountQuote: userStoreCopy.getTokenAccountAddress(
+							vaultsSupport[vaultId].quoteTokenAddress
 						)!,
 						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultId)),
 						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultId)),
@@ -97,11 +99,11 @@
 	}
 
 	function onBaseDepositChange() {
-		quoteDepositValue = 0
+		quoteDepositValue = 0;
 	}
 
 	function onQuoteDepositChange() {
-		baseDepositValue = 0
+		baseDepositValue = 0;
 	}
 
 	// function onHalfDepositClick() {
@@ -127,8 +129,7 @@
 				<p>Max {row.tokenQuote.symbol} withdraw: 0</p>
 			</div>
 			<div class="strategy-row-details__info__col">
-				<span class="strategy-row-details__switch">
-				</span>
+				<span class="strategy-row-details__switch" />
 			</div>
 		</div>
 	</div>
@@ -144,9 +145,13 @@
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<Input bind:value={baseDepositValue} on:change={onBaseDepositChange}/>
+					<Input bind:value={baseDepositValue} on:change={onBaseDepositChange} />
 					<Switch />
-					<Input class="strategy-row-details__input--right" bind:value={quoteDepositValue} on:change={onQuoteDepositChange}/>
+					<Input
+						class="strategy-row-details__input--right"
+						bind:value={quoteDepositValue}
+						on:change={onQuoteDepositChange}
+					/>
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">

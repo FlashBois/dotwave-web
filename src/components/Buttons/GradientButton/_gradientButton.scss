@@ -12,6 +12,7 @@
 	line-height: 48px;
 	border-radius: 20px;
 	border: none;
+	transition: all 0.2s ease-in-out;
 
 	background: linear-gradient(45deg, rgba(1, 157, 154, 0.5), rgba(176, 30, 157, 0.5));
 	backdrop-filter: blur(15px);
@@ -26,5 +27,9 @@
 	&:disabled {
 		background: linear-gradient(45deg, rgba(1, 157, 154, 0.26), rgba(176, 30, 156, 0.267));
 		color: gray;
+	}
+
+	&:hover {
+		transform: scale(1.02);
 	}
 }

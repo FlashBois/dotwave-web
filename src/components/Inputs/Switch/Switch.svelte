@@ -1,276 +1,110 @@
 <script lang="ts">
-	// based on suggestions from:
-	// Inclusive Components by Heydon Pickering https://inclusive-components.design/toggle-button/
-	// On Designing and Building Toggle Switches by Sara Soueidan https://www.sarasoueidan.com/blog/toggle-switch-design/
-	// and this example by Scott O'hara https://codepen.io/scottohara/pen/zLZwNv
+	let checked: boolean;
 
-	export let label = '';
-	export let design = 'inner label';
-	export let options: string[] = [];
-	export let fontSize = 16;
-	export let value = 'on';
-
-	let checked = true;
-
-	const uniqueID = Math.floor(Math.random() * 100);
-
-	function handleClick(event: Event) {
-		const target = event.target as HTMLButtonElement;
-		const state = target.getAttribute('aria-checked');
-
-		checked = state === 'true' ? false : true;
-
-		value = checked === true ? 'on' : 'off';
+	function onCheckboxChange(event: Event) {
+		console.log(event.target)
 	}
-
-	const slugify = (str = '') => str.toLowerCase().replace(/ /g, '-').replace(/\./g, '');
 </script>
 
-{#if design == 'inner'}
-	<div class="s s--inner">
-		<span id={`switch-${uniqueID}`}>{label}</span>
-		<button
-			role="switch"
-			aria-checked={checked}
-			aria-labelledby={`switch-${uniqueID}`}
-			on:click={(e) => handleClick}
-		>
-			<span>on</span>
-			<span>off</span>
-		</button>
-	</div>
-{:else if design == 'slider'}
-	<div class="s s--slider" style="font-size:{fontSize}px">
-		<span id={`switch-${uniqueID}`}>{label}</span>
-		<button
-			role="switch"
-			aria-checked={checked}
-			aria-labelledby={`switch-${uniqueID}`}
-			on:click={handleClick}
+<div class="switch-background">
+	<input type="checkbox" bind:checked on:change={onCheckboxChange} />
+	<label for="darkmode-toggle">
+		<img
+			class="sun"
+			alt="ray"
+			src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png"
 		/>
-	</div>
-{:else if design == 'image'}
-	<div class="s s--multi">
-		<div
-			role="radiogroup"
-			class="group-container"
-			aria-labelledby={`label-${uniqueID}`}
-			style="font-size:{fontSize}px"
-			id={`group-${uniqueID}`}
-		>
-			<div class="legend" id={`label-${uniqueID}`}>{label}</div>
-			{#each options as option}
-				<input type="radio" id={`${option}-${uniqueID}`} value={option} bind:group={value} />
-				<label for={`${option}-${uniqueID}`}>
-					{option}
-				</label>
-			{/each}
-		</div>
-	</div>
-{:else}
-	<div class="s s--multi">
-		<div
-			role="radiogroup"
-			class="group-container"
-			aria-labelledby={`label-${uniqueID}`}
-			style="font-size:{fontSize}px"
-			id={`group-${uniqueID}`}
-		>
-			<div class="legend" id={`label-${uniqueID}`}>{label}</div>
-			{#each options as option}
-				<input type="radio" id={`${option}-${uniqueID}`} value={option} bind:group={value} />
-				<label for={`${option}-${uniqueID}`}>
-					{option}
-				</label>
-			{/each}
-		</div>
-	</div>
-{/if}
+		<img
+			class="moon"
+			alt="ray"
+			src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png"
+		/>
+	</label>
+</div>
 
-<style>
-	:root {
-		--gray: #6b2424;
+<style lang="scss">
+	@mixin background-blur {
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+		backdrop-filter: blur(50px);
+		-webkit-backdrop-filter: blur(50px);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 	}
-	/* Inner Design Option */
-	.s--inner button {
-		padding: 0.5em;
-		background-color: #fff;
-		border: 1px solid var(--gray);
+	.switch-background {
+		width: 84px;
+		height: 70px;
 	}
-	[role='switch'][aria-checked='true'] :first-child,
-	[role='switch'][aria-checked='false'] :last-child {
-		display: none;
-		color: #fff;
-	}
-
-	.s--inner button span {
-		user-select: none;
-		pointer-events: none;
-		padding: 0.25em;
-	}
-
-	.s--inner button:focus {
-		outline: var(--color-primary-pink) solid 1px;
-	}
-
-	/* Slider Design Option */
-
-	.s--slider {
-		display: flex;
-		align-items: center;
-	}
-
-	.s--slider button {
-		width: 3em;
-		height: 1.6em;
+	label {
+		width: 84px;
+		height: 35px;
 		position: relative;
-		margin: 0 0 0 0.5em;
-		background: var(--gray);
-		border: none;
+		display: block;
+		background: transparent;
+		border-radius: 200px;
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -5px 15px rgba(255, 255, 255, 0.4);
+		cursor: pointer;
 	}
 
-	.s--slider button::before {
+	label:after {
 		content: '';
+		width: 30px;
+		height: 30px;
 		position: absolute;
-		width: 1.3em;
-		height: 1.3em;
-		background: #fff;
-		top: 0.13em;
-		right: 1.5em;
-		transition: transform 0.3s;
+		top: 2px;
+		left: 2px;
+		background: #131212;
+		border-radius: 180px;
+		box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+	}
+	input {
+		width: 0;
+		height: 0;
+		visibility: hidden;
+	}
+	input:checked + label {
+		background: #131212c9;
+		box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -1px 3px rgba(255, 255, 255, 0.4);
+	}
+	input:checked + label:after {
+		left: 79px;
+		transform: translateX(-100%);
+		background: transparent;
+	}
+	label,
+	label:after {
+		transition: 0.3s;
 	}
 
-	.s--slider button[aria-checked='true'] {
-		background-color: var(--color-primary-pink);
+	label:active:after {
+		width: 75px;
 	}
 
-	.s--slider button[aria-checked='true']::before {
-		transform: translateX(1.3em);
-		transition: transform 0.3s;
-	}
-
-	.s--slider button:focus {
-		box-shadow: 0 0px 0px 1px var(--color-primary-pink);
-	}
-
-	/* Multi Design Option */
-
-	/* Based on suggestions from Sara Soueidan https://www.sarasoueidan.com/blog/toggle-switch-design/
-    and this example from Scott O'hara https://codepen.io/scottohara/pen/zLZwNv */
-
-	.s--multi .group-container {
-		border: none;
-		padding: 0;
-		white-space: nowrap;
-	}
-
-	/* .s--multi legend {
-    font-size: 2px;
-    opacity: 0;
-    position: absolute;
-    } */
-
-	.s--multi label {
-		display: inline-block;
-		line-height: 1.6;
-		position: relative;
-		z-index: 2;
-	}
-
-	.s--multi input {
-		opacity: 0;
+	label img {
 		position: absolute;
+		width: 23px;
+		top: 5.4px;
+		z-index: 100;
 	}
-
-	.s--multi label:first-of-type {
-		padding-right: 5em;
+	label img.sun {
+		left: 5.2px;
+		fill: #fff;
+		transition: 0.3s;
+		transform: scale(1.1);
 	}
-
-	.s--multi label:last-child {
-		margin-left: -5em;
-		padding-left: 5em;
+	label img.moon {
+		left: 51px;
+		top: 3.5px;
+		width: 25px;
+		height: 25px;
+		fill: #7e7e7e;
+		transition: 0.3s;
+		transform: scale(0.9);
 	}
-
-	.s--multi:focus-within label:first-of-type:after {
-		box-shadow: 0 0px 8px var(--color-primary-pink);
-		border-radius: 1.5em;
+	input:checked + label img.moon {
+		transform: scale(1.1);
 	}
-
-	/* making the switch UI.  */
-	.s--multi label:first-of-type:before,
-	.s--multi label:first-of-type:after {
-		content: '';
-		height: 1.25em;
-		overflow: hidden;
-		pointer-events: none;
-		position: absolute;
-		vertical-align: middle;
-	}
-
-	.s--multi label:first-of-type:before {
-		border-radius: 100%;
-		z-index: 2;
-		position: absolute;
-		width: 1.2em;
-		height: 1.2em;
-		background: red;
-		top: 0.2em;
-		right: 1.2em;
-		transition: transform 0.3s;
-	}
-
-	.s--multi label:first-of-type:after {
-		background: var(--color-primary-pink);
-		border-radius: 1em;
-		margin: 0 1em;
-		transition: background 0.2s ease-in-out;
-		width: 3em;
-		height: 1.6em;
-	}
-
-	.s--multi input:first-of-type:checked ~ label:first-of-type:after {
-		background: var(--gray);
-	}
-
-	.s--multi input:first-of-type:checked ~ label:first-of-type:before {
-		transform: translateX(-1.4em);
-	}
-
-	.s--multi input:last-of-type:checked ~ label:last-of-type {
-		z-index: 1;
-	}
-
-	.s--multi input:focus {
-		box-shadow: 0 0px 8px var(--color-primary-pink);
-		border-radius: 1.5em;
-	}
-
-	/* gravy */
-
-	/* Inner Design Option */
-	[role='switch'][aria-checked='true'] :first-child,
-	[role='switch'][aria-checked='false'] :last-child {
-		border-radius: 0.25em;
-		background: var(--color-primary-pink);
-		display: inline-block;
-	}
-
-	.s--inner button:focus {
-		box-shadow: 0 0px 8px var(--color-primary-pink);
-		border-radius: 0.1em;
-	}
-
-	/* Slider Design Option */
-	.s--slider button {
-		border-radius: 1.5em;
-	}
-
-	.s--slider button::before {
-		border-radius: 100%;
-	}
-
-	.s--slider button:focus {
-		box-shadow: 0 0px 8px var(--color-primary-pink);
-		border-radius: 1.5em;
+	input:checked + label img.sun {
+		transform: scale(0.9);
 	}
 </style>

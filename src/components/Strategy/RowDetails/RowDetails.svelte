@@ -16,6 +16,7 @@
 	import { BN, web3 } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { web3Store } from '$src/stores/web3Store';
+	import { delay } from 'lodash';
 
 	export let row: IStrategyTable;
 
@@ -95,6 +96,9 @@
 			);
 
 			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
+			delay(async () => {
+				await loadUserStoreAccounts();
+			}, 3000);
 		}
 	}
 
@@ -163,12 +167,8 @@
 		<div class="strategy-row-details__operation">
 			<div class="strategy-row-details__operation-box">
 				<div class="strategy-row-details__label">
-					<span
-						>Balance: {#if !publicKey} -- {:else} {baseToken.amount.toString()} {/if}</span
-					>
-					<span
-						>Balance: {#if !publicKey} -- {:else} {baseToken.amount.toString()} {/if}</span
-					>
+					<span>Balance: -- </span>
+					<span>Balance: -- </span>
 				</div>
 				<div class="strategy-row-details__input-container">
 					<Input />

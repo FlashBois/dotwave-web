@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { loadUserStoreAccounts } from '$src/stores/userStore';
 	import { web3Store } from '$src/stores/web3Store';
 	import { useMintDevnetTokens } from '$src/tools/web3/useMintDevnetTokens';
 	import { walletStore, type WalletStore } from '$stores/walletStore';
+	import { delay } from 'lodash';
 	import { get } from 'svelte/store';
 	import WalletButton from './WalletButton.svelte';
 	import WalletConnectButton from './WalletConnectButton.svelte';
@@ -83,6 +85,7 @@
 		const wallet = get(walletStore);
 		if (wallet) {
 			await useMintDevnetTokens(connection, wallet);
+			delay(async() => {await loadUserStoreAccounts()}, 3000)
 
 			if (dropDrownVisible) {
 				closeDropdown();

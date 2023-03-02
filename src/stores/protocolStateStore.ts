@@ -29,7 +29,7 @@ export async function createProtocolState(): Promise<void> {
 
 	const [stateAddress, _] = PublicKey.findProgramAddressSync(
 		[Buffer.from(anchor.utils.bytes.utf8.encode(STATE_SEED))],
-		new PublicKey('3wnPHyMvFaAMQoHYmkQ52erfYocW5f4GmkmdNzu3Couv')
+		new PublicKey('3EoFa6QYUQW1pgjoMbhhmERypWrf5dYfTYiJPMbnKNn9')
 	);
 
 	const stateAccountInfo = (await connection.getAccountInfo(stateAddress))?.data;

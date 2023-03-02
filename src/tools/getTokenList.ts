@@ -14,7 +14,7 @@ const devnetTokensPriority = ['USDC', 'SOL', 'ETH', 'WBTC'];
 
 export const getTokenList = (chain: 'devnet' = 'devnet'): ITokenList[] => {
 	const { vaultsSupport, ready } = get(protocolStateStore);
-	if (!ready) return [];
+	if (!ready || !vaultsSupport) return [];
 
 	const vaultTokens = new Set<string>();
 

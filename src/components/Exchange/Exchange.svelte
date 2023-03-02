@@ -4,13 +4,16 @@
 	import { swapStore, TokenListType } from '$src/stores/swapStore';
 	import { userStore } from '$src/stores/userStore';
 	import { walletStore } from '$stores/walletStore';
-	import { derived, writable } from 'svelte/store';
+	import { derived, get, writable } from 'svelte/store';
 	import Decimal from 'decimal.js';
 
 	import Input from '$components/Inputs/Input/Input.svelte';
 	import ReadonlyInput from '$components/Inputs/Input/ReadonlyInput.svelte';
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
+	import { protocolStateStore } from '$src/stores/protocolStateStore';
+	import { PublicKey } from '@solana/web3.js';
+	import { swapOutput } from '$src/tools/swapOutput';
 
 	$: ({ wallet } = $walletStore);
 	$: ({ data } = $page);
@@ -28,9 +31,38 @@
 		}
 	}
 
+	interface ISimulationData {
+		in: number;
+		out: number;
+		ok: boolean;
+		msg: string;
+	}
+
 	const fromValue = writable(0);
-	const toValue = derived<typeof fromValue, number>(fromValue, ($fromValue, set) => {
-		set($fromValue);
+	const toValue = derived<typeof fromValue, ISimulationData>(fromValue, ($fromValue, set) => {
+		try {
+			const out = swapOutput(BigInt($fromValue));
+			set({
+				in: $fromValue,
+				out: Number(out),
+				ok: true,
+				msg: ''
+			});
+		} catch (error: any) {
+			let msg = 'simulation failed';
+			switch (error.message) {
+				case 'Not enough available quote quantity':
+					msg = 'Not enough liquidity';
+			}
+
+			console.log(error.message);
+			set({
+				in: $fromValue,
+				out: 0,
+				ok: false,
+				msg
+			});
+		}
 	});
 
 	$: userData = derived<
@@ -73,7 +105,11 @@
 			<div class="exchange__label">
 				<span>From</span>
 				<span
-					>Balance: {#if !wallet} -- {:else} {from.amount.div(new Decimal(10).pow(data.from.decimals))} {/if}</span
+					>Balance: {#if !wallet}
+						--
+					{:else}
+						{from.amount.div(new Decimal(10).pow(data.from.decimals))}
+					{/if}</span
 				>
 			</div>
 			<div class="exchange__input">
@@ -114,11 +150,15 @@
 			<div class="exchange__label">
 				<span>To</span>
 				<span
-					>Balance: {#if !wallet} -- {:else} {to.amount.div(new Decimal(10).pow(data.to.decimals))} {/if}</span
+					>Balance: {#if !wallet}
+						--
+					{:else}
+						{to.amount.div(new Decimal(10).pow(data.to.decimals))}
+					{/if}</span
 				>
 			</div>
 			<div class="exchange__input">
-				<ReadonlyInput value={$toValue} />
+				<ReadonlyInput value={$toValue.out} />
 				<button on:click={() => displayTokenList(TokenListType.TO)} class="exchange__select">
 					<img src={data.to.logoURI} alt={data.to.symbol} />
 					<p>{data.to.symbol}</p>
@@ -139,6 +179,12 @@
 		</div>
 	</div>
 	<div class="exchange__button">
-		{#if !wallet} <WalletMultiButton/> {:else}<AnimateButton>EXCHANGE</AnimateButton>{/if}
+		{#if !wallet}
+			<WalletMultiButton />
+		{:else if $toValue.ok == false}
+			<AnimateButton>{$toValue.msg}</AnimateButton>
+		{:else}
+			<AnimateButton>EXCHANGE</AnimateButton>
+		{/if}
 	</div>
 </div>

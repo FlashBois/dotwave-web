@@ -9,18 +9,25 @@ import { web3Store } from './web3Store';
 export interface IUserStore {
 	address: PublicKey | null;
 	accounts: ITokenAccount[];
+	getTokenAccountAddress: (mint: PublicKey) => PublicKey | null;
 }
 
 export const userStore = writable<IUserStore>({
 	address: null,
-	accounts: []
+	accounts: [],
+	getTokenAccountAddress: function (mint: PublicKey) {
+		const tokenInfo = this.accounts.find((e) => e.mint.equals(mint));
+		if (tokenInfo?.publicKey) return tokenInfo.publicKey;
+		else return null;
+	}
 });
 
 export function createUserStore(owner: PublicKey): void {
-	userStore.update(() => {
+	userStore.update((store) => {
 		return {
 			address: owner,
-			accounts: []
+			accounts: [],
+			getTokenAccountAddress: store.getTokenAccountAddress
 		};
 	});
 }
@@ -35,18 +42,22 @@ export async function loadUserStoreAccounts(): Promise<void> {
 			owner: address
 		});
 
-		userStore.update(() => {
+		userStore.update((store) => {
 			return {
 				accounts,
-				address
+				address,
+				getTokenAccountAddress: store.getTokenAccountAddress
 			};
 		});
 	}
 }
 
 export function clearUserStore() {
-	userStore.set({
-		address: null,
-		accounts: []
+	userStore.update((store) => {
+		return {
+			accounts: [],
+			address: null,
+			getTokenAccountAddress: store.getTokenAccountAddress
+		};
 	});
 }

@@ -2,6 +2,7 @@ import type { ISortable } from '$src/tools/useAdvancedSorting';
 import { get, writable } from 'svelte/store';
 import { protocolStateStore } from './protocolStateStore';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
+import type { PublicKey } from '@solana/web3.js';
 
 export interface IStrategyStore {
 	sort: { property: keyof IStrategyTable; type: ISortable } | null;
@@ -21,11 +22,15 @@ export interface IStrategyTable {
 		symbol: string;
 		name: string;
 		logoURI: string;
+		address: PublicKey;
+		decimals: number;
 	};
 	tokenQuote: {
 		symbol: string;
 		name: string;
 		logoURI: string;
+		address: PublicKey;
+		decimals: number
 	};
 	walletBalance: number;
 	deposited: number;
@@ -52,6 +57,8 @@ export async function loadStrategies(): Promise<void> {
 		for (const vault of vaultsSupport) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 
+			let id = 0;
+
 			for (let strategyId = 0; strategyId < countStrategy; strategyId++) {
 				const strategyInfo = vaultsAccounts.strategy_info(vault.id, strategyId);
 				const baseTokenInfo = tokenListDevnet.find(
@@ -63,7 +70,7 @@ export async function loadStrategies(): Promise<void> {
 
 				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
-						id: 0,
+						id,
 						vaultId: vault.id,
 						strategyId,
 						strategy: {
@@ -74,12 +81,16 @@ export async function loadStrategies(): Promise<void> {
 						tokenBase: {
 							symbol: baseTokenInfo.symbol,
 							name: baseTokenInfo.name,
-							logoURI: baseTokenInfo.logoURI
+							logoURI: baseTokenInfo.logoURI,
+							address: vault.baseTokenAddress,
+							decimals: baseTokenInfo.decimals
 						},
 						tokenQuote: {
 							symbol: quoteTokenInfo.symbol,
 							name: quoteTokenInfo.name,
-							logoURI: quoteTokenInfo.logoURI
+							logoURI: quoteTokenInfo.logoURI,
+							address: vault.quoteTokenAddress,
+							decimals: quoteTokenInfo.decimals
 						},
 						walletBalance: 100.01,
 						deposited: 20.01,
@@ -90,9 +101,12 @@ export async function loadStrategies(): Promise<void> {
 						utilization: 20.5,
 						withDetails: false
 					});
+					id++;
 				}
 			}
 		}
+
+		console.log(extractStrategy);
 
 		strategyStore.update((store) => {
 			store.strategyTable = extractStrategy;

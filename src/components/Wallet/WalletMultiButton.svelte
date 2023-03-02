@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { loadUserStoreAccounts } from '$src/stores/userStore';
+	import { web3Store } from '$src/stores/web3Store';
+	import { useMintDevnetTokens } from '$src/tools/web3/useMintDevnetTokens';
 	import { walletStore, type WalletStore } from '$stores/walletStore';
+	import { delay } from 'lodash';
+	import { get } from 'svelte/store';
 	import WalletButton from './WalletButton.svelte';
 	import WalletConnectButton from './WalletConnectButton.svelte';
 	import WalletModal from './WalletModal.svelte';
@@ -74,6 +79,19 @@
 			}
 		};
 	}
+
+	async function onFaucetClick() {
+		const { connection } = get(web3Store);
+		const wallet = get(walletStore);
+		if (wallet) {
+			await useMintDevnetTokens(connection, wallet);
+			delay(async() => {await loadUserStoreAccounts()}, 3000)
+
+			if (dropDrownVisible) {
+				closeDropdown();
+			}
+		}
+	}
 </script>
 
 {#if !wallet}
@@ -101,6 +119,10 @@
 					}
 				}}
 			>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<li on:click={onFaucetClick} class="wallet-adapter-dropdown-list-item" role="menuitem">
+					Faucet
+				</li>
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<li on:click={copyAddress} class="wallet-adapter-dropdown-list-item" role="menuitem">
 					{copied ? 'Copied' : 'Copy address'}

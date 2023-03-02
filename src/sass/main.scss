@@ -17,6 +17,8 @@
 @import '../components/Exchange/exchange';
 @import '../components/Exchange/TokenList/token-list';
 
+@import '../components/Borrow/borrow';
+
 @import '../components/Buttons/AnimateButton/animateButton';
 @import '../components/Buttons/GradientButton/gradientButton';
 
@@ -27,6 +29,7 @@
 
 // PAGES
 @import '../routes/strategy/strategy';
+@import '../routes/borrow/borrow';
 @import 'pages/swap';
 
 

@@ -1,0 +1,12 @@
+.borrow-page {
+    background-color: red;
+    height: 100%;
+    width: 100%;
+
+    grid-column: center-start / center-end;
+    grid-row: 2;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}

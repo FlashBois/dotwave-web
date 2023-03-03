@@ -42,7 +42,7 @@
 	}
 
 	const fromValue = writable(0);
-	const toValue = derived<typeof fromValue, ISimulationData>(fromValue, ($fromValue, set) => {
+	const simulation = derived<typeof fromValue, ISimulationData>(fromValue, ($fromValue, set) => {
 		try {
 			const out = swapOutput($fromValue);
 			set({
@@ -57,6 +57,8 @@
 			if (error.message.includes('[DecimalError]')) {
 				msg = 'Invalid input amount';
 			}
+
+			console.error(error);
 
 			switch (error.message) {
 				case 'Not enough available quote quantity':
@@ -119,7 +121,7 @@
 	async function swap() {
 		const gotWalletStore = get(walletStore);
 		const connection = get(anchorStore).connection;
-		const to = get(toValue);
+		const to = get(simulation);
 		await useSingleSwap(connection, gotWalletStore, to.in, to.out);
 	}
 </script>
@@ -183,7 +185,7 @@
 				>
 			</div>
 			<div class="exchange__input">
-				<ReadonlyInput value={$toValue.out} />
+				<ReadonlyInput value={$simulation.out} />
 				<button on:click={() => displayTokenList(TokenListType.TO)} class="exchange__select">
 					<img src={data.to.logoURI} alt={data.to.symbol} />
 					<p>{data.to.symbol}</p>
@@ -206,8 +208,8 @@
 	<div class="exchange__button">
 		{#if !wallet}
 			<WalletMultiButton />
-		{:else if $toValue.ok == false}
-			<AnimateButton>{$toValue.msg}</AnimateButton>
+		{:else if $simulation.ok == false}
+			<AnimateButton>{$simulation.msg}</AnimateButton>
 		{:else}
 			<AnimateButton on:onClick={swap}>EXCHANGE</AnimateButton>
 		{/if}

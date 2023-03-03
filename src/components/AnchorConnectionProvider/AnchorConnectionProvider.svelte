@@ -9,7 +9,7 @@
 	export let network: string,
 		config: Commitment | ConnectionConfig | undefined = 'processed';
 
-	export const PROGRAM_ID = new PublicKey('3EoFa6QYUQW1pgjoMbhhmERypWrf5dYfTYiJPMbnKNn9');
+	export const PROGRAM_ID = new PublicKey('xRkECZZpCjQ9PfpGvJ1R87GtVcMzJq31qZjGz9fYo95');
 	const connection = new Connection(network, config);
 
 	function defineProgramAndProvider(walletStore: WalletStore) {

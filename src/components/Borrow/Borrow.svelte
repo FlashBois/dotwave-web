@@ -18,11 +18,13 @@
 	import { BN } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { delay } from 'lodash';
+	import { useRepay } from '$src/tools/instructions/useRepay';
 
 	$: ({ params } = $page);
 
 	let vaultSupport: IVaultSupport;
-	let borrowInputValue: number
+	let borrowInputValue: number;
+	let repayInputValue: number
 
 	onMount(() => {
 		const protocolSateCopy = get(protocolStateStore);
@@ -62,15 +64,57 @@
 					0,
 					{
 						statement: statementProgramAddress,
-						accountBase: userStoreCopy.getTokenAccountAddress(
-							vaultSupport.baseTokenAddress
-						)!,
+						accountBase: userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress)!,
 						reserveBase: new PublicKey(vaultsAccounts.base_reserve(0)),
 						vaults: vaultsAddress,
 						state: stateAddress,
 						signer: publicKey
 					},
-					new BN(10000)
+					new BN(borrowInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
+				)
+			);
+
+			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
+			delay(async () => {
+				await loadUserStoreAccounts();
+			}, 3000);
+		}
+	}
+
+	async function onRepayClick() {
+		const anchorCopy = get(anchorStore);
+		const walletCopy = get(walletStore);
+		const web3Copy = get(web3Store);
+		const userStoreCopy = get(userStore);
+		const { vaultsAccounts, vaultsAddress, stateAddress } = get(protocolStateStore);
+
+		if (anchorCopy && walletCopy.publicKey && vaultsAccounts) {
+			const { program } = anchorCopy;
+			const { publicKey } = walletCopy;
+
+			const tx = new Transaction();
+			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
+
+			const userStatemantAccount = await web3Copy.connection.getAccountInfo(
+				statementProgramAddress
+			);
+			if (!userStatemantAccount) {
+				tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
+			}
+
+			tx.add(
+				await useRepay(
+					program,
+					vaultSupport.id,
+					{
+						statement: statementProgramAddress,
+						accountBase: userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress)!,
+						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
+						vaults: vaultsAddress,
+						state: stateAddress,
+						signer: publicKey
+					},
+					new BN(repayInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
 				)
 			);
 
@@ -87,7 +131,7 @@
 		<div class="borrow__operation">
 			<div class="borrow__operation-box">
 				<div class="borrow__input">
-					<Input bind:value={borrowInputValue}/>
+					<Input bind:value={borrowInputValue} />
 					<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 				</div>
 				<div class="borrow__button-box">
@@ -98,11 +142,11 @@
 		<div class="borrow__operation">
 			<div class="borrow__operation-box">
 				<div class="borrow__input">
-					<Input />
+					<Input bind:value={repayInputValue}/>
 					<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 				</div>
 				<div class="borrow__button-box">
-					<GradientButton>Repay</GradientButton>
+					<GradientButton on:click={onRepayClick}>Repay</GradientButton>
 				</div>
 			</div>
 		</div>

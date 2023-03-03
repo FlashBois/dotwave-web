@@ -3,15 +3,25 @@ import { writable } from 'svelte/store';
 import * as anchor from '@project-serum/anchor';
 import { get } from 'svelte/store';
 import { StateAccount, VaultsAccount } from '$src/pkg';
+import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 const STATE_SEED = 'state';
+
+export interface ITokenInfo {
+	address: string;
+	decimals: number;
+	name: string;
+	symbol: string;
+	logoURI: string;
+}
 
 export interface IVaultSupport {
 	id: number;
 	baseTokenAddress: PublicKey;
+	baseTokenInfo: ITokenInfo;
 	quoteTokenAddress: PublicKey;
+	quoteTokenInfo: ITokenInfo;
 	oracleAddress: PublicKey;
-	// updateOracle: () => void;
 }
 
 export interface IProtocolStateStore {
@@ -59,13 +69,38 @@ export async function loadProtocolState(): Promise<void> {
 			const vaultsAccounts = VaultsAccount.load(vaultAccountInfo);
 
 			const vaults = vaultsAccounts.vaults_keys_with_id();
+
 			const vaultsSupport: IVaultSupport[] = vaults.map((item) => {
-				return {
-					baseTokenAddress: new PublicKey(item.base_key),
-					quoteTokenAddress: new PublicKey(item.quote_key),
-					id: item.index,
-					oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.index))
-				};
+				const baseTokenAddress = new PublicKey(item.base_key);
+				const quoteTokenAddress = new PublicKey(item.quote_key);
+
+				const baseTokenInfo = tokenListDevnet.find((e) => e.address == baseTokenAddress.toString());
+				const quoteTokenInfo = tokenListDevnet.find(
+					(e) => e.address == quoteTokenAddress.toString()
+				);
+
+				if (baseTokenInfo && quoteTokenInfo) {
+					return {
+						baseTokenAddress,
+						quoteTokenAddress,
+						baseTokenInfo: {
+							address: baseTokenInfo.address,
+							decimals: baseTokenInfo.decimals,
+							logoURI: baseTokenInfo.logoURI,
+							name: baseTokenInfo.name,
+							symbol: baseTokenInfo.symbol
+						},
+						quoteTokenInfo: {
+							address: quoteTokenInfo.address,
+							decimals: quoteTokenInfo.decimals,
+							logoURI: quoteTokenInfo.logoURI,
+							name: quoteTokenInfo.name,
+							symbol: quoteTokenInfo.symbol
+						},
+						id: item.index,
+						oracleAddress: new PublicKey(baseTokenInfo.oracle)
+					};
+				} else throw Error('Token address does not exist in the token list');
 			});
 
 			protocolStateStore.update((store) => {

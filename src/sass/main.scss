@@ -29,7 +29,7 @@
 
 // PAGES
 @import '../routes/strategy/strategy';
-@import '../routes/borrow/borrow';
+@import '../routes/borrow/[base]_[quote]/borrow';
 @import 'pages/swap';
 
 

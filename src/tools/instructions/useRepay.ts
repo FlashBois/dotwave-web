@@ -12,7 +12,7 @@ interface IRepayAccounts {
 	reserveBase: PublicKey;
 }
 
-export async function useBorrow(
+export async function useRepay(
 	program: Program<Protocol>,
 	vaultId: number,
 	accounts: IRepayAccounts,

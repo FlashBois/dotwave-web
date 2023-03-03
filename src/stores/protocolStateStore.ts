@@ -6,6 +6,7 @@ import { StateAccount, VaultsAccount } from '$src/pkg';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 const STATE_SEED = 'state';
+export const PROGRAM_ID = new PublicKey("xRkECZZpCjQ9PfpGvJ1R87GtVcMzJq31qZjGz9fYo95");
 
 export interface ITokenInfo {
 	address: string;
@@ -39,7 +40,7 @@ export async function createProtocolState(): Promise<void> {
 
 	const [stateAddress, _] = PublicKey.findProgramAddressSync(
 		[Buffer.from(anchor.utils.bytes.utf8.encode(STATE_SEED))],
-		new PublicKey('3wnPHyMvFaAMQoHYmkQ52erfYocW5f4GmkmdNzu3Couv')
+		PROGRAM_ID
 	);
 
 	const stateAccountInfo = (await connection.getAccountInfo(stateAddress))?.data;

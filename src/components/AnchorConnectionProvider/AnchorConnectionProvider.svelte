@@ -1,21 +1,19 @@
 <script lang="ts">
-	import { Connection, PublicKey } from '@solana/web3.js';
+	import { Connection } from '@solana/web3.js';
 	import type { Commitment, ConnectionConfig } from '@solana/web3.js';
 	import { AnchorProvider, Program } from '@project-serum/anchor';
 	import { walletStore, type WalletStore } from '$src/stores/walletStore';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { IDL } from '$src/utils/Idl/protocol';
+	import { PROGRAM_ID } from '$src/stores/protocolStateStore';
 
-	export let
-		network: string,
+	export let network: string,
 		config: Commitment | ConnectionConfig | undefined = 'processed';
 
-	export const PROGRAM_ID = new PublicKey("3wnPHyMvFaAMQoHYmkQ52erfYocW5f4GmkmdNzu3Couv");
 	const connection = new Connection(network, config);
 
 	function defineProgramAndProvider(walletStore: WalletStore) {
-		let { signTransaction, signAllTransactions, publicKey } =
-			walletStore;
+		let { signTransaction, signAllTransactions, publicKey } = walletStore;
 
 		const provider = new AnchorProvider(
 			connection,
@@ -29,13 +27,13 @@
 			}
 		);
 
-		const program = new Program(IDL, PROGRAM_ID , provider);
+		const program = new Program(IDL, PROGRAM_ID, provider);
 
 		anchorStore.set({
 			connection,
 			program,
 			network
-		})
+		});
 	}
 
 	$: $walletStore && $walletStore.publicKey && defineProgramAndProvider($walletStore);

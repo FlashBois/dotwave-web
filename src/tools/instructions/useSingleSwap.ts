@@ -8,7 +8,8 @@ import {
 	createAssociatedTokenAccountInstruction,
 	createMintToInstruction,
 	getAssociatedTokenAddress,
-	mintTo
+	mintTo,
+	TOKEN_PROGRAM_ID
 } from '@solana/spl-token';
 import {
 	Keypair,
@@ -60,9 +61,7 @@ export async function useSingleSwap(
 		.toString();
 
 	const parsedExpectedAmount = new Decimal(expectedAmount)
-		.mul(10 ** to.decimals)
-		.mul(100)
-		.div(slippagePercentage)
+		.mul(new Decimal(1).sub(new Decimal(slippagePercentage).div(100)))
 		.floor()
 		.toString();
 
@@ -108,8 +107,7 @@ export async function useSingleSwap(
 			accountQuote,
 			reserveBase: new PublicKey(vaultsAccounts.base_reserve(found.index)),
 			reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(found.index)),
-
-			tokenProgram: minter.publicKey
+			tokenProgram: TOKEN_PROGRAM_ID
 		})
 		.preInstructions(preInstructions)
 		.transaction();

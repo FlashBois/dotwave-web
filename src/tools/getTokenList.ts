@@ -1,6 +1,7 @@
 import tokenList from '$src/assets/data/token-list.json';
 import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { get } from 'svelte/store';
+import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 export interface ITokenList {
 	address: string;
@@ -9,8 +10,6 @@ export interface ITokenList {
 	symbol: string;
 	logoURI: string;
 }
-
-const devnetTokensPriority = ['USDC', 'SOL', 'ETH', 'WBTC'];
 
 export const getTokenList = (chain: 'devnet' = 'devnet'): ITokenList[] => {
 	const { vaultsSupport, ready } = get(protocolStateStore);
@@ -27,11 +26,10 @@ export const getTokenList = (chain: 'devnet' = 'devnet'): ITokenList[] => {
 
 	if (chain === 'devnet') {
 		return uniqueTokens.map((address: string, i) => {
-			const found = tokenList.find((t) => t.symbol === devnetTokensPriority[i]);
+			const found = tokenListDevnet.find((t) => t.address === address);
 			if (!found) throw new Error('Token not found');
 			return {
-				...found,
-				address
+				...found
 			};
 		});
 	} else {

@@ -30,7 +30,7 @@ export interface IStrategyTable {
 		name: string;
 		logoURI: string;
 		address: PublicKey;
-		decimals: number
+		decimals: number;
 	};
 	walletBalance: number;
 	deposited: number;
@@ -54,6 +54,7 @@ export async function loadStrategies(): Promise<void> {
 	let extractStrategy: IStrategyTable[] = [];
 
 	if (vaultsAccounts) {
+		// console.log('here', vaultsAccounts.strategy_info(0, 0).balance_base.toString());
 		for (const vault of vaultsSupport) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 

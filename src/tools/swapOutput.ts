@@ -23,5 +23,13 @@ export const swapOutput = (input: number) => {
 		.floor()
 		.toString();
 
-	return vaultsAccounts?.swap(found.index, BigInt(parsedAmount), found.base, false, 0);
+	const simulationResult = vaultsAccounts?.swap(
+		found.index,
+		BigInt(parsedAmount),
+		found.base,
+		false,
+		0
+	);
+
+	return new Decimal(simulationResult.toString()).div(10 ** to.decimals).toNumber();
 };

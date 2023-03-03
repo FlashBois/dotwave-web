@@ -232,6 +232,10 @@ export type Protocol = {
         {
           "name": "maxTotalBorrow",
           "type": "u64"
+        },
+        {
+          "name": "initialFeeTime",
+          "type": "u32"
         }
       ]
     },
@@ -300,6 +304,14 @@ export type Protocol = {
         {
           "name": "swapping",
           "type": "bool"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "u64"
+        },
+        {
+          "name": "liquidationThreshold",
+          "type": "u64"
         }
       ]
     },
@@ -484,6 +496,106 @@ export type Protocol = {
         },
         {
           "name": "c",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "borrow",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "repay",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
           "type": "u64"
         }
       ]
@@ -1692,8 +1804,8 @@ export type Protocol = {
     },
     {
       "code": 6010,
-      "name": "ConfidenceHigherThanPrice",
-      "msg": "Price confidence is higher than price"
+      "name": "ConfidenceTooHigh",
+      "msg": "Price confidence is higher than spread limit"
     },
     {
       "code": 6011,
@@ -1784,6 +1896,41 @@ export type Protocol = {
       "code": 6028,
       "name": "InvalidService",
       "msg": "Service is not valid"
+    },
+    {
+      "code": 6029,
+      "name": "PythAccountParse",
+      "msg": "Parse price account error"
+    },
+    {
+      "code": 6030,
+      "name": "PythPriceGet",
+      "msg": "Cannot get price within DEFAULT_MAX_ORACLE_AGE"
+    },
+    {
+      "code": 6031,
+      "name": "OracleAccountNotFound",
+      "msg": "Cannot find desired oracle account in remaining account infos"
+    },
+    {
+      "code": 6032,
+      "name": "ArrayEmpty",
+      "msg": "Array is empty"
+    },
+    {
+      "code": 6033,
+      "name": "TimeGet",
+      "msg": "Cannot get time"
+    },
+    {
+      "code": 6034,
+      "name": "PubkeyMissing",
+      "msg": "pubkey should be defined"
+    },
+    {
+      "code": 6035,
+      "name": "PositionNotFound",
+      "msg": "Given position was not found"
     }
   ]
 };
@@ -2022,6 +2169,10 @@ export const IDL: Protocol = {
         {
           "name": "maxTotalBorrow",
           "type": "u64"
+        },
+        {
+          "name": "initialFeeTime",
+          "type": "u32"
         }
       ]
     },
@@ -2090,6 +2241,14 @@ export const IDL: Protocol = {
         {
           "name": "swapping",
           "type": "bool"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "u64"
+        },
+        {
+          "name": "liquidationThreshold",
+          "type": "u64"
         }
       ]
     },
@@ -2274,6 +2433,106 @@ export const IDL: Protocol = {
         },
         {
           "name": "c",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "borrow",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "repay",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
           "type": "u64"
         }
       ]
@@ -3482,8 +3741,8 @@ export const IDL: Protocol = {
     },
     {
       "code": 6010,
-      "name": "ConfidenceHigherThanPrice",
-      "msg": "Price confidence is higher than price"
+      "name": "ConfidenceTooHigh",
+      "msg": "Price confidence is higher than spread limit"
     },
     {
       "code": 6011,
@@ -3574,6 +3833,41 @@ export const IDL: Protocol = {
       "code": 6028,
       "name": "InvalidService",
       "msg": "Service is not valid"
+    },
+    {
+      "code": 6029,
+      "name": "PythAccountParse",
+      "msg": "Parse price account error"
+    },
+    {
+      "code": 6030,
+      "name": "PythPriceGet",
+      "msg": "Cannot get price within DEFAULT_MAX_ORACLE_AGE"
+    },
+    {
+      "code": 6031,
+      "name": "OracleAccountNotFound",
+      "msg": "Cannot find desired oracle account in remaining account infos"
+    },
+    {
+      "code": 6032,
+      "name": "ArrayEmpty",
+      "msg": "Array is empty"
+    },
+    {
+      "code": 6033,
+      "name": "TimeGet",
+      "msg": "Cannot get time"
+    },
+    {
+      "code": 6034,
+      "name": "PubkeyMissing",
+      "msg": "pubkey should be defined"
+    },
+    {
+      "code": 6035,
+      "name": "PositionNotFound",
+      "msg": "Given position was not found"
     }
   ]
 };

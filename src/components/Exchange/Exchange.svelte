@@ -14,6 +14,8 @@
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
 	import { PublicKey } from '@solana/web3.js';
 	import { swapOutput } from '$src/tools/swapOutput';
+	import { useSingleSwap } from '$src/tools/instructions/useSingleSwap';
+	import { anchorStore } from '$src/stores/anchorStore';
 
 	$: ({ wallet } = $walletStore);
 	$: ({ data } = $page);
@@ -67,6 +69,8 @@
 					msg = 'Input quantity is too great';
 				case 'recursive use of an object detected which would lead to unsafe aliasing in rust':
 					msg = 'Simulation failed';
+				case 'To be defined':
+					msg = 'End of curve reached';
 			}
 
 			console.log(error.message);
@@ -110,6 +114,13 @@
 				tokenList: { type, visible: true }
 			};
 		});
+	}
+
+	async function swap() {
+		const gotWalletStore = get(walletStore);
+		const connection = get(anchorStore).connection;
+		const to = get(toValue);
+		await useSingleSwap(connection, gotWalletStore, to.in, to.out);
 	}
 </script>
 
@@ -198,7 +209,7 @@
 		{:else if $toValue.ok == false}
 			<AnimateButton>{$toValue.msg}</AnimateButton>
 		{:else}
-			<AnimateButton on:swap={(e) => console.log('wanna exchange?')}>EXCHANGE</AnimateButton>
+			<AnimateButton on:onClick={swap}>EXCHANGE</AnimateButton>
 		{/if}
 	</div>
 </div>

@@ -28,7 +28,9 @@ export async function signAndSendTransaction(
 	}
 
 	try {
-		return await connection.sendRawTransaction(signedTransaction.serialize());
+		return await connection.sendRawTransaction(signedTransaction.serialize(), {
+			skipPreflight: true
+		});
 	} catch (error) {
 		console.error(error);
 		return 'sending error';

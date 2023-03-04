@@ -57,8 +57,6 @@ export async function loadStrategies(): Promise<void> {
 		for (const vault of vaultsSupport) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 
-			let id = 0;
-
 			for (let strategyId = 0; strategyId < countStrategy; strategyId++) {
 				const strategyInfo = vaultsAccounts.strategy_info(vault.id, strategyId);
 				const baseTokenInfo = tokenListDevnet.find(
@@ -70,7 +68,7 @@ export async function loadStrategies(): Promise<void> {
 
 				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
-						id,
+						id: vault.id,
 						vaultId: vault.id,
 						strategyId,
 						strategy: {
@@ -101,12 +99,9 @@ export async function loadStrategies(): Promise<void> {
 						utilization: 20.5,
 						withDetails: false
 					});
-					id++;
 				}
 			}
 		}
-
-		console.log(extractStrategy);
 
 		strategyStore.update((store) => {
 			store.strategyTable = extractStrategy;

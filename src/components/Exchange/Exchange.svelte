@@ -52,27 +52,43 @@
 				msg: ''
 			});
 		} catch (error: any) {
-			let msg = 'simulation failed';
+			let msg;
 
 			if (error.message.includes('[DecimalError]')) {
 				msg = 'Invalid input amount';
 			}
 
-			console.error(error);
-
 			switch (error.message) {
 				case 'Not enough available quote quantity':
 					msg = 'Not enough liquidity';
+					break;
 				case 'Vault not found':
 					msg = 'There is not vault for this token yet';
+					break;
+
 				case 'Cannot swap a token for itself':
 					msg = error.message;
+					break;
+
 				case 'invalid BigInt syntax':
 					msg = 'Input quantity is too great';
+					break;
+
 				case 'recursive use of an object detected which would lead to unsafe aliasing in rust':
 					msg = 'Simulation failed';
+					break;
+
 				case 'To be defined':
 					msg = 'End of curve reached';
+					break;
+
+				default:
+					if (error.message.includes('[DecimalError]')) {
+						msg = 'Invalid input amount';
+					} else {
+						msg = 'Simulation failed';
+						console.error(error);
+					}
 			}
 
 			console.log(error.message);

@@ -15,7 +15,7 @@ export const swapOutput = (input: number) => {
 	}
 
 	const foundFrom = findVault(vaultsSupport, new PublicKey(from.address));
-	const foundTo = findVault(vaultsSupport, new PublicKey(from.address));
+	const foundTo = findVault(vaultsSupport, new PublicKey(to.address));
 
 	if (!foundFrom || !foundTo) {
 		throw new Error('Vault not found');

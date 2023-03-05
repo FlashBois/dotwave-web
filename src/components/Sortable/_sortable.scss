@@ -1,0 +1,16 @@
+.sortable {
+    display: flex;
+    flex-direction: column;
+    margin: 0 5px;
+    justify-content: center;
+
+    svg {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+.sortable-div {
+    user-select: none;
+    cursor: pointer;
+}

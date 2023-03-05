@@ -1,0 +1,25 @@
+.strategy-page {
+    background-color: transparent;
+    height: 100%;
+
+    grid-column: center-start / center-end;
+    grid-row: 2;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 8rem 1fr;
+
+    .filters-section {
+        grid-row: 1;
+
+        height: 100%;
+        width: 100%;
+    }
+
+    .strategy-table-section {
+        grid-row: 2;
+
+        height: 100%;
+        width: 100%;
+    }
+}

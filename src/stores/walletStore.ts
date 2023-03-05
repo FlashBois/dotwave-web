@@ -274,7 +274,7 @@ async function disconnect(): Promise<void> {
 		walletStore.setDisconnecting(true);
 		await adapter.disconnect();
 	} finally {
-		clearUserStore()
+		clearUserStore();
 		walletStore.resetWallet();
 		walletStore.setDisconnecting(false);
 	}

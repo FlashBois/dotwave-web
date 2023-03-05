@@ -7,14 +7,28 @@
 @import 'base/topography';
 @import 'base/utilities';
 
+
+// COMPONENTS
 @import '../components/Wallet/wallet';
+
 @import '../components/Inputs/Input/input';
 @import '../components/Inputs/UnderlineInput/underlineInput';
+
 @import '../components/Exchange/exchange';
 @import '../components/Exchange/TokenList/token-list';
+
 @import '../components/Buttons/AnimateButton/animateButton';
 @import '../components/Buttons/GradientButton/gradientButton';
 
+@import '../components/Strategy/Table/table';
+@import '../components/Strategy/RowDetails/rowDetails';
+
+@import '../components/Sortable/sortable';
+
+// PAGES
+@import '../routes/strategy/strategy';
 @import 'pages/swap';
 
+
+// LAYOUT
 @import 'layout/header';

@@ -5,7 +5,7 @@ import { userStore } from '$src/stores/userStore';
 import type { WalletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
 import { createAssociatedTokenAccountInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { PublicKey, TransactionInstruction, type Connection } from '@solana/web3.js';
+import { PublicKey, Transaction, TransactionInstruction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { findVault } from '../findVault';
@@ -43,58 +43,82 @@ export async function useSwap(
 		.floor()
 		.toString();
 
-	const accountBase = gotUserStore.getTokenAccountAddress(
-		vaultsSupport[foundFrom.index].baseTokenAddress
-	);
-	const accountQuote = gotUserStore.getTokenAccountAddress(
-		vaultsSupport[foundFrom.index].quoteTokenAddress
-	);
+	const double = foundFrom.base && foundTo.base;
 
-	if (!accountBase || !accountQuote) throw new Error("Couldn't find token account");
+	const accountFrom = gotUserStore.getTokenAccountAddress(
+		foundFrom.base
+			? vaultsSupport[foundFrom.index].baseTokenAddress
+			: vaultsSupport[foundFrom.index].quoteTokenAddress
+	);
+	const accountTo = gotUserStore.getTokenAccountAddress(
+		foundTo.base
+			? vaultsSupport[foundTo.index].baseTokenAddress
+			: vaultsSupport[foundFrom.index].quoteTokenAddress
+	);
+	if (!accountFrom || !accountTo) throw new Error("Couldn't find token account");
 
-	const preInstructions: TransactionInstruction[] = [];
-	if (foundFrom.base) {
-		if ((await connection.getAccountInfo(accountBase)) === null)
-			preInstructions.push(
-				createAssociatedTokenAccountInstruction(
-					walletAddress,
-					accountBase,
-					walletAddress,
-					vaultsSupport[foundFrom.index].baseTokenAddress
-				)
-			);
-	} else {
-		if ((await connection.getAccountInfo(accountQuote)) === null)
-			preInstructions.push(
-				createAssociatedTokenAccountInstruction(
-					walletAddress,
-					accountQuote,
-					walletAddress,
-					vaultsSupport[foundFrom.index].quoteTokenAddress
-				)
-			);
+	const tx = new Transaction();
+
+	if ((await connection.getAccountInfo(accountTo)) === null) {
+		tx.add(
+			createAssociatedTokenAccountInstruction(
+				walletAddress,
+				accountTo,
+				walletAddress,
+				foundTo.base
+					? vaultsSupport[foundTo.index].baseTokenAddress
+					: vaultsSupport[foundFrom.index].quoteTokenAddress
+			)
+		);
 	}
 
-	const tx = await program.methods
-		.singleSwap(
-			foundFrom.index,
-			new BN(parsedAmount),
-			new BN(parsedExpectedAmount),
-			foundFrom.base,
-			false
-		)
-		.accounts({
-			state: stateAddress,
-			vaults: vaultsAddress,
-			signer: walletAddress,
-			accountBase,
-			accountQuote,
-			reserveBase: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
-			reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
-			tokenProgram: TOKEN_PROGRAM_ID
-		})
-		.preInstructions(preInstructions)
-		.transaction();
+	if (!double) {
+		tx.add(
+			await program.methods
+				.singleSwap(
+					foundFrom.index,
+					new BN(parsedAmount),
+					new BN(parsedExpectedAmount),
+					foundFrom.base,
+					false
+				)
+				.accounts({
+					state: stateAddress,
+					vaults: vaultsAddress,
+					signer: walletAddress,
+					accountBase: foundFrom.base ? accountFrom : accountTo,
+					accountQuote: foundFrom.base ? accountTo : accountFrom,
+					reserveBase: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
+					reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
+					tokenProgram: TOKEN_PROGRAM_ID
+				})
+				.instruction()
+		);
+	} else {
+		tx.add(
+			await program.methods
+				.doubleSwap(
+					foundFrom.index,
+					foundTo.index,
+					new BN(parsedAmount),
+					new BN(parsedExpectedAmount),
+					false
+				)
+				.accounts({
+					state: stateAddress,
+					vaults: vaultsAddress,
+					signer: walletAddress,
+					accountIn: accountFrom,
+					accountOut: accountTo,
+					reserveIn: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
+					reserveInQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
+					reserveOut: new PublicKey(vaultsAccounts.base_reserve(foundTo.index)),
+					reserveOutQuote: new PublicKey(vaultsAccounts.quote_reserve(foundTo.index)),
+					tokenProgram: TOKEN_PROGRAM_ID
+				})
+				.instruction()
+		);
+	}
 
 	const signature = await signAndSendTransaction(connection, wallet, tx);
 	console.log('Swapped', tx, signature);

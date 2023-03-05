@@ -2,6 +2,7 @@ import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { swapStore } from '$src/stores/swapStore';
 import { PublicKey } from '@solana/web3.js';
 import Decimal from 'decimal.js';
+import { result } from 'lodash';
 import { get } from 'svelte/store';
 import { findVault } from './findVault';
 
@@ -13,8 +14,10 @@ export const swapOutput = (input: number) => {
 		return;
 	}
 
-	const found = findVault(vaultsSupport, new PublicKey(from.address));
-	if (!found) {
+	const foundFrom = findVault(vaultsSupport, new PublicKey(from.address));
+	const foundTo = findVault(vaultsSupport, new PublicKey(from.address));
+
+	if (!foundFrom || !foundTo) {
 		throw new Error('Vault not found');
 	}
 
@@ -23,13 +26,13 @@ export const swapOutput = (input: number) => {
 		.floor()
 		.toString();
 
-	const simulationResult = vaultsAccounts?.swap(
-		found.index,
-		BigInt(parsedAmount),
-		found.base,
-		false,
-		0
-	);
+	const quoteQuantity = foundFrom.base
+		? vaultsAccounts.swap(foundFrom.index, BigInt(parsedAmount), true, false, 0)
+		: BigInt(parsedAmount);
 
-	return new Decimal(simulationResult.toString()).div(10 ** to.decimals).toNumber();
+	const result = foundTo.base
+		? vaultsAccounts.swap(foundTo.index, quoteQuantity, false, false, 0)
+		: quoteQuantity;
+
+	return new Decimal(result.toString()).div(10 ** to.decimals).toNumber();
 };

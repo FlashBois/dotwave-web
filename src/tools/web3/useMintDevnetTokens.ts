@@ -8,7 +8,7 @@ import {
 } from '@solana/spl-token';
 import { Keypair, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import { get } from 'svelte/store';
-import { signAndSendTransaction } from '../wallet/sending';
+import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 
 export const minter = Keypair.fromSecretKey(
 	Uint8Array.from(
@@ -36,8 +36,10 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 	const tokens = [new PublicKey(vaults.quote_token(0))];
 
 	for (let i = 0; i < vaults.vaults_len() && i < MAX_TOKENS_TO_MINT; i++) {
-		tokens.push(new PublicKey(vaults.base_token(0)));
+		tokens.push(new PublicKey(vaults.base_token(i)));
 	}
+
+	console.log('Minting tokens', tokens);
 
 	const accountAddresses = await Promise.all(
 		tokens.map((token) => getAssociatedTokenAddress(token, walletAddress))
@@ -50,17 +52,16 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 	const tx = new Transaction();
 
 	accountAddresses
+		.map((address, i) =>
+			createAssociatedTokenAccountInstruction(walletAddress, address, walletAddress, tokens[i])
+		)
 		.filter((_, i) => !accounts[i])
-		.forEach((address, i) => {
-			tx.add(
-				createAssociatedTokenAccountInstruction(walletAddress, address, walletAddress, tokens[i])
-			);
-		});
+		.forEach((instruction) => tx.add(instruction));
 
 	accountAddresses.forEach((address, i) => {
 		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e7));
 	});
 
-	const signature = await signAndSendTransaction(connection, wallet, tx, [minter]);
+	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);
 	console.log('Minted tokens', tx, signature);
 }

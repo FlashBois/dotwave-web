@@ -1,6 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export function price_denominator(): number;
+export function fraction_denominator(): number;
 export function vaultsaccount_get_price(a: number, b: number, c: number): void;
 export function vaultsaccount_get_confidence(a: number, b: number, c: number): void;
 export function vaultsaccount_get_price_quote(a: number, b: number, c: number): void;
@@ -55,6 +57,7 @@ export function __wbg_get_vaultskeyswithid_index(a: number): number;
 export function __wbg_set_vaultskeyswithid_index(a: number, b: number): void;
 export function vaultsaccount_load(a: number): number;
 export function vaultsaccount_vaults_len(a: number): number;
+export function vaultsaccount_size(): number;
 export function vaultsaccount_vaults_keys_with_id(a: number, b: number): void;
 export function vaultsaccount_base_token(a: number, b: number, c: number): void;
 export function vaultsaccount_quote_token(a: number, b: number, c: number): void;
@@ -68,7 +71,4 @@ export function vaultsaccount_has_lending(a: number, b: number, c: number): void
 export function vaultsaccount_has_swap(a: number, b: number, c: number): void;
 export function vaultsaccount_refresh(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number): void;
-export function price_denominator(): number;
-export function fraction_denominator(): number;
-export function vaultsaccount_size(): number;
 export function __wbindgen_add_to_stack_pointer(a: number): number;

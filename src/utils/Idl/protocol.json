@@ -232,6 +232,10 @@
         {
           "name": "maxTotalBorrow",
           "type": "u64"
+        },
+        {
+          "name": "initialFeeTime",
+          "type": "u32"
         }
       ]
     },
@@ -300,6 +304,14 @@
         {
           "name": "swapping",
           "type": "bool"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "u64"
+        },
+        {
+          "name": "liquidationThreshold",
+          "type": "u64"
         }
       ]
     },
@@ -439,6 +451,83 @@
       ]
     },
     {
+      "name": "doubleSwap",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveInQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOutQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vaultIn",
+          "type": "u8"
+        },
+        {
+          "name": "vaultOut",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "minExpected",
+          "type": "u64"
+        },
+        {
+          "name": "byAmountOut",
+          "type": "bool"
+        }
+      ]
+    },
+    {
       "name": "modifyFeeCurve",
       "accounts": [
         {
@@ -484,6 +573,106 @@
         },
         {
           "name": "c",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "borrow",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "repay",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
           "type": "u64"
         }
       ]
@@ -1692,8 +1881,8 @@
     },
     {
       "code": 6010,
-      "name": "ConfidenceHigherThanPrice",
-      "msg": "Price confidence is higher than price"
+      "name": "ConfidenceTooHigh",
+      "msg": "Price confidence is higher than spread limit"
     },
     {
       "code": 6011,
@@ -1784,6 +1973,41 @@
       "code": 6028,
       "name": "InvalidService",
       "msg": "Service is not valid"
+    },
+    {
+      "code": 6029,
+      "name": "PythAccountParse",
+      "msg": "Parse price account error"
+    },
+    {
+      "code": 6030,
+      "name": "PythPriceGet",
+      "msg": "Cannot get price within DEFAULT_MAX_ORACLE_AGE"
+    },
+    {
+      "code": 6031,
+      "name": "OracleAccountNotFound",
+      "msg": "Cannot find desired oracle account in remaining account infos"
+    },
+    {
+      "code": 6032,
+      "name": "ArrayEmpty",
+      "msg": "Array is empty"
+    },
+    {
+      "code": 6033,
+      "name": "TimeGet",
+      "msg": "Cannot get time"
+    },
+    {
+      "code": 6034,
+      "name": "PubkeyMissing",
+      "msg": "pubkey should be defined"
+    },
+    {
+      "code": 6035,
+      "name": "PositionNotFound",
+      "msg": "Given position was not found"
     }
   ]
 }

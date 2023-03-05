@@ -6,16 +6,14 @@
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { IDL } from '$src/utils/Idl/protocol';
 
-	export let
-		network: string,
+	export let network: string,
 		config: Commitment | ConnectionConfig | undefined = 'processed';
 
-	export const PROGRAM_ID = new PublicKey("3wnPHyMvFaAMQoHYmkQ52erfYocW5f4GmkmdNzu3Couv");
+	export const PROGRAM_ID = new PublicKey('xRkECZZpCjQ9PfpGvJ1R87GtVcMzJq31qZjGz9fYo95');
 	const connection = new Connection(network, config);
 
 	function defineProgramAndProvider(walletStore: WalletStore) {
-		let { signTransaction, signAllTransactions, publicKey } =
-			walletStore;
+		let { signTransaction, signAllTransactions, publicKey } = walletStore;
 
 		const provider = new AnchorProvider(
 			connection,
@@ -29,13 +27,13 @@
 			}
 		);
 
-		const program = new Program(IDL, PROGRAM_ID , provider);
+		const program = new Program(IDL, PROGRAM_ID, provider);
 
 		anchorStore.set({
 			connection,
 			program,
 			network
-		})
+		});
 	}
 
 	$: $walletStore && $walletStore.publicKey && defineProgramAndProvider($walletStore);

@@ -4,9 +4,9 @@ import type { Connection } from '@solana/web3.js';
 import type { Protocol } from '$src/utils/Idl/protocol';
 
 export type IAnchorStore = {
-  connection: Connection;
-  program: Program<Protocol>;
-  network: string;
+	connection: Connection;
+	program: Program<Protocol>;
+	network: string;
 };
 
 export const anchorStore = writable<IAnchorStore>(undefined);

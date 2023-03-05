@@ -14,7 +14,7 @@
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
 	import { PublicKey } from '@solana/web3.js';
 	import { swapOutput } from '$src/tools/swapOutput';
-	import { useSingleSwap } from '$src/tools/instructions/useSingleSwap';
+	import { useSwap } from '$src/tools/instructions/useSwap';
 	import { anchorStore } from '$src/stores/anchorStore';
 
 	$: ({ wallet } = $walletStore);
@@ -122,7 +122,7 @@
 		const gotWalletStore = get(walletStore);
 		const connection = get(anchorStore).connection;
 		const to = get(simulation);
-		await useSingleSwap(connection, gotWalletStore, to.in, to.out);
+		await useSwap(connection, gotWalletStore, to.in, to.out);
 	}
 </script>
 

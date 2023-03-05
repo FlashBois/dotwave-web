@@ -451,6 +451,83 @@ export type Protocol = {
       ]
     },
     {
+      "name": "doubleSwap",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveInQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOutQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vaultIn",
+          "type": "u8"
+        },
+        {
+          "name": "vaultOut",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "minExpected",
+          "type": "u64"
+        },
+        {
+          "name": "byAmountOut",
+          "type": "bool"
+        }
+      ]
+    },
+    {
       "name": "modifyFeeCurve",
       "accounts": [
         {
@@ -2380,6 +2457,83 @@ export const IDL: Protocol = {
         {
           "name": "fromBase",
           "type": "bool"
+        },
+        {
+          "name": "byAmountOut",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "doubleSwap",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveIn",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveInQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOutQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vaultIn",
+          "type": "u8"
+        },
+        {
+          "name": "vaultOut",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "minExpected",
+          "type": "u64"
         },
         {
           "name": "byAmountOut",

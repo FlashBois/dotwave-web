@@ -11,7 +11,7 @@ import { get } from 'svelte/store';
 import { findVault } from '../findVault';
 import { signAndSendTransaction } from '../wallet/sending';
 
-export async function useSingleSwap(
+export async function useSwap(
 	connection: Connection,
 	wallet: WalletStore,
 	amount: number,
@@ -21,14 +21,15 @@ export async function useSingleSwap(
 	const walletAddress = wallet.publicKey!;
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const { vaultsSupport, stateAddress, vaultsAddress, vaultsAccounts } = get(protocolStateStore)!;
-	const { from, slippagePercentage } = get(swapStore);
+	const { from, to, slippagePercentage } = get(swapStore);
 	const { program } = get(anchorStore);
 	const gotUserStore = get(userStore);
 
 	if (!vaultsAccounts) throw new Error('Vaults not loaded');
 
-	const found = findVault(vaultsSupport, new PublicKey(from.address));
-	if (!found) {
+	const foundFrom = findVault(vaultsSupport, new PublicKey(from.address));
+	const foundTo = findVault(vaultsSupport, new PublicKey(to.address));
+	if (!foundFrom || !foundTo) {
 		throw new Error('Vault not found');
 	}
 
@@ -43,23 +44,23 @@ export async function useSingleSwap(
 		.toString();
 
 	const accountBase = gotUserStore.getTokenAccountAddress(
-		vaultsSupport[found.index].baseTokenAddress
+		vaultsSupport[foundFrom.index].baseTokenAddress
 	);
 	const accountQuote = gotUserStore.getTokenAccountAddress(
-		vaultsSupport[found.index].quoteTokenAddress
+		vaultsSupport[foundFrom.index].quoteTokenAddress
 	);
 
 	if (!accountBase || !accountQuote) throw new Error("Couldn't find token account");
 
 	const preInstructions: TransactionInstruction[] = [];
-	if (found.base) {
+	if (foundFrom.base) {
 		if ((await connection.getAccountInfo(accountBase)) === null)
 			preInstructions.push(
 				createAssociatedTokenAccountInstruction(
 					walletAddress,
 					accountBase,
 					walletAddress,
-					vaultsSupport[found.index].baseTokenAddress
+					vaultsSupport[foundFrom.index].baseTokenAddress
 				)
 			);
 	} else {
@@ -69,21 +70,27 @@ export async function useSingleSwap(
 					walletAddress,
 					accountQuote,
 					walletAddress,
-					vaultsSupport[found.index].quoteTokenAddress
+					vaultsSupport[foundFrom.index].quoteTokenAddress
 				)
 			);
 	}
 
 	const tx = await program.methods
-		.singleSwap(found.index, new BN(parsedAmount), new BN(parsedExpectedAmount), found.base, false)
+		.singleSwap(
+			foundFrom.index,
+			new BN(parsedAmount),
+			new BN(parsedExpectedAmount),
+			foundFrom.base,
+			false
+		)
 		.accounts({
 			state: stateAddress,
 			vaults: vaultsAddress,
 			signer: walletAddress,
 			accountBase,
 			accountQuote,
-			reserveBase: new PublicKey(vaultsAccounts.base_reserve(found.index)),
-			reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(found.index)),
+			reserveBase: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
+			reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
 			tokenProgram: TOKEN_PROGRAM_ID
 		})
 		.preInstructions(preInstructions)

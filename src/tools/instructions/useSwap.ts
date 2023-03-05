@@ -9,7 +9,7 @@ import { PublicKey, Transaction, TransactionInstruction, type Connection } from 
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { findVault } from '../findVault';
-import { signAndSendTransaction } from '../wallet/sending';
+import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 
 export async function useSwap(
 	connection: Connection,
@@ -120,6 +120,6 @@ export async function useSwap(
 		);
 	}
 
-	const signature = await signAndSendTransaction(connection, wallet, tx);
+	const signature = await useSignAndSendTransaction(connection, wallet, tx);
 	console.log('Swapped', tx, signature);
 }

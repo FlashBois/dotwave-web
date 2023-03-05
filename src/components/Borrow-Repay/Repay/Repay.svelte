@@ -11,7 +11,7 @@
 	import { PublicKey, Transaction } from '@solana/web3.js';
 
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
+	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
@@ -69,7 +69,7 @@
 	<div class="repay__operation">
 		<div class="repay__operation-box">
 			<div class="repay__input">
-				<Input bind:value={repayInputValue} />
+				<DecimalInput bind:value={repayInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="repay__button-box">

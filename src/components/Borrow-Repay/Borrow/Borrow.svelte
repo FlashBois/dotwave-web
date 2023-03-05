@@ -15,6 +15,7 @@
 	import { BN } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { delay } from 'lodash';
+	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
 	export let vaultSupport: IVaultSupport;
 	let borrowInputValue: number;
@@ -68,7 +69,7 @@
 	<div class="borrow__operation">
 		<div class="borrow__operation-box">
 			<div class="borrow__input">
-				<Input bind:value={borrowInputValue} />
+				<DecimalInput bind:value={borrowInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="borrow__button-box">

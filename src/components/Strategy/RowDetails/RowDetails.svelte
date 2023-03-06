@@ -1,8 +1,8 @@
 <script lang="ts">
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
+	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
+
 	import type { IStrategyTable } from '$src/stores/strategyStore';
-	import Switch from '$components/Inputs/Switch/Switch.svelte';
 	import { derived, get } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
@@ -22,10 +22,10 @@
 
 	$: ({ publicKey } = $walletStore);
 
-	let checked: boolean = false;
 	let baseDepositValue: number;
 	let quoteDepositValue: number;
-	let withdrawValue: number;
+	let baseWithdrawValue: number;
+	let quoteWithdrawValue: number;
 
 	$: userData = derived<
 		[typeof userStore],
@@ -123,8 +123,6 @@
 	<div class="strategy-row-details__info-box">
 		<div class="strategy-row-details__info">
 			<div class="strategy-row-details__info__col">
-				<!-- <p>{row.tokenBase.symbol} balance: {baseToken.amount}</p>
-				<p>{row.tokenQuote.symbol} balance: {quoteToken.amount}</p> -->
 				<p>{row.tokenBase.symbol} deposited: 0</p>
 				<p>{row.tokenQuote.symbol} deposited: 0</p>
 				<p>{row.tokenBase.symbol} locked: 0</p>
@@ -149,12 +147,15 @@
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<Input bind:value={baseDepositValue} on:change={onBaseDepositChange} />
-					<Switch />
-					<Input
+					<DecimalInput bind:value={baseDepositValue} on:input={onBaseDepositChange} />
+					<div class="strategy-row-details__input-center">
+						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
+						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
+					</div>
+					<DecimalInput
 						class="strategy-row-details__input--right"
 						bind:value={quoteDepositValue}
-						on:change={onQuoteDepositChange}
+						on:input={onQuoteDepositChange}
 					/>
 				</div>
 			</div>
@@ -171,9 +172,15 @@
 					<span>Balance: -- </span>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<Input />
-					<Switch />
-					<Input class="strategy-row-details__input--right" />
+					<DecimalInput bind:value={baseWithdrawValue} />
+					<div class="strategy-row-details__input-center">
+						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
+						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
+					</div>
+					<DecimalInput
+						bind:value={quoteWithdrawValue}
+						class="strategy-row-details__input--right"
+					/>
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">

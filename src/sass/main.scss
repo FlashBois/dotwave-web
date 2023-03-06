@@ -12,10 +12,16 @@
 @import '../components/Wallet/wallet';
 
 @import '../components/Inputs/Input/input';
+@import '../components/Inputs/DecimalInput/decimalInput';
 @import '../components/Inputs/UnderlineInput/underlineInput';
 
 @import '../components/Exchange/exchange';
 @import '../components/Exchange/TokenList/token-list';
+
+@import '../components/Borrow-Repay/borrow-repay';
+@import '../components/Borrow-Repay/Borrow/borrow';
+@import '../components/Borrow-Repay/Repay/repay';
+@import '../components/Borrow-Repay/BorrowList/borrow-list';
 
 @import '../components/Buttons/AnimateButton/animateButton';
 @import '../components/Buttons/GradientButton/gradientButton';
@@ -27,6 +33,7 @@
 
 // PAGES
 @import '../routes/strategy/strategy';
+@import '../routes/borrow/[base]_[quote]/borrow';
 @import 'pages/swap';
 
 

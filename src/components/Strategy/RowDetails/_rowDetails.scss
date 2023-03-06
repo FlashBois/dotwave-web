@@ -84,6 +84,23 @@
         }
 	}
 
+	&__input-center {
+		display: flex;
+		border-radius: 200px;
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: inset 0px 5px 15px rgba(0, 0, 0, 0.4), inset 0px -5px 15px rgba(255, 255, 255, 0.4);
+
+		img {
+			width: 25px;
+			height: 25px;
+			margin: 0.5rem;
+
+			&:first-child {
+				margin-right: 1.5rem;
+			}
+		}
+	}
+
 	&__button-box {
 		width: 50%;
 		height: 20%;

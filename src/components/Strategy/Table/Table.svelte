@@ -34,25 +34,18 @@
 
 	let header: IHeader[] = [
 		{
-			name: 'Wallet balance',
+			name: 'Deposit token',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'walletBalance'
+			nameExt: 'depositToken'
 		},
 		{
-			name: 'Deposited',
+			name: 'Deposit stable',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'deposited'
-		},
-		{
-			name: 'Locked',
-			sortingType: ISortable.NONE,
-			isSorted: false,
-			needWallet: true,
-			nameExt: 'locked'
+			nameExt: 'depositStable'
 		},
 		{
 			name: 'Daily APY',
@@ -62,25 +55,25 @@
 			nameExt: 'dailyAPY'
 		},
 		{
-			name: 'Weekly APY',
+			name: 'APY',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'weeklyAPY'
+			nameExt: 'dailyAPY'
 		},
 		{
-			name: 'Yearly APY',
+			name: 'Utilization token',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'yearlyAPY'
+			nameExt: 'utilizationToken'
 		},
 		{
-			name: 'Utilization',
+			name: 'Utilization stable',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'utilization'
+			nameExt: 'utilizationStable'
 		}
 	];
 
@@ -186,13 +179,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="strategy-table__row-item--cell">{row.walletBalance}</div>
-				<div class="strategy-table__row-item--cell">{row.deposited}</div>
-				<div class="strategy-table__row-item--cell">{row.locked}</div>
-				<div class="strategy-table__row-item--cell">{row.dailyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.weeklyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.yearlyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.utilization}</div>
+				<div class="strategy-table__row-item--cell">{row.depositToken}</div>
+				<div class="strategy-table__row-item--cell">{row.depositStable}</div>
+				<div class="strategy-table__row-item--cell">{row.dailyAPY}</div>
+				<div class="strategy-table__row-item--cell">{row.APY}%</div>
+				<div class="strategy-table__row-item--cell">{row.utilizationToken}%</div>
+				<div class="strategy-table__row-item--cell">{row.utilizationStable}%</div>
 				<div class="strategy-table__row-item--arrow">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

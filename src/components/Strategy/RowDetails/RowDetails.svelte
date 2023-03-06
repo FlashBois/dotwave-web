@@ -13,7 +13,7 @@
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import { BN, web3 } from '@project-serum/anchor';
+	import { BN } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { web3Store } from '$src/stores/web3Store';
 	import { delay } from 'lodash';

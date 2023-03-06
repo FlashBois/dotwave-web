@@ -32,13 +32,12 @@ export interface IStrategyTable {
 		address: PublicKey;
 		decimals: number;
 	};
-	walletBalance: number;
-	deposited: number;
-	locked: number;
+	depositToken: number;
+	depositStable: number;
 	dailyAPY: number;
-	weeklyAPY: number;
-	yearlyAPY: number;
-	utilization: number;
+	APY: number;
+	utilizationToken: number;
+	utilizationStable: number;
 	withDetails: boolean;
 }
 
@@ -93,13 +92,12 @@ export async function loadStrategies(): Promise<void> {
 							address: vault.quoteTokenAddress,
 							decimals: quoteTokenInfo.decimals
 						},
-						walletBalance: 100.01,
-						deposited: 20.01,
-						locked: 100.01,
+						depositToken: 2,
+						depositStable: 1,
 						dailyAPY: 2.01,
-						weeklyAPY: 12.01,
-						yearlyAPY: 1.01,
-						utilization: 20.5,
+						APY: 2.00,
+						utilizationToken: 20.5,
+						utilizationStable: 20.5,
 						withDetails: false
 					});
 					id++;

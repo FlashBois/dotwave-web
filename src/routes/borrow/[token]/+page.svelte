@@ -2,35 +2,35 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Borrow from '$components/Borrow-Repay/Borrow/Borrow.svelte';
-	import BorrowList from '$components/Borrow-Repay/BorrowList/BorrowList.svelte';
 	import Repay from '$components/Borrow-Repay/Repay/Repay.svelte';
+	import TokenList from '$components/TokenList/TokenList.svelte';
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { derived, get, writable } from 'svelte/store';
 
 	$: ({ params } = $page);
 	const borrowListVisible = writable(false);
 
-	let backdrop: HTMLDivElement;
-
 	$: vaultSupport = derived<[typeof page], IVaultSupport>([page], ([$page], set) => {
 		if ($page.params) {
 			const protocolSateCopy = get(protocolStateStore);
 
 			const vault = protocolSateCopy.vaultsSupport.find(
-				(e) => e.baseTokenInfo.symbol == params.base && e.quoteTokenInfo.symbol == params.quote
+				(e) => e.baseTokenInfo.symbol == params.token
 			);
 
 			if (vault) {
 				borrowListVisible.set(false);
 				set(vault);
-			} else goto('RAY_USDC');
+			} else goto('RAY');
 		}
 	});
 
-	async function closeTokenList(e: MouseEvent) {
-		if (e.target === backdrop) {
-			borrowListVisible.set(false);
-		}
+	function onCloseTokenList() {
+		borrowListVisible.set(false);
+	}
+
+	function onTokenClick(token: string) {
+		goto(`${token}`);
 	}
 </script>
 
@@ -44,8 +44,7 @@
 				class="borrow__select"
 			>
 				<img src={$vaultSupport.baseTokenInfo.logoURI} alt={$vaultSupport.baseTokenInfo.symbol} />
-				<p>{$vaultSupport.baseTokenInfo.symbol} - {$vaultSupport.quoteTokenInfo.symbol}</p>
-				<img src={$vaultSupport.quoteTokenInfo.logoURI} alt={$vaultSupport.quoteTokenInfo.symbol} />
+				<p>{$vaultSupport.baseTokenInfo.symbol}</p>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					width="16"
@@ -67,10 +66,11 @@
 		{/if}
 	</div>
 
-	{#if $borrowListVisible && $protocolStateStore.vaultsSupport.length > 0}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="borrow-list-section" bind:this={backdrop} on:click={(e) => closeTokenList(e)}>
-			<BorrowList vaultsSupport={$protocolStateStore.vaultsSupport} />
-		</div>
-	{/if}
+	<TokenList
+		on:onTokenClick={(e) => onTokenClick(e.detail)}
+		on:onClose={() => onCloseTokenList()}
+		visible={$borrowListVisible}
+		vaultsSupport={$protocolStateStore.vaultsSupport}
+		withQuote={false}
+	/>
 </div>

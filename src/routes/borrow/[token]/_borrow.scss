@@ -45,8 +45,8 @@
     }
 
     .borrow__select {
-        width: 200px;
-        height: 70%;
+        width: 100px;
+        height: 60%;
         grid-column: 2;
 
         background: linear-gradient(135deg, rgba(1, 157, 154, 0.5), rgba(176, 30, 157, 0.5));
@@ -55,7 +55,7 @@
         cursor: pointer;
         margin: 1rem;
         border: none;
-        padding: 0 2rem;
+        padding: 0 1rem;
 
         display: flex;
         justify-content: space-evenly;

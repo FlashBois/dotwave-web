@@ -20,6 +20,7 @@
 		class={className}
 		on:keydown={onInputChange}
 		on:change
+		on:input
 		type="text"
 		bind:value
 		{placeholder}

@@ -149,8 +149,8 @@
 				<div class="strategy-row-details__input-container">
 					<DecimalInput bind:value={baseDepositValue} on:input={onBaseDepositChange} />
 					<div class="strategy-row-details__input-center">
-						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`}>
-						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`}>
+						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
+						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						class="strategy-row-details__input--right"
@@ -172,12 +172,15 @@
 					<span>Balance: -- </span>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={baseWithdrawValue}/>
+					<DecimalInput bind:value={baseWithdrawValue} />
 					<div class="strategy-row-details__input-center">
-						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`}>
-						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`}>
+						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
+						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
-					<DecimalInput bind:value={quoteWithdrawValue} class="strategy-row-details__input--right" />
+					<DecimalInput
+						bind:value={quoteWithdrawValue}
+						class="strategy-row-details__input--right"
+					/>
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">

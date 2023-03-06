@@ -744,6 +744,106 @@ export type Protocol = {
   ],
   "types": [
     {
+      "name": "BothValues",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Value"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Value"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothQuantities",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Quantity"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFractions",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Fraction"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFeeCurves",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "FeeCurve"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "FeeCurve"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFundingRates",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "FundingRate"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "FundingRate"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Balances",
       "type": {
         "kind": "struct",
@@ -1029,6 +1129,14 @@ export type Protocol = {
                 "defined": "Lend"
               }
             }
+          },
+          {
+            "name": "trade",
+            "type": {
+              "option": {
+                "defined": "Trade"
+              }
+            }
           }
         ]
       }
@@ -1103,6 +1211,114 @@ export type Protocol = {
             "docs": [
               "Fraction of paid fee to be kept."
             ],
+            "type": {
+              "defined": "Fraction"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Trade",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "available",
+            "docs": [
+              "liquidity available to be locked"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "locked",
+            "docs": [
+              "total liquidity locked inside the vault"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "openValue",
+            "docs": [
+              "total value at the moment of opening a position"
+            ],
+            "type": {
+              "defined": "BothValues"
+            }
+          },
+          {
+            "name": "borrowFee",
+            "docs": [
+              "struct for calculation of position fee"
+            ],
+            "type": {
+              "defined": "BothFeeCurves"
+            }
+          },
+          {
+            "name": "funding",
+            "type": {
+              "defined": "BothFundingRates"
+            }
+          },
+          {
+            "name": "lastFee",
+            "type": "u32"
+          },
+          {
+            "name": "fundingMultiplier",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "openFee",
+            "docs": [
+              "fee paid on opening a position"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "maxOpenLeverage",
+            "docs": [
+              "maximum leverage allowed at the moment of opening a position"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "maxLeverage",
+            "docs": [
+              "maximum leverage allowed"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "accruedFee",
+            "docs": [
+              "fees waiting to be distributed to liquidity providers"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "collateralRatio",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "liquidationThreshold",
             "type": {
               "defined": "Fraction"
             }
@@ -1328,6 +1544,68 @@ export type Protocol = {
       }
     },
     {
+      "name": "Receipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "side",
+            "docs": [
+              "side of the position: either long or short"
+            ],
+            "type": {
+              "defined": "Side"
+            }
+          },
+          {
+            "name": "size",
+            "docs": [
+              "size of the position (in base token)"
+            ],
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "locked",
+            "docs": [
+              "quantity of tokens locked in the position (size for LONG)"
+            ],
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "initialFunding",
+            "docs": [
+              "shares for borrow fee"
+            ],
+            "type": {
+              "defined": "FundingRate"
+            }
+          },
+          {
+            "name": "openPrice",
+            "docs": [
+              "price at which the position was opened"
+            ],
+            "type": {
+              "defined": "Price"
+            }
+          },
+          {
+            "name": "openValue",
+            "docs": [
+              "value o position at the moment of creation"
+            ],
+            "type": {
+              "defined": "Value"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Positions",
       "type": {
         "kind": "struct",
@@ -1343,7 +1621,7 @@ export type Protocol = {
                 {
                   "defined": "Position"
                 },
-                64
+                32
               ]
             }
           }
@@ -1356,15 +1634,15 @@ export type Protocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "liabilities",
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
             "name": "collateral",
             "type": {
               "defined": "CollateralValues"
+            }
+          },
+          {
+            "name": "liabilities",
+            "type": {
+              "defined": "Value"
             }
           }
         ]
@@ -1483,20 +1761,6 @@ export type Protocol = {
       }
     },
     {
-      "name": "VaultEntry",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "data",
-            "type": {
-              "defined": "Vault"
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "VaultKeys",
       "type": {
         "kind": "struct",
@@ -1591,6 +1855,30 @@ export type Protocol = {
           },
           {
             "name": "Nine"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BalanceChange",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Profit",
+            "fields": [
+              {
+                "defined": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Loss",
+            "fields": [
+              {
+                "defined": "Quantity"
+              }
+            ]
           }
         ]
       }
@@ -1750,35 +2038,9 @@ export type Protocol = {
                 "type": "u8"
               },
               {
-                "name": "side",
+                "name": "receipt",
                 "type": {
-                  "defined": "Side"
-                }
-              },
-              {
-                "name": "quantity",
-                "type": {
-                  "defined": "Quantity"
-                }
-              },
-              {
-                "name": "quote_quantity",
-                "type": {
-                  "option": {
-                    "defined": "Quantity"
-                  }
-                }
-              },
-              {
-                "name": "open_price",
-                "type": {
-                  "defined": "Price"
-                }
-              },
-              {
-                "name": "entry_funding",
-                "type": {
-                  "defined": "FundingRate"
+                  "defined": "Receipt"
                 }
               }
             ]
@@ -2008,6 +2270,21 @@ export type Protocol = {
       "code": 6035,
       "name": "PositionNotFound",
       "msg": "Given position was not found"
+    },
+    {
+      "code": 6036,
+      "name": "TradeServiceNone",
+      "msg": "Trade service is none"
+    },
+    {
+      "code": 6037,
+      "name": "PositionMismatch",
+      "msg": "Function called on bad position type"
+    },
+    {
+      "code": 6038,
+      "name": "CollateralizationTooLow",
+      "msg": "Collateralization is lower than max allowed leverage"
     }
   ]
 };
@@ -2758,6 +3035,106 @@ export const IDL: Protocol = {
   ],
   "types": [
     {
+      "name": "BothValues",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Value"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Value"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothQuantities",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Quantity"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFractions",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "Fraction"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFeeCurves",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "FeeCurve"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "FeeCurve"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "BothFundingRates",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base",
+            "type": {
+              "defined": "FundingRate"
+            }
+          },
+          {
+            "name": "quote",
+            "type": {
+              "defined": "FundingRate"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Balances",
       "type": {
         "kind": "struct",
@@ -3043,6 +3420,14 @@ export const IDL: Protocol = {
                 "defined": "Lend"
               }
             }
+          },
+          {
+            "name": "trade",
+            "type": {
+              "option": {
+                "defined": "Trade"
+              }
+            }
           }
         ]
       }
@@ -3117,6 +3502,114 @@ export const IDL: Protocol = {
             "docs": [
               "Fraction of paid fee to be kept."
             ],
+            "type": {
+              "defined": "Fraction"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Trade",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "available",
+            "docs": [
+              "liquidity available to be locked"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "locked",
+            "docs": [
+              "total liquidity locked inside the vault"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "openValue",
+            "docs": [
+              "total value at the moment of opening a position"
+            ],
+            "type": {
+              "defined": "BothValues"
+            }
+          },
+          {
+            "name": "borrowFee",
+            "docs": [
+              "struct for calculation of position fee"
+            ],
+            "type": {
+              "defined": "BothFeeCurves"
+            }
+          },
+          {
+            "name": "funding",
+            "type": {
+              "defined": "BothFundingRates"
+            }
+          },
+          {
+            "name": "lastFee",
+            "type": "u32"
+          },
+          {
+            "name": "fundingMultiplier",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "openFee",
+            "docs": [
+              "fee paid on opening a position"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "maxOpenLeverage",
+            "docs": [
+              "maximum leverage allowed at the moment of opening a position"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "maxLeverage",
+            "docs": [
+              "maximum leverage allowed"
+            ],
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "accruedFee",
+            "docs": [
+              "fees waiting to be distributed to liquidity providers"
+            ],
+            "type": {
+              "defined": "Balances"
+            }
+          },
+          {
+            "name": "collateralRatio",
+            "type": {
+              "defined": "Fraction"
+            }
+          },
+          {
+            "name": "liquidationThreshold",
             "type": {
               "defined": "Fraction"
             }
@@ -3342,6 +3835,68 @@ export const IDL: Protocol = {
       }
     },
     {
+      "name": "Receipt",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "side",
+            "docs": [
+              "side of the position: either long or short"
+            ],
+            "type": {
+              "defined": "Side"
+            }
+          },
+          {
+            "name": "size",
+            "docs": [
+              "size of the position (in base token)"
+            ],
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "locked",
+            "docs": [
+              "quantity of tokens locked in the position (size for LONG)"
+            ],
+            "type": {
+              "defined": "Quantity"
+            }
+          },
+          {
+            "name": "initialFunding",
+            "docs": [
+              "shares for borrow fee"
+            ],
+            "type": {
+              "defined": "FundingRate"
+            }
+          },
+          {
+            "name": "openPrice",
+            "docs": [
+              "price at which the position was opened"
+            ],
+            "type": {
+              "defined": "Price"
+            }
+          },
+          {
+            "name": "openValue",
+            "docs": [
+              "value o position at the moment of creation"
+            ],
+            "type": {
+              "defined": "Value"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Positions",
       "type": {
         "kind": "struct",
@@ -3357,7 +3912,7 @@ export const IDL: Protocol = {
                 {
                   "defined": "Position"
                 },
-                64
+                32
               ]
             }
           }
@@ -3370,15 +3925,15 @@ export const IDL: Protocol = {
         "kind": "struct",
         "fields": [
           {
-            "name": "liabilities",
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
             "name": "collateral",
             "type": {
               "defined": "CollateralValues"
+            }
+          },
+          {
+            "name": "liabilities",
+            "type": {
+              "defined": "Value"
             }
           }
         ]
@@ -3497,20 +4052,6 @@ export const IDL: Protocol = {
       }
     },
     {
-      "name": "VaultEntry",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "data",
-            "type": {
-              "defined": "Vault"
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "VaultKeys",
       "type": {
         "kind": "struct",
@@ -3605,6 +4146,30 @@ export const IDL: Protocol = {
           },
           {
             "name": "Nine"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BalanceChange",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Profit",
+            "fields": [
+              {
+                "defined": "Quantity"
+              }
+            ]
+          },
+          {
+            "name": "Loss",
+            "fields": [
+              {
+                "defined": "Quantity"
+              }
+            ]
           }
         ]
       }
@@ -3764,35 +4329,9 @@ export const IDL: Protocol = {
                 "type": "u8"
               },
               {
-                "name": "side",
+                "name": "receipt",
                 "type": {
-                  "defined": "Side"
-                }
-              },
-              {
-                "name": "quantity",
-                "type": {
-                  "defined": "Quantity"
-                }
-              },
-              {
-                "name": "quote_quantity",
-                "type": {
-                  "option": {
-                    "defined": "Quantity"
-                  }
-                }
-              },
-              {
-                "name": "open_price",
-                "type": {
-                  "defined": "Price"
-                }
-              },
-              {
-                "name": "entry_funding",
-                "type": {
-                  "defined": "FundingRate"
+                  "defined": "Receipt"
                 }
               }
             ]
@@ -4022,6 +4561,21 @@ export const IDL: Protocol = {
       "code": 6035,
       "name": "PositionNotFound",
       "msg": "Given position was not found"
+    },
+    {
+      "code": 6036,
+      "name": "TradeServiceNone",
+      "msg": "Trade service is none"
+    },
+    {
+      "code": 6037,
+      "name": "PositionMismatch",
+      "msg": "Function called on bad position type"
+    },
+    {
+      "code": 6038,
+      "name": "CollateralizationTooLow",
+      "msg": "Collateralization is lower than max allowed leverage"
     }
   ]
 };

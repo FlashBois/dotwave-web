@@ -1,6 +1,6 @@
 [
 	{
-		"address": "9P7t5MZn7BZnN9m6Lg1mX6rH1pVDUApTTi8HWUxk63W5",
+		"address": "EECrNdwZrFEBbNisTeveq8rRQxVBEb1SZtVQBMbhxMLn",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "USD Coin",
@@ -11,7 +11,7 @@
 		"oracle": "5SSkXsEKQepHHAewytPVwdej4epN1nxgLVM84L4KXgy7"
 	},
 	{
-		"address": "EzQwpsdSd2iQ2rnZ6GNdvZex1JTeGrY1nr7gx9ahkpuz",
+		"address": "9qNLpkWMvBJgB5jh5CYrd6qro3bFeHQXDHY3QaVhEUzz",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "Raydium",
@@ -22,7 +22,7 @@
 		"oracle": "5SSkXsEKQepHHAewytPVwdej4epN1nxgLVM84L4KXgy7"
 	},
 	{
-		"address": "AeaSWeyi4f91LycaLxrbQoH6ZLCHvid8zCVX36eXC4Lp",
+		"address": "9ZCadMuUGjpCC2xBBP3JAMpyrLcTtiQv2sqnMGaYt2b2",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "Orca",

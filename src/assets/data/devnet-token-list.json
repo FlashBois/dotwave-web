@@ -7,7 +7,8 @@
 		"symbol": "USDC",
 		"logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
 		"extensions": { "coingeckoId": "usd-coin" },
-		"tags": ["old-registry"]
+		"tags": ["old-registry"],
+		"oracle": "5SSkXsEKQepHHAewytPVwdej4epN1nxgLVM84L4KXgy7"
 	},
 	{
 		"address": "EzQwpsdSd2iQ2rnZ6GNdvZex1JTeGrY1nr7gx9ahkpuz",
@@ -17,7 +18,8 @@
 		"symbol": "RAY",
 		"logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R/logo.png",
 		"extensions": { "coingeckoId": "raydium" },
-		"tags": ["old-registry"]
+		"tags": ["old-registry"],
+		"oracle": "5SSkXsEKQepHHAewytPVwdej4epN1nxgLVM84L4KXgy7"
 	},
 	{
 		"address": "AeaSWeyi4f91LycaLxrbQoH6ZLCHvid8zCVX36eXC4Lp",
@@ -27,6 +29,7 @@
 		"symbol": "ORCA",
 		"logoURI": "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/orcaEKTdK7LKz57vaAYr9QeNsVEPfiu6QeMU1kektZE/logo.png",
 		"extensions": { "coingeckoId": "orca" },
-		"tags": ["old-registry"]
+		"tags": ["old-registry"],
+		"oracle": "5SSkXsEKQepHHAewytPVwdej4epN1nxgLVM84L4KXgy7"
 	}
 ]

@@ -1,21 +1,43 @@
+.token-list-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1040;
+	overflow-y: auto;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	@supports (-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px)) {
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		background-color: rgba(rgba(0, 0, 0), 0.3);
+	}
+}
+
 .token-list {
 	width: 40rem;
-	height: 85vh;
+	height: 75rem;
 	border-radius: 20px;
 
 	@include background-blur;
 
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 1.5fr 0.5fr 10fr;
-	align-items: center;
+	grid-template-rows: 1.2fr 1.2fr 10fr;
 
 	&__search {
 		grid-row: 1;
 
-		height: 60px;
+		height: 100%;
 		padding: 0 30px;
-		margin-top: 1rem;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	&__popular {
@@ -26,6 +48,7 @@
 		flex-wrap: wrap;
 		justify-content: space-evenly;
 		align-items: center;
+		margin-bottom: 1rem;
 
 		&-item {
 			width: 21%;

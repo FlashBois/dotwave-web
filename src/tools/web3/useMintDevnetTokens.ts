@@ -7,7 +7,7 @@ import {
 } from '@solana/spl-token';
 import { Keypair, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import { get } from 'svelte/store';
-import { signAndSendTransaction } from '../wallet/sending';
+import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 
 export const minter = Keypair.fromSecretKey(
 	Uint8Array.from(
@@ -61,6 +61,6 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e7));
 	});
 
-	const signature = await signAndSendTransaction(connection, wallet, tx, [minter]);
+	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);
 	console.log('Minted tokens', tx, signature);
 }

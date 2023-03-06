@@ -489,6 +489,16 @@ export type Protocol = {
           "isSigner": false
         },
         {
+          "name": "reserveInQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOutQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -2489,6 +2499,16 @@ export const IDL: Protocol = {
         },
         {
           "name": "reserveOut",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveInQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveOutQuote",
           "isMut": true,
           "isSigner": false
         },

@@ -44,7 +44,7 @@
 
 			<ul class="nav__list">
 				<li class="nav__item">
-					<a href="/swap/SOL_USDC" class="nav__link">Swap</a>
+					<a href="/swap/RAY_USDC" class="nav__link">Swap</a>
 				</li>
 				<li class="nav__item">
 					<a href="/trade" class="nav__link">Trade</a>

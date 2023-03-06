@@ -129,8 +129,9 @@
 		}
 	}
 
-	function displayDetails(id: number) {
+	function displayDetails(vault: number, strategy: number) {
 		strategyStore.update((store) => {
+			const id = store.strategyTable.findIndex((s) => s.vaultId === vault && s.id === strategy);
 			store.strategyTable[id].withDetails = !store.strategyTable[id].withDetails;
 			return store;
 		});
@@ -160,7 +161,7 @@
 	{#each $filteredStrategies as row, i}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
-			<div class="strategy-table__row-items" on:click={() => displayDetails(row.id)}>
+			<div class="strategy-table__row-items" on:click={() => displayDetails(row.vaultId, row.id)}>
 				<div class="strategy-table__row-item--strategy">
 					<div class="strategy-table__strategy-cell">
 						<div class="strategy-table__strategy-cell__img-box">
@@ -209,7 +210,7 @@
 				</div>
 			</div>
 			{#if row.withDetails}
-				<RowDetails row={row}/>
+				<RowDetails {row} />
 			{/if}
 		</div>
 	{/each}

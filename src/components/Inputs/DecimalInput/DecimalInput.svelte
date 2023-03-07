@@ -21,6 +21,7 @@
 		on:keydown={onInputChange}
 		on:change
 		on:input
+		on:keyup
 		type="text"
 		bind:value
 		{placeholder}

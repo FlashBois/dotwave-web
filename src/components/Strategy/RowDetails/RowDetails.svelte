@@ -3,7 +3,7 @@
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
 	import type { IStrategyTable } from '$src/stores/strategyStore';
-	import { derived, get } from 'svelte/store';
+	import { derived, get, writable } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
 	import { walletStore } from '$src/stores/walletStore';
@@ -22,8 +22,8 @@
 
 	$: ({ publicKey } = $walletStore);
 
-	let baseDepositValue: number;
-	let quoteDepositValue: number;
+	let baseDepositValue = writable<number>(undefined);
+	let quoteDepositValue = writable<number>(undefined);
 	let baseWithdrawValue: number;
 	let quoteWithdrawValue: number;
 
@@ -91,11 +91,12 @@
 						state: stateAddress,
 						signer: publicKey
 					},
-					new BN(baseDepositValue * 10 ** row.tokenBase.decimals)
+					new BN($baseDepositValue * 10 ** row.tokenBase.decimals)
 				)
 			);
 
 			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
+			clearInputs();
 			delay(async () => {
 				await loadUserStoreAccounts();
 			}, 3000);
@@ -103,11 +104,33 @@
 	}
 
 	function onBaseDepositChange() {
-		quoteDepositValue = 0;
+		quoteDepositValue.set(
+			Number(
+				$protocolStateStore.vaultsAccounts?.deposit(
+					row.id,
+					row.strategyId,
+					BigInt($baseDepositValue * 10 ** row.tokenBase.decimals),
+					true,
+					Math.floor(Date.now() / 1000)
+				)
+			) /
+				10 ** row.tokenQuote.decimals
+		);
 	}
 
 	function onQuoteDepositChange() {
-		baseDepositValue = 0;
+		baseDepositValue.set(
+			Number(
+				$protocolStateStore.vaultsAccounts?.deposit(
+					row.id,
+					row.strategyId,
+					BigInt($quoteDepositValue * 10 ** row.tokenQuote.decimals),
+					false,
+					Math.floor(Date.now() / 1000)
+				)
+			) /
+				10 ** row.tokenBase.decimals
+		);
 	}
 
 	// function onHalfDepositClick() {
@@ -117,6 +140,11 @@
 	// function onMaxDepositClick() {
 	// 	depositValue = Number(baseToken.amount.toFixed(9));
 	// }
+
+	function clearInputs() {
+		baseDepositValue.set(0);
+		quoteDepositValue.set(0);
+	}
 </script>
 
 <div class="strategy-row-details" class:delay-animation={row.withDetails}>
@@ -147,15 +175,15 @@
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={baseDepositValue} on:input={onBaseDepositChange} />
+					<DecimalInput bind:value={$baseDepositValue} on:keyup={onBaseDepositChange} />
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						class="strategy-row-details__input--right"
-						bind:value={quoteDepositValue}
-						on:input={onQuoteDepositChange}
+						bind:value={$quoteDepositValue}
+						on:keyup={onQuoteDepositChange}
 					/>
 				</div>
 			</div>

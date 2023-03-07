@@ -86,6 +86,7 @@ export function vaultsaccount_has_lending(a: number, b: number, c: number): void
 export function vaultsaccount_has_swap(a: number, b: number, c: number): void;
 export function vaultsaccount_refresh(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number, d: number): void;
+export function vaultsaccount_timestamp(a: number, b: number, c: number): void;
 export function vaultsaccount_deposit(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function price_denominator(): number;
 export function fraction_denominator(): number;

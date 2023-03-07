@@ -350,6 +350,11 @@ export class VaultsAccount {
 */
   lending_apy(index: number, daily: boolean): bigint;
 /**
+* @param {number} index
+* @returns {number}
+*/
+  timestamp(index: number): number;
+/**
 * @param {number} vault
 * @param {number} strategy
 * @param {bigint} amount

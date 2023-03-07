@@ -1339,6 +1339,25 @@ export class VaultsAccount {
         }
     }
     /**
+    * @param {number} index
+    * @returns {number}
+    */
+    timestamp(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_timestamp(retptr, this.ptr, index);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 >>> 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
     * @param {number} vault
     * @param {number} strategy
     * @param {bigint} amount

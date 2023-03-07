@@ -44,11 +44,11 @@
 			tx.add(
 				await useBorrow(
 					program,
-					0,
+					vaultSupport.id,
 					{
 						statement: statementProgramAddress,
 						accountBase: userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress)!,
-						reserveBase: new PublicKey(vaultsAccounts.base_reserve(0)),
+						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
 						vaults: vaultsAddress,
 						state: stateAddress,
 						signer: publicKey

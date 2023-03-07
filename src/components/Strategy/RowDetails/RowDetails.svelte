@@ -167,10 +167,24 @@
 		<div class="strategy-row-details__operation">
 			<div class="strategy-row-details__operation-box">
 				<div class="strategy-row-details__label">
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
+						on:click={() => {
+							if (publicKey) {
+								baseDepositValue.set(baseToken.amount.toNumber());
+								onBaseDepositChange();
+							}
+						}}
 						>Balance: {#if !publicKey} -- {:else} {baseToken.amount.toString()} {/if}</span
 					>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
+						on:click={() => {
+							if (publicKey) {
+								quoteDepositValue.set(quoteToken.amount.toNumber());
+								onQuoteDepositChange();
+							}
+						}}
 						>Balance: {#if !publicKey} -- {:else} {quoteToken.amount.toString()} {/if}</span
 					>
 				</div>
@@ -186,11 +200,15 @@
 						on:keyup={onQuoteDepositChange}
 					/>
 				</div>
+				<!-- <div class="strategy-row-details__tools">
+					<span class="strategy-row-details__tools__item"><span>MAX</span><span>HALF</span></span>
+					<span class="strategy-row-details__tools__item"><span>HALF</span><span>MAX</span></span>
+				</div> -->
 			</div>
 			<div class="strategy-row-details__button-box">
-				<GradientButton on:click={() => onDepositClick(row.vaultId, row.strategyId)}
-					>Deposit</GradientButton
-				>
+				{#if $baseDepositValue <= baseToken.amount.toNumber()}<GradientButton
+						on:click={() => onDepositClick(row.vaultId, row.strategyId)}>Deposit</GradientButton
+					>{/if}
 			</div>
 		</div>
 		<div class="strategy-row-details__operation">

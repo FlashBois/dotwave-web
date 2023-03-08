@@ -1,8 +1,11 @@
 import type { ISortable } from '$src/tools/useAdvancedSorting';
 import { get, writable } from 'svelte/store';
-import { protocolStateStore } from './protocolStateStore';
+import { loadProtocolState, protocolStateStore } from './protocolStateStore';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 import type { PublicKey } from '@solana/web3.js';
+import { userStore } from './userStore';
+import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
+import { getNumberFromBigInt } from '$src/tools/getNumberFromBigInt';
 
 export interface IStrategyStore {
 	sort: { property: keyof IStrategyTable; type: ISortable } | null;
@@ -32,10 +35,10 @@ export interface IStrategyTable {
 		address: PublicKey;
 		decimals: number;
 	};
-	depositToken: number;
-	depositStable: number;
+	deposit: [number, number];
 	dailyAPY: number;
 	APY: number;
+	provided: [number, number];
 	utilizationToken: number;
 	utilizationStable: number;
 	withDetails: boolean;
@@ -48,6 +51,8 @@ export const strategyStore = writable<IStrategyStore>({
 
 export async function loadStrategies(): Promise<void> {
 	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
+	const { statementBuffer } = get(userStore);
+	// await loadProtocolState()
 
 	// eslint-disable-next-line prefer-const
 	let extractStrategy: IStrategyTable[] = [];
@@ -65,6 +70,18 @@ export async function loadStrategies(): Promise<void> {
 				const quoteTokenInfo = tokenListDevnet.find(
 					(e) => e.address == vault.quoteTokenAddress.toString()
 				);
+
+				const depositToken = 0;
+				const depositStable = 0;
+				
+				if (vaultsAccounts && statementBuffer) {
+					// const lpPositionInfo = vaultsAccounts.get_lp_position_info(0, 0, statementBuffer, getCurrentUnixTime())
+					// depositToken = getNumberFromBigInt(lpPositionInfo.base_quantity, 6)
+					// depositStable = getNumberFromBigInt(lpPositionInfo.quote_quantity, 6)
+				}
+
+				const providedToken = getNumberFromBigInt(vaultsAccounts.balance_base(0, 0), 6);
+				const providedStable = getNumberFromBigInt(vaultsAccounts.balance_quote(0, 0), 6);
 
 				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
@@ -90,12 +107,12 @@ export async function loadStrategies(): Promise<void> {
 							address: vault.quoteTokenAddress,
 							decimals: quoteTokenInfo.decimals
 						},
-						depositToken: 2,
-						depositStable: 1,
-						dailyAPY: 2.01,
-						APY: 2.00,
-						utilizationToken: 20.5,
-						utilizationStable: 20.5,
+						deposit: [depositToken, depositStable],
+						dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(0, true), 6),
+						APY: getNumberFromBigInt(vaultsAccounts.lending_apy(0, false), 6),
+						provided: [providedToken, providedStable],
+						utilizationToken: getNumberFromBigInt(strategyInfo.utilization_base),
+						utilizationStable: getNumberFromBigInt(strategyInfo.utilization_quote),
 						withDetails: false
 					});
 				}

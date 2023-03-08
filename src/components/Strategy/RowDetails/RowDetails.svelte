@@ -8,10 +8,9 @@
 	import Decimal from 'decimal.js';
 	import { walletStore } from '$src/stores/walletStore';
 	import { useDeposit } from '$src/tools/instructions/useDeposit';
-	import { PublicKey, Transaction } from '@solana/web3.js';
+	import { ComputeBudgetProgram, PublicKey, Transaction } from '@solana/web3.js';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
 	import { anchorStore } from '$src/stores/anchorStore';
-	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
 	import { BN } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
@@ -22,34 +21,32 @@
 
 	$: ({ publicKey } = $walletStore);
 
+	$: buttonMessage = { message: 'Enter a value', disabled: true };
+
 	let baseDepositValue = writable<number>(undefined);
 	let quoteDepositValue = writable<number>(undefined);
 	let baseWithdrawValue: number;
 	let quoteWithdrawValue: number;
 
-	$: userData = derived<
-		[typeof userStore],
-		{ baseToken: { amount: Decimal }; quoteToken: { amount: Decimal } }
-	>([userStore], ([$userStore], set) => {
-		if ($userStore.accounts) {
-			const from = $userStore.accounts.find((e) => e.mint.equals(row.tokenBase.address));
-			const to = $userStore.accounts.find((e) => e.mint.equals(row.tokenQuote.address));
+	$: userData = derived<[typeof userStore], { baseAmount: Decimal; quoteAmount: Decimal }>(
+		[userStore],
+		([$userStore], set) => {
+			if ($userStore.accounts) {
+				const from = $userStore.accounts.find((e) => e.mint.equals(row.tokenBase.address));
+				const to = $userStore.accounts.find((e) => e.mint.equals(row.tokenQuote.address));
 
-			set({
-				baseToken: {
-					amount: from?.amount
+				set({
+					baseAmount: from?.amount
 						? from.amount.div(new Decimal(10).pow(row.tokenBase.decimals))
-						: new Decimal(0)
-				},
-				quoteToken: {
-					amount: to?.amount
+						: new Decimal(0),
+					quoteAmount: to?.amount
 						? to.amount.div(new Decimal(10).pow(row.tokenBase.decimals))
 						: new Decimal(0)
-				}
-			});
+				});
+			}
 		}
-	});
-	$: ({ baseToken, quoteToken } = $userData);
+	);
+	$: ({ baseAmount, quoteAmount } = $userData);
 
 	async function onDepositClick(vaultId: number, strategyId: number) {
 		const anchorCopy = get(anchorStore);
@@ -72,6 +69,12 @@
 					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
 				}
 			}
+
+			tx.add(
+				ComputeBudgetProgram.setComputeUnitLimit({
+					units: 400000
+				})
+			);
 
 			tx.add(
 				await useDeposit(
@@ -110,7 +113,7 @@
 		quoteDepositValue.set(
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
-					row.id,
+					row.vaultId,
 					row.strategyId,
 					BigInt($baseDepositValue * 10 ** row.tokenBase.decimals),
 					true,
@@ -119,13 +122,14 @@
 			) /
 				10 ** row.tokenQuote.decimals
 		);
+		checkDepositInput();
 	}
 
 	function onQuoteDepositChange() {
 		baseDepositValue.set(
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
-					row.id,
+					row.vaultId,
 					row.strategyId,
 					BigInt($quoteDepositValue * 10 ** row.tokenQuote.decimals),
 					false,
@@ -134,6 +138,18 @@
 			) /
 				10 ** row.tokenBase.decimals
 		);
+		checkDepositInput();
+	}
+
+	function checkDepositInput() {
+		if ($baseDepositValue == 0 || $quoteDepositValue == 0) buttonMessage = { message: 'Enter a value', disabled: true };
+		if ($baseDepositValue > 0 && $quoteDepositValue > 0)
+			buttonMessage = { message: '', disabled: false };
+		if (
+			$baseDepositValue > baseAmount.toNumber() ||
+			$quoteDepositValue > quoteAmount.toNumber()
+		)
+			buttonMessage = { message: 'Insufficient funds', disabled: true };
 	}
 
 	// function onHalfDepositClick() {
@@ -174,21 +190,21 @@
 					<span
 						on:click={() => {
 							if (publicKey) {
-								baseDepositValue.set(baseToken.amount.toNumber());
+								baseDepositValue.set(baseAmount.toNumber());
 								onBaseDepositChange();
 							}
 						}}
-						>Balance: {#if !publicKey} -- {:else} {baseToken.amount.toString()} {/if}</span
+						>Balance: {#if !publicKey} -- {:else} {baseAmount.toString()} {/if}</span
 					>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
 						on:click={() => {
 							if (publicKey) {
-								quoteDepositValue.set(quoteToken.amount.toNumber());
+								quoteDepositValue.set(quoteAmount.toNumber());
 								onQuoteDepositChange();
 							}
 						}}
-						>Balance: {#if !publicKey} -- {:else} {quoteToken.amount.toString()} {/if}</span
+						>Balance: {#if !publicKey} -- {:else} {quoteAmount.toString()} {/if}</span
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
@@ -209,9 +225,13 @@
 				</div> -->
 			</div>
 			<div class="strategy-row-details__button-box">
-				{#if $baseDepositValue <= baseToken.amount.toNumber()}<GradientButton
-						on:click={() => onDepositClick(row.vaultId, row.strategyId)}>Deposit</GradientButton
-					>{/if}
+				{#if buttonMessage.disabled}
+					<GradientButton disabled>{buttonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={() => onDepositClick(row.vaultId, row.strategyId)}
+						>Deposit</GradientButton
+					>
+				{/if}
 			</div>
 		</div>
 		<div class="strategy-row-details__operation">

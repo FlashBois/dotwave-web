@@ -16,6 +16,6 @@
 
 <div>
     {#each createdStrategy as item, i}
-        {item} {#if createdStrategy.length - 1 > i} - {/if}
+        {`${item} ${(createdStrategy.length - 1) > i ? ' - ' : ''}`} 
     {/each}
 </div>

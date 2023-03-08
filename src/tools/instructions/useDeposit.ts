@@ -1,7 +1,7 @@
 import type { Protocol } from '$src/utils/Idl/protocol';
 import type { BN, Program } from '@project-serum/anchor';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { ComputeBudgetProgram, type PublicKey, type TransactionInstruction } from '@solana/web3.js';
+import type { PublicKey, TransactionInstruction } from '@solana/web3.js';
 
 interface IDepositAccounts {
 	state: PublicKey;
@@ -26,11 +26,6 @@ export async function useDeposit(
 ): Promise<TransactionInstruction> {
 	return await program.methods
 		.deposit(vaultId, strategyId, amount, direction)
-		.preInstructions([
-			ComputeBudgetProgram.setComputeUnitLimit({
-			  units: 1000000
-			})
-		  ])
 		.accountsStrict({
 			...accounts,
 			tokenProgram: TOKEN_PROGRAM_ID

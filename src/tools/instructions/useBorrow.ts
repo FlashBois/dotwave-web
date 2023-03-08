@@ -10,6 +10,8 @@ interface IBorrowAccounts {
 	statement: PublicKey;
 	signer: PublicKey;
 	reserveBase: PublicKey;
+	baseOracle: PublicKey;
+	quoteOracle: PublicKey;
 }
 
 export async function useBorrow(
@@ -24,5 +26,17 @@ export async function useBorrow(
 			...accounts,
 			tokenProgram: TOKEN_PROGRAM_ID
 		})
+		.remainingAccounts([
+			{
+				isSigner: false,
+				isWritable: false,
+				pubkey: accounts.baseOracle
+			},
+			{
+				isSigner: false,
+				isWritable: false,
+				pubkey: accounts.quoteOracle
+			}
+		])
 		.instruction();
 }

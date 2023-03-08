@@ -12,6 +12,7 @@
 	import ImageLoader from '$components/Image/ImageLoader.svelte';
 	import StrategyType from '../StrategyType/StrategyType.svelte';
 	import RowDetails from '../RowDetails/RowDetails.svelte';
+	import PrograssBar from '$components/ProgressBar/PrograssBar.svelte';
 
 	$: ({ publicKey } = $walletStore);
 
@@ -34,18 +35,11 @@
 
 	let header: IHeader[] = [
 		{
-			name: 'Deposit token',
+			name: 'Deposit',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'depositToken'
-		},
-		{
-			name: 'Deposit stable',
-			sortingType: ISortable.NONE,
-			isSorted: false,
-			needWallet: true,
-			nameExt: 'depositStable'
+			nameExt: 'deposit'
 		},
 		{
 			name: 'Daily APY',
@@ -60,6 +54,13 @@
 			isSorted: false,
 			needWallet: false,
 			nameExt: 'dailyAPY'
+		},
+		{
+			name: 'Provided',
+			sortingType: ISortable.NONE,
+			isSorted: false,
+			needWallet: false,
+			nameExt: 'provided'
 		},
 		{
 			name: 'Utilization token',
@@ -178,12 +179,44 @@
 						</div>
 					</div>
 				</div>
-				<div class="strategy-table__row-item--cell">{row.depositToken}</div>
-				<div class="strategy-table__row-item--cell">{row.depositStable}</div>
-				<div class="strategy-table__row-item--cell">{row.dailyAPY}</div>
+				<div class="strategy-table__row-item--cell">
+					{#if $walletStore.publicKey}
+						<span
+							><p>{row.deposit[0]}</p>
+							<img src={row.tokenBase.logoURI} alt="logo" /></span
+						>
+						<span
+							><p>{row.deposit[1]}</p>
+							<img src={row.tokenQuote.logoURI} alt="logo" /></span
+						>
+					{:else}
+						-
+					{/if}
+				</div>
+				<div class="strategy-table__row-item--cell">{row.dailyAPY}%</div>
 				<div class="strategy-table__row-item--cell">{row.APY}%</div>
-				<div class="strategy-table__row-item--cell">{row.utilizationToken}%</div>
-				<div class="strategy-table__row-item--cell">{row.utilizationStable}%</div>
+				<div class="strategy-table__row-item--cell">
+					<span
+						><p>{row.provided[0]}</p>
+						<img src={row.tokenBase.logoURI} alt="logo" /></span
+					>
+					<span
+						><p>{row.provided[1]}</p>
+						<img src={row.tokenQuote.logoURI} alt="logo" /></span
+					>
+				</div>
+				<div class="strategy-table__row-item--cell">
+					<div class="strategy-table__row-item__with-progress">
+						<PrograssBar percent={row.utilizationToken} />
+						{row.utilizationToken}%
+					</div>
+				</div>
+				<div class="strategy-table__row-item--cell">
+					<div class="strategy-table__row-item__with-progress">
+						<PrograssBar percent={row.utilizationStable} />
+						{row.utilizationStable}%
+					</div>
+				</div>
 				<div class="strategy-table__row-item--arrow">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

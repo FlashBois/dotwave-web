@@ -22,6 +22,7 @@ import type {
 } from '@solana/web3.js';
 import { get, writable } from 'svelte/store';
 import { getLocalStorage, setLocalStorage } from '../tools/wallet/localStorage';
+import { loadStrategies } from './strategyStore';
 import { clearUserStore, createUserStore, loadUserStoreAccounts } from './userStore';
 
 interface Wallet {
@@ -103,6 +104,7 @@ async function autoConnect() {
 		if (adapter?.publicKey) {
 			createUserStore(adapter.publicKey);
 			await loadUserStoreAccounts();
+			await loadStrategies()
 		}
 		walletStore.setConnecting(false);
 	}
@@ -134,6 +136,7 @@ async function connect(): Promise<void> {
 		if (adapter?.publicKey) {
 			createUserStore(adapter.publicKey);
 			await loadUserStoreAccounts();
+			await loadStrategies()
 		}
 		walletStore.setConnecting(false);
 	}
@@ -277,6 +280,7 @@ async function disconnect(): Promise<void> {
 		clearUserStore();
 		walletStore.resetWallet();
 		walletStore.setDisconnecting(false);
+		await loadStrategies()
 	}
 }
 

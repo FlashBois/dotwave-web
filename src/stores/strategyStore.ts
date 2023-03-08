@@ -1,6 +1,6 @@
 import type { ISortable } from '$src/tools/useAdvancedSorting';
 import { get, writable } from 'svelte/store';
-import { protocolStateStore } from './protocolStateStore';
+import { loadProtocolState, protocolStateStore } from './protocolStateStore';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 import type { PublicKey } from '@solana/web3.js';
 import { userStore } from './userStore';
@@ -53,7 +53,6 @@ export const strategyStore = writable<IStrategyStore>({
 export async function loadStrategies(): Promise<void> {
 	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
 	const { statementBuffer } = get(userStore);
-	// await loadProtocolState()
 
 	// eslint-disable-next-line prefer-const
 	let extractStrategy: IStrategyTable[] = [];
@@ -72,13 +71,13 @@ export async function loadStrategies(): Promise<void> {
 					(e) => e.address == vault.quoteTokenAddress.toString()
 				);
 
-				let depositToken = 0;
-				let depositStable = 0;
+				const depositToken = 0;
+				const depositStable = 0;
 
 				if (vaultsAccounts && statementBuffer) {
-					const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
-					depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
-					depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
+					// const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
+					// depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
+					// depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
 				}
 
 				const providedToken = getNumberFromBigInt(vaultsAccounts.balance_base(vault.id, strategyId), baseTokenInfo?.decimals);

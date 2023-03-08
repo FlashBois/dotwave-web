@@ -58,18 +58,19 @@
 		const userStoreCopy = get(userStore);
 		const { vaultsAccounts, vaultsAddress, stateAddress, vaultsSupport } = get(protocolStateStore);
 
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts) {
+		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
 			const { program } = anchorCopy;
 			const { publicKey } = walletCopy;
 
 			const tx = new Transaction();
-			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
 
-			const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-				statementProgramAddress
-			);
-			if (!userStatemantAccount) {
-				tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
+			if (!userStoreCopy.statement) {
+				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
+					userStoreCopy.statementAddress
+				);
+				if (!userStatemantAccount) {
+					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
+				}
 			}
 
 			tx.add(
@@ -78,7 +79,7 @@
 					vaultId,
 					strategyId,
 					{
-						statement: statementProgramAddress,
+						statement: userStoreCopy.statementAddress,
 						accountBase: userStoreCopy.getTokenAccountAddress(
 							vaultsSupport[vaultId].baseTokenAddress
 						)!,
@@ -89,7 +90,9 @@
 						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultId)),
 						vaults: vaultsAddress,
 						state: stateAddress,
-						signer: publicKey
+						signer: publicKey,
+						baseOracle: vaultsSupport[vaultId].baseOracle,
+						quoteOracle: vaultsSupport[vaultId].quoteOracle
 					},
 					new BN($baseDepositValue * 10 ** row.tokenBase.decimals)
 				)

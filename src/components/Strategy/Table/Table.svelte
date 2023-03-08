@@ -193,8 +193,8 @@
 						-
 					{/if}
 				</div>
-				<div class="strategy-table__row-item--cell">{row.dailyAPY.toFixed(4)}%</div>
-				<div class="strategy-table__row-item--cell">{row.APY.toFixed(2)}%</div>
+				<div class="strategy-table__row-item--cell">{row.dailyAPY}%</div>
+				<div class="strategy-table__row-item--cell">{row.APY}%</div>
 				<div class="strategy-table__row-item--cell">
 					<span
 						><p>{row.provided[0]}</p>
@@ -207,13 +207,13 @@
 				</div>
 				<div class="strategy-table__row-item--cell">
 					<div class="strategy-table__row-item__with-progress">
-						<PrograssBar percent={70} />
+						<PrograssBar percent={row.utilizationToken} />
 						{row.utilizationToken}%
 					</div>
 				</div>
 				<div class="strategy-table__row-item--cell">
 					<div class="strategy-table__row-item__with-progress">
-						<PrograssBar percent={70} />
+						<PrograssBar percent={row.utilizationStable} />
 						{row.utilizationStable}%
 					</div>
 				</div>

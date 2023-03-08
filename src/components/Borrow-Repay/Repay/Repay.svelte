@@ -16,7 +16,6 @@
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
-	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 	import Decimal from 'decimal.js';
 
 	$: ({ publicKey } = $walletStore);
@@ -30,18 +29,20 @@
 		const userStoreCopy = get(userStore);
 		const { vaultsAccounts, vaultsAddress, stateAddress } = get(protocolStateStore);
 
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts) {
+		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
 			const { program } = anchorCopy;
 			const { publicKey } = walletCopy;
 
 			const tx = new Transaction();
 			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
 
-			const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-				statementProgramAddress
-			);
-			if (!userStatemantAccount) {
-				tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
+			if (!userStoreCopy.statement) {
+				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
+					userStoreCopy.statementAddress
+				);
+				if (!userStatemantAccount) {
+					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
+				}
 			}
 
 			tx.add(
@@ -54,7 +55,9 @@
 						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
 						vaults: vaultsAddress,
 						state: stateAddress,
-						signer: publicKey
+						signer: publicKey,
+						baseOracle: vaultSupport.baseOracle,
+						quoteOracle: vaultSupport.quoteOracle
 					},
 					new BN(repayInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
 				)

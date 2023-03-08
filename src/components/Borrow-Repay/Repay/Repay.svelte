@@ -3,7 +3,7 @@
 	import { delay } from 'lodash';
 	import { useRepay } from '$src/tools/instructions/useRepay';
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-	import { get } from 'svelte/store';
+	import { derived, get } from 'svelte/store';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { walletStore } from '$src/stores/walletStore';
 	import { web3Store } from '$src/stores/web3Store';
@@ -16,7 +16,10 @@
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
+	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
+	import Decimal from 'decimal.js';
 
+	$: ({ publicKey } = $walletStore);
 	export let vaultSupport: IVaultSupport;
 	let repayInputValue: number;
 
@@ -63,11 +66,38 @@
 			}, 3000);
 		}
 	}
+
+	$: userData = derived<[typeof userStore], { baseTokenAmount: Decimal }>(
+		[userStore],
+		([$userStore], set) => {
+			if ($userStore.accounts) {
+				const baseAccount = $userStore.accounts.find(
+					(e) => e.mint.toString() == vaultSupport.baseTokenInfo.address
+				);
+
+				set({
+					baseTokenAmount: baseAccount?.amount
+						? baseAccount.amount.div(new Decimal(10).pow(vaultSupport.baseTokenInfo.decimals))
+						: new Decimal(0)
+				});
+			}
+		}
+	);
+	$: ({ baseTokenAmount } = $userData);
 </script>
 
 <div class="repay">
 	<div class="repay__operation">
 		<div class="repay__operation-box">
+			<div class="borrow__label">
+				<span
+					>Balance: {#if !publicKey}
+						--
+					{:else}
+						{baseTokenAmount}
+					{/if}</span
+				>
+			</div>
 			<div class="repay__input">
 				<DecimalInput bind:value={repayInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />

@@ -68,6 +68,9 @@
 <div class="borrow">
 	<div class="borrow__operation">
 		<div class="borrow__operation-box">
+			<div class="borrow__label">
+				<span>Max borrow: -- </span>
+			</div>
 			<div class="borrow__input">
 				<DecimalInput bind:value={borrowInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />

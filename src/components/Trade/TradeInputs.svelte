@@ -4,9 +4,21 @@
 </script>
 
 <div class="inputs">
-	<Input />
-	<div class="pnl {pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? '-'}</div>
-	<Input />
+	<div class="input-box">
+		<span> Short </span>
+
+		<Input />
+	</div>
+
+	<div class="input-box pnl-box">
+		<span>&nbsp;</span>
+		<div class="pnl {pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? '-'}</div>
+	</div>
+
+	<div class="input-box">
+		<span> Long </span>
+		<Input />
+	</div>
 </div>
 
 <style lang="scss">
@@ -20,18 +32,29 @@
 		align-items: center;
 		gap: 1rem;
 
-		.input {
+		.input-box {
 			width: 100%;
-			// border: 1px solid var(--color-primary-green);
 			border-radius: 10px;
-			backdrop-filter: blur(50px);
+			border: none;
+			backdrop-filter: none;
 
-			display: grid;
-			grid-template-columns: 2fr 1fr;
+			span {
+				font-size: 1.7rem;
+				color: var(--color-primary-white);
+			}
+
+			.input {
+				width: 100%;
+				border-radius: 10px;
+				backdrop-filter: blur(50px);
+			}
+		}
+
+		.pnl-box {
+			width: 30%;
 		}
 
 		.pnl {
-			width: 20%;
 			border: 1px solid var(--color-primary-green);
 			border-radius: 10px;
 			backdrop-filter: blur(50px);

@@ -31,3 +31,7 @@
 
 // LAYOUT
 @import 'layout/header';
+
+:global(*) {
+	font-family: 'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

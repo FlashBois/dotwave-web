@@ -365,6 +365,22 @@ export class VaultsAccount {
 */
   lending_apy(index: number, timestamp: number): bigint;
 /**
+* @param {number} index
+* @returns {bigint}
+*/
+  max_leverage(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  trading_open_fee(index: number): bigint;
+/**
+* @param {number} index
+* @param {boolean} long
+* @returns {bigint}
+*/
+  trading_fee(index: number, long: boolean): bigint;
+/**
 * @param {number} vault
 * @param {number} strategy
 * @param {bigint} amount

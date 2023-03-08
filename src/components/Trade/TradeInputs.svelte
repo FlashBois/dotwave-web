@@ -1,13 +1,30 @@
 <script lang="ts">
-	import Input from '$components/Inputs/Input/Input.svelte';
+	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
+	import type { Side } from './types';
+
 	export let pnl: number = 0;
+
+	let long = 0;
+	let short = 0;
+	let side: Side | undefined = undefined;
+
+	$: {
+		if (long > 0 && side != 'long') {
+			side = 'long';
+			short = 0;
+		} else if (short > 0 && side != 'short') {
+			side = 'short';
+			long = 0;
+		}
+		console.log(long, short, side);
+	}
 </script>
 
 <div class="inputs">
 	<div class="input-box">
 		<span> Short </span>
 
-		<Input />
+		<DecimalInput placeholder="0" bind:value={short} />
 	</div>
 
 	<div class="input-box pnl-box">
@@ -17,7 +34,7 @@
 
 	<div class="input-box">
 		<span> Long </span>
-		<Input />
+		<DecimalInput bind:value={long} />
 	</div>
 </div>
 

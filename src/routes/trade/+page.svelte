@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Trade from '$components/Trade/Trade.svelte';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import TokenList from '$components/Exchange/TokenList/TokenList.svelte';
+	import TokenList from '$components/TokenList/TokenList.svelte';
 	import type { ITokenList } from '$src/tools/getTokenList';
 	import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 

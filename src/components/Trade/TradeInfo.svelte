@@ -1,7 +1,11 @@
 <script lang="ts">
-	import type { ITradeInfo } from './types';
+	import type Decimal from 'decimal.js';
+	import type { ITradeInfo, Position } from './types';
 
-	export let data: ITradeInfo;
+	export let price: Decimal | undefined;
+	export let maxLeverage: Decimal | undefined;
+	export let collateral: Decimal | undefined;
+	export let position: Position | undefined;
 
 	let size: string;
 </script>
@@ -9,21 +13,21 @@
 <div class="both-infos">
 	<div class="info">
 		<ul>
-			<li>Price: {data?.price ?? '-'}</li>
-			<li>Max Leverage: {data?.maxLeverage ?? '-'}</li>
+			<li>Price: {price?.toString() ?? '-'}</li>
+			<li>Max Leverage: {maxLeverage?.toString() ?? '-'}</li>
 		</ul>
 	</div>
 	<div class="info">
 		<ul>
-			<li>Collateral: {data?.collateral ?? '-'}</li>
-			<li>Open price: {data?.position?.openPrice ?? '-'}</li>
-			{#if data?.position != undefined}
-				<li>Open position: {data.position.size} {data.position.side}</li>
+			<li>Collateral: {collateral?.toString() ?? '-'}</li>
+			<li>Open price: {position?.openPrice ?? '-'}</li>
+			{#if position != undefined}
+				<li>Open position: {position.size} {position.side}</li>
 			{:else}
 				<li>Position: -</li>
 			{/if}
 			<li>
-				Leverage: {data.position?.leverage === undefined ? '-' : data.position.leverage + 'x'}
+				Leverage: {position?.leverage === undefined ? '-' : position.leverage + 'x'}
 			</li>
 		</ul>
 	</div>

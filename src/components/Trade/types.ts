@@ -1,5 +1,7 @@
+import type Decimal from 'decimal.js';
+
 export interface ITradeInfo {
-	price?: number;
+	price?: Decimal;
 	maxLeverage?: number;
 	collateral?: number;
 	position?: Position;

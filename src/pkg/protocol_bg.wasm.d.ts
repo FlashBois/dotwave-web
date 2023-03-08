@@ -106,6 +106,9 @@ export function vaultsaccount_has_lending(a: number, b: number, c: number): void
 export function vaultsaccount_has_swap(a: number, b: number, c: number): void;
 export function vaultsaccount_refresh(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number, d: number): void;
+export function vaultsaccount_max_leverage(a: number, b: number, c: number): void;
+export function vaultsaccount_trading_open_fee(a: number, b: number, c: number): void;
+export function vaultsaccount_trading_fee(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_deposit(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_free(a: number, b: number): void;

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
 
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { get } from 'svelte/store';
@@ -8,7 +7,7 @@
 	import { walletStore } from '$src/stores/walletStore';
 	import { web3Store } from '$src/stores/web3Store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
-	import { PublicKey, Transaction } from '@solana/web3.js';
+	import { ComputeBudgetProgram, PublicKey, Transaction, type AccountMeta } from '@solana/web3.js';
 	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
 	import { useBorrow } from '$src/tools/instructions/useBorrow';
@@ -25,7 +24,7 @@
 		const walletCopy = get(walletStore);
 		const web3Copy = get(web3Store);
 		const userStoreCopy = get(userStore);
-		const { vaultsAccounts, vaultsAddress, stateAddress } = get(protocolStateStore);
+		const { vaultsAccounts, vaultsAddress, stateAddress, vaultsSupport } = get(protocolStateStore);
 
 		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
 			const { program } = anchorCopy;
@@ -44,6 +43,36 @@
 			}
 
 			tx.add(
+				ComputeBudgetProgram.setComputeUnitLimit({
+					units: 1000000
+				})
+			);
+
+			const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh();
+			let remainingAccounts: AccountMeta[] = [];
+
+			if (vaultsToRefresh) {
+				const refresh = vaultsToRefresh.filter(
+					(value, index) => vaultsToRefresh.indexOf(value) === index
+				);
+
+				for (const id of refresh) {
+					remainingAccounts.push(
+						{
+							isSigner: false,
+							isWritable: false,
+							pubkey: vaultsSupport[id].baseOracle
+						},
+						{
+							isSigner: false,
+							isWritable: false,
+							pubkey: vaultsSupport[id].quoteOracle
+						}
+					);
+				}
+			}
+
+			tx.add(
 				await useBorrow(
 					program,
 					vaultSupport.id,
@@ -54,9 +83,8 @@
 						vaults: vaultsAddress,
 						state: stateAddress,
 						signer: publicKey,
-						baseOracle: vaultSupport.baseOracle,
-						quoteOracle: vaultSupport.quoteOracle
 					},
+					remainingAccounts,
 					new BN(borrowInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
 				)
 			);

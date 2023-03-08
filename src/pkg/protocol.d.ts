@@ -28,13 +28,19 @@ export class LpPositionInfo {
   free(): void;
 /**
 */
-  base_quantity: bigint;
+  deposited_base_quantity: bigint;
+/**
+*/
+  deposited_quote_quantity: bigint;
+/**
+*/
+  earned_base_quantity: bigint;
+/**
+*/
+  earned_quote_quantity: bigint;
 /**
 */
   position_value: bigint;
-/**
-*/
-  quote_quantity: bigint;
 /**
 */
   strategy_id: number;
@@ -81,6 +87,10 @@ export class StatementAccount {
 * @returns {number}
 */
   get_bump(): number;
+/**
+* @returns {Array<any>}
+*/
+  vaults_to_refresh(): Array<any>;
 /**
 * @param {Uint8Array} vaults
 */
@@ -134,6 +144,11 @@ export class StrategyInfo {
 */
 export class VaultsAccount {
   free(): void;
+/**
+* @param {number} index
+* @returns {number}
+*/
+  timestamp(index: number): number;
 /**
 * @param {number} index
 * @returns {bigint}
@@ -345,10 +360,10 @@ export class VaultsAccount {
   refresh(index: number, current_time: number): void;
 /**
 * @param {number} index
-* @param {boolean} daily
+* @param {number} timestamp
 * @returns {bigint}
 */
-  lending_apy(index: number, daily: boolean): bigint;
+  lending_apy(index: number, timestamp: number): bigint;
 /**
 * @param {number} vault
 * @param {number} strategy

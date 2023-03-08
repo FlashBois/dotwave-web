@@ -676,6 +676,130 @@ export type Protocol = {
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "openPosition",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "long",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "closePosition",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "long",
+          "type": "bool"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -2285,6 +2409,11 @@ export type Protocol = {
       "code": 6038,
       "name": "CollateralizationTooLow",
       "msg": "Collateralization is lower than max allowed leverage"
+    },
+    {
+      "code": 6039,
+      "name": "NoVaultsToRefresh",
+      "msg": "Statement does not contain any vault to refresh"
     }
   ]
 };
@@ -2967,6 +3096,130 @@ export const IDL: Protocol = {
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "openPosition",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "long",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "closePosition",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "long",
+          "type": "bool"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -4576,6 +4829,11 @@ export const IDL: Protocol = {
       "code": 6038,
       "name": "CollateralizationTooLow",
       "msg": "Collateralization is lower than max allowed leverage"
+    },
+    {
+      "code": 6039,
+      "name": "NoVaultsToRefresh",
+      "msg": "Statement does not contain any vault to refresh"
     }
   ]
 };

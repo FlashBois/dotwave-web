@@ -22,7 +22,8 @@ export interface IVaultSupport {
 	baseTokenInfo: ITokenInfo;
 	quoteTokenAddress: PublicKey;
 	quoteTokenInfo: ITokenInfo;
-	oracleAddress: PublicKey;
+	baseOracle: PublicKey;
+	quoteOracle: PublicKey;
 }
 
 export interface IProtocolStateStore {
@@ -99,7 +100,8 @@ export async function loadProtocolState(): Promise<void> {
 							symbol: quoteTokenInfo.symbol
 						},
 						id: item.index,
-						oracleAddress: new PublicKey(baseTokenInfo.oracle)
+						baseOracle: new PublicKey(vaultsAccounts.oracle_base(item.index)),
+						quoteOracle: new PublicKey(vaultsAccounts.oracle_quote(item.index))
 					};
 				} else throw Error('Token address does not exist in the token list');
 			});

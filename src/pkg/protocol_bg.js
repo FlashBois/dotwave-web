@@ -67,15 +67,6 @@ export function fraction_denominator() {
     return BigInt.asUintN(64, ret);
 }
 
-let cachedBigInt64Memory0 = null;
-
-function getBigInt64Memory0() {
-    if (cachedBigInt64Memory0 === null || cachedBigInt64Memory0.byteLength === 0) {
-        cachedBigInt64Memory0 = new BigInt64Array(wasm.memory.buffer);
-    }
-    return cachedBigInt64Memory0;
-}
-
 let cachedInt32Memory0 = null;
 
 function getInt32Memory0() {
@@ -83,6 +74,15 @@ function getInt32Memory0() {
         cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
     }
     return cachedInt32Memory0;
+}
+
+let cachedBigInt64Memory0 = null;
+
+function getBigInt64Memory0() {
+    if (cachedBigInt64Memory0 === null || cachedBigInt64Memory0.byteLength === 0) {
+        cachedBigInt64Memory0 = new BigInt64Array(wasm.memory.buffer);
+    }
+    return cachedBigInt64Memory0;
 }
 
 let stack_pointer = 128;
@@ -263,40 +263,66 @@ export class LpPositionInfo {
     * @returns {bigint}
     */
     get position_value() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_position_value(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set position_value(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_position_value(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
-    get base_quantity() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+    get deposited_base_quantity() {
+        const ret = wasm.__wbg_get_lppositioninfo_deposited_base_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
-    set base_quantity(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+    set deposited_base_quantity(arg0) {
+        wasm.__wbg_set_lppositioninfo_deposited_base_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
-    get quote_quantity() {
-        const ret = wasm.__wbg_get_lppositioninfo_quote_quantity(this.ptr);
+    get deposited_quote_quantity() {
+        const ret = wasm.__wbg_get_lppositioninfo_deposited_quote_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
-    set quote_quantity(arg0) {
-        wasm.__wbg_set_lppositioninfo_quote_quantity(this.ptr, arg0);
+    set deposited_quote_quantity(arg0) {
+        wasm.__wbg_set_lppositioninfo_deposited_quote_quantity(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get earned_base_quantity() {
+        const ret = wasm.__wbg_get_lppositioninfo_earned_base_quantity(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set earned_base_quantity(arg0) {
+        wasm.__wbg_set_lppositioninfo_earned_base_quantity(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get earned_quote_quantity() {
+        const ret = wasm.__wbg_get_lppositioninfo_earned_quote_quantity(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set earned_quote_quantity(arg0) {
+        wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
     }
 }
 /**
@@ -418,6 +444,24 @@ export class StatementAccount {
         return ret;
     }
     /**
+    * @returns {Array<any>}
+    */
+    vaults_to_refresh() {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.statementaccount_vaults_to_refresh(retptr, this.ptr);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return takeObject(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
     * @param {Uint8Array} vaults
     */
     refresh(vaults) {
@@ -532,40 +576,40 @@ export class StrategyInfo {
     * @returns {bigint}
     */
     get balance_base() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_balance_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_base(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_balance_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get balance_quote() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_balance_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_quote(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_balance_quote(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked_base() {
-        const ret = wasm.__wbg_get_lppositioninfo_quote_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_locked_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked_base(arg0) {
-        wasm.__wbg_set_lppositioninfo_quote_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_locked_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -628,6 +672,25 @@ export class VaultsAccount {
     free() {
         const ptr = this.__destroy_into_raw();
         wasm.__wbg_vaultsaccount_free(ptr);
+    }
+    /**
+    * @param {number} index
+    * @returns {number}
+    */
+    timestamp(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_timestamp(retptr, this.ptr, index);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 >>> 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
     }
     /**
     * @param {number} index
@@ -1083,7 +1146,7 @@ export class VaultsAccount {
     * @returns {number}
     */
     vaults_len() {
-        const ret = wasm.statementaccount_positions_len(this.ptr);
+        const ret = wasm.vaultsaccount_vaults_len(this.ptr);
         return ret;
     }
     /**
@@ -1320,13 +1383,13 @@ export class VaultsAccount {
     }
     /**
     * @param {number} index
-    * @param {boolean} daily
+    * @param {number} timestamp
     * @returns {bigint}
     */
-    lending_apy(index, daily) {
+    lending_apy(index, timestamp) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, daily);
+            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, timestamp);
             var r0 = getBigInt64Memory0()[retptr / 8 + 0];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
             var r3 = getInt32Memory0()[retptr / 4 + 3];
@@ -1455,6 +1518,11 @@ export function __wbindgen_object_clone_ref(arg0) {
 
 export function __wbindgen_error_new(arg0, arg1) {
     const ret = new Error(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+};
+
+export function __wbindgen_number_new(arg0) {
+    const ret = arg0;
     return addHeapObject(ret);
 };
 

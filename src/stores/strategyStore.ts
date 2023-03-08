@@ -1,6 +1,6 @@
 import type { ISortable } from '$src/tools/useAdvancedSorting';
 import { get, writable } from 'svelte/store';
-import { loadProtocolState, protocolStateStore } from './protocolStateStore';
+import { protocolStateStore } from './protocolStateStore';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 import type { PublicKey } from '@solana/web3.js';
 import { userStore } from './userStore';
@@ -56,6 +56,7 @@ export async function loadStrategies(): Promise<void> {
 
 	// eslint-disable-next-line prefer-const
 	let extractStrategy: IStrategyTable[] = [];
+	let id = 0;
 
 	if (vaultsAccounts) {
 		// console.log('here', vaultsAccounts.strategy_info(0, 0).balance_base.toString());
@@ -71,13 +72,13 @@ export async function loadStrategies(): Promise<void> {
 					(e) => e.address == vault.quoteTokenAddress.toString()
 				);
 
-				const depositToken = 0;
-				const depositStable = 0;
+				let depositToken = 0;
+				let depositStable = 0;
 
 				if (vaultsAccounts && statementBuffer) {
-					// const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
-					// depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
-					// depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
+					const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
+					depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
+					depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
 				}
 
 				const providedToken = getNumberFromBigInt(vaultsAccounts.balance_base(vault.id, strategyId), baseTokenInfo?.decimals);
@@ -85,7 +86,7 @@ export async function loadStrategies(): Promise<void> {
 
 				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
-						id: vault.id,
+						id: id++,
 						vaultId: vault.id,
 						strategyId,
 						strategy: {
@@ -108,8 +109,10 @@ export async function loadStrategies(): Promise<void> {
 							decimals: quoteTokenInfo.decimals
 						},
 						deposit: [depositToken, depositStable],
-						dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
-						APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
+						dailyAPY: 1,
+						// dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
+						// APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
+						APY: 1,
 						provided: [providedToken, providedStable],
 						utilizationToken: getDecimalFromBigint(strategyInfo.utilization_base)
 							.div(10 ** 6)

@@ -263,27 +263,27 @@ export class LpPositionInfo {
     * @returns {bigint}
     */
     get position_value() {
-        const ret = wasm.__wbg_get_lppositioninfo_position_value(this.ptr);
+        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set position_value(arg0) {
-        wasm.__wbg_set_lppositioninfo_position_value(this.ptr, arg0);
+        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get deposited_base_quantity() {
-        const ret = wasm.__wbg_get_lppositioninfo_deposited_base_quantity(this.ptr);
+        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set deposited_base_quantity(arg0) {
-        wasm.__wbg_set_lppositioninfo_deposited_base_quantity(this.ptr, arg0);
+        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -576,66 +576,66 @@ export class StrategyInfo {
     * @returns {bigint}
     */
     get balance_base() {
-        const ret = wasm.__wbg_get_strategyinfo_balance_base(this.ptr);
+        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_base(arg0) {
-        wasm.__wbg_set_strategyinfo_balance_base(this.ptr, arg0);
+        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get balance_quote() {
-        const ret = wasm.__wbg_get_strategyinfo_balance_quote(this.ptr);
+        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_quote(arg0) {
-        wasm.__wbg_set_strategyinfo_balance_quote(this.ptr, arg0);
+        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked_base() {
-        const ret = wasm.__wbg_get_strategyinfo_locked_base(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_deposited_quote_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked_base(arg0) {
-        wasm.__wbg_set_strategyinfo_locked_base(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_deposited_quote_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked_quote() {
-        const ret = wasm.__wbg_get_strategyinfo_locked_quote(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_earned_base_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked_quote(arg0) {
-        wasm.__wbg_set_strategyinfo_locked_quote(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_earned_base_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get utilization_base() {
-        const ret = wasm.__wbg_get_strategyinfo_utilization_base(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_earned_quote_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set utilization_base(arg0) {
-        wasm.__wbg_set_strategyinfo_utilization_base(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -1146,7 +1146,7 @@ export class VaultsAccount {
     * @returns {number}
     */
     vaults_len() {
-        const ret = wasm.vaultsaccount_vaults_len(this.ptr);
+        const ret = wasm.statementaccount_positions_len(this.ptr);
         return ret;
     }
     /**
@@ -1397,25 +1397,6 @@ export class VaultsAccount {
                 throw takeObject(r2);
             }
             return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} index
-    * @returns {number}
-    */
-    timestamp(index) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_timestamp(retptr, this.ptr, index);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return r0 >>> 0;
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
         }

@@ -1,13 +1,21 @@
 <script lang="ts">
 	import Trade from '$components/Trade/Trade.svelte';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import TokenList from '$components/TokenList/TokenList.svelte';
-	import type { ITokenList } from '$src/tools/getTokenList';
-	import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
+	import { page } from '$app/stores';
 
 	let backdrop: HTMLDivElement;
+
+	$: selected = $protocolStateStore.vaultsSupport.find(
+		(s) =>
+			s.baseTokenInfo.symbol === $page.params?.which &&
+			$protocolStateStore.vaultsAccounts?.does_any_trade(s.id)
+	);
+
 	let visibleTokenList = false;
-	let selected: ITokenList = (tokenListDevnet as ITokenList[]).find((e) => e.symbol === 'RAY')!;
+	$: if (!!selected) visibleTokenList = true;
+
+	$: if (selected) console.log('selected');
+	$: if (!selected) console.log('!selected', $page.params?.which);
 
 	async function closeTokenList(e: MouseEvent) {
 		console.log('here');
@@ -20,7 +28,7 @@
 <div class="swap-page">
 	{#if $protocolStateStore.ready}
 		<div class="exchange-section">
-			<Trade token={selected} />
+			<Trade support={selected} />
 		</div>
 
 		{#if visibleTokenList}

@@ -2,10 +2,9 @@
 	import { walletStore } from '$stores/walletStore';
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
-	import type { ITokenList } from '$src/tools/getTokenList';
 	import TradeInputs from '$components/Trade/TradeInputs.svelte';
 	import TradeInfo from './TradeInfo.svelte';
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
+	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { findVault } from '$src/tools/findVault';
 	import { PublicKey } from '@solana/web3.js';
 	import {
@@ -13,21 +12,19 @@
 		getDecimalFromPrice
 	} from '$src/tools/decimal/getDecimalFromBigInt';
 
-	export let token: ITokenList;
+	export let support: IVaultSupport | undefined;
 
 	$: vaults = $protocolStateStore?.vaultsAccounts;
-	$: index = findVault($protocolStateStore?.vaultsSupport, new PublicKey(token.address))?.index;
 
-	$: price =
-		vaults && index !== undefined ? getDecimalFromPrice(vaults.get_price(index)) : undefined;
+	$: price = vaults && support ? getDecimalFromPrice(vaults.get_price(support.id)) : undefined;
 
-	$: maxLeverage = undefined;
-	// vaults && index !== undefined ? getDecimalFromFraction(vaults.max_leverage(index)) : undefined;
+	$: maxLeverage =
+		vaults && support ? getDecimalFromFraction(vaults.max_leverage(support.id)) : undefined;
 
 	$: collateral = undefined;
 	$: position = undefined;
 
-	let actionName: 'Open' | 'Close' | 'Increase' | 'Decrease' | 'Reverse' = 'Open';
+	let message = 'Open';
 
 	function trade() {
 		console.log('traded');

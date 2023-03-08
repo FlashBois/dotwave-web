@@ -72,6 +72,8 @@ export function vaultsaccount_strategy_info(a: number, b: number, c: number, d: 
 export function vaultsaccount_count_strategies(a: number, b: number, c: number): void;
 export function vaultsaccount_does_lend(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_does_swap(a: number, b: number, c: number, d: number): void;
+export function vaultsaccount_does_trade(a: number, b: number, c: number, d: number): void;
+export function vaultsaccount_does_any_trade(a: number, b: number, c: number): void;
 export function vaultsaccount_balance_base(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_balance_quote(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lock_base(a: number, b: number, c: number, d: number): void;

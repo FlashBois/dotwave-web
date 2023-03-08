@@ -15,6 +15,8 @@
 		} else if (short > 0 && side != 'short') {
 			side = 'short';
 			long = 0;
+		} else if (long == 0 && short == 0) {
+			side = undefined;
 		}
 		console.log(long, short, side);
 	}
@@ -28,7 +30,7 @@
 	</div>
 
 	<div class="input-box pnl-box">
-		<span>&nbsp;</span>
+		<span>Settle</span>
 		<div class="pnl {pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? '-'}</div>
 	</div>
 

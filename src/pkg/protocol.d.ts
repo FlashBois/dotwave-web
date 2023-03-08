@@ -230,6 +230,17 @@ export class VaultsAccount {
 /**
 * @param {number} vault
 * @param {number} strategy
+* @returns {boolean}
+*/
+  does_trade(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @returns {boolean}
+*/
+  does_any_trade(vault: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
 * @returns {bigint}
 */
   balance_base(vault: number, strategy: number): bigint;

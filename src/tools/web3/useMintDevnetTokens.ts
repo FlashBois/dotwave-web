@@ -4,7 +4,6 @@ import {
 	createAssociatedTokenAccountInstruction,
 	createMintToInstruction,
 	getAssociatedTokenAddress,
-	mintTo
 } from '@solana/spl-token';
 import { Keypair, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import { get } from 'svelte/store';

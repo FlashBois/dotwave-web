@@ -34,25 +34,18 @@
 
 	let header: IHeader[] = [
 		{
-			name: 'Wallet balance',
+			name: 'Deposit token',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'walletBalance'
+			nameExt: 'depositToken'
 		},
 		{
-			name: 'Deposited',
+			name: 'Deposit stable',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'deposited'
-		},
-		{
-			name: 'Locked',
-			sortingType: ISortable.NONE,
-			isSorted: false,
-			needWallet: true,
-			nameExt: 'locked'
+			nameExt: 'depositStable'
 		},
 		{
 			name: 'Daily APY',
@@ -62,25 +55,25 @@
 			nameExt: 'dailyAPY'
 		},
 		{
-			name: 'Weekly APY',
+			name: 'APY',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'weeklyAPY'
+			nameExt: 'dailyAPY'
 		},
 		{
-			name: 'Yearly APY',
+			name: 'Utilization token',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'yearlyAPY'
+			nameExt: 'utilizationToken'
 		},
 		{
-			name: 'Utilization',
+			name: 'Utilization stable',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'utilization'
+			nameExt: 'utilizationStable'
 		}
 	];
 
@@ -129,9 +122,8 @@
 		}
 	}
 
-	function displayDetails(vault: number, strategy: number) {
+	function displayDetails(id: number) {
 		strategyStore.update((store) => {
-			const id = store.strategyTable.findIndex((s) => s.vaultId === vault && s.id === strategy);
 			store.strategyTable[id].withDetails = !store.strategyTable[id].withDetails;
 			return store;
 		});
@@ -161,7 +153,7 @@
 	{#each $filteredStrategies as row, i}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
-			<div class="strategy-table__row-items" on:click={() => displayDetails(row.vaultId, row.id)}>
+			<div class="strategy-table__row-items" on:click={() => displayDetails(row.vaultId)}>
 				<div class="strategy-table__row-item--strategy">
 					<div class="strategy-table__strategy-cell">
 						<div class="strategy-table__strategy-cell__img-box">
@@ -186,13 +178,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="strategy-table__row-item--cell">{row.walletBalance}</div>
-				<div class="strategy-table__row-item--cell">{row.deposited}</div>
-				<div class="strategy-table__row-item--cell">{row.locked}</div>
-				<div class="strategy-table__row-item--cell">{row.dailyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.weeklyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.yearlyAPY}%</div>
-				<div class="strategy-table__row-item--cell">{row.utilization}</div>
+				<div class="strategy-table__row-item--cell">{row.depositToken}</div>
+				<div class="strategy-table__row-item--cell">{row.depositStable}</div>
+				<div class="strategy-table__row-item--cell">{row.dailyAPY}</div>
+				<div class="strategy-table__row-item--cell">{row.APY}%</div>
+				<div class="strategy-table__row-item--cell">{row.utilizationToken}%</div>
+				<div class="strategy-table__row-item--cell">{row.utilizationStable}%</div>
 				<div class="strategy-table__row-item--arrow">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

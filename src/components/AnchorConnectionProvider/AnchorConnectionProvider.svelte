@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { Connection, PublicKey } from '@solana/web3.js';
+	import { Connection } from '@solana/web3.js';
 	import type { Commitment, ConnectionConfig } from '@solana/web3.js';
 	import { AnchorProvider, Program } from '@project-serum/anchor';
 	import { walletStore, type WalletStore } from '$src/stores/walletStore';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { IDL } from '$src/utils/Idl/protocol';
+	import { PROGRAM_ID } from '$src/stores/protocolStateStore';
 
 	export let network: string,
 		config: Commitment | ConnectionConfig | undefined = 'processed';
 
-	export const PROGRAM_ID = new PublicKey('xRkECZZpCjQ9PfpGvJ1R87GtVcMzJq31qZjGz9fYo95');
 	const connection = new Connection(network, config);
 
 	function defineProgramAndProvider(walletStore: WalletStore) {

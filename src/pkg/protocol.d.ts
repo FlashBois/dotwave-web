@@ -10,6 +10,46 @@ export function price_denominator(): bigint;
 export function fraction_denominator(): bigint;
 /**
 */
+export class BorrowPositionInfo {
+  free(): void;
+/**
+*/
+  borrowed_quantity: bigint;
+/**
+*/
+  owed_quantity: bigint;
+/**
+*/
+  vault_id: number;
+}
+/**
+*/
+export class LpPositionInfo {
+  free(): void;
+/**
+*/
+  deposited_base_quantity: bigint;
+/**
+*/
+  deposited_quote_quantity: bigint;
+/**
+*/
+  earned_base_quantity: bigint;
+/**
+*/
+  earned_quote_quantity: bigint;
+/**
+*/
+  position_value: bigint;
+/**
+*/
+  strategy_id: number;
+/**
+*/
+  vault_id: number;
+}
+/**
+*/
 export class StateAccount {
   free(): void;
 /**
@@ -36,9 +76,37 @@ export class StatementAccount {
 */
   static load(account_info: Uint8Array): StatementAccount;
 /**
+* @param {Uint8Array} account_info
+*/
+  reload(account_info: Uint8Array): void;
+/**
+* @returns {Uint8Array}
+*/
+  buffer(): Uint8Array;
+/**
 * @returns {number}
 */
   get_bump(): number;
+/**
+* @returns {Array<any>}
+*/
+  vaults_to_refresh(): Array<any>;
+/**
+* @param {Uint8Array} vaults
+*/
+  refresh(vaults: Uint8Array): void;
+/**
+* @returns {number}
+*/
+  positions_len(): number;
+/**
+* @returns {Uint8Array}
+*/
+  owner(): Uint8Array;
+/**
+* @returns {bigint}
+*/
+  remaining_permitted_debt(): bigint;
 }
 /**
 */
@@ -78,6 +146,11 @@ export class VaultsAccount {
   free(): void;
 /**
 * @param {number} index
+* @returns {number}
+*/
+  timestamp(index: number): number;
+/**
+* @param {number} index
 * @returns {bigint}
 */
   get_price(index: number): bigint;
@@ -110,6 +183,27 @@ export class VaultsAccount {
 * @param {number} time
 */
   update_quote_oracle(index: number, price: bigint, confidence: bigint, time: number): void;
+/**
+* @param {number} id
+* @param {bigint} value
+* @returns {bigint}
+*/
+  max_borrow_for(id: number, value: bigint): bigint;
+/**
+* @param {number} vault_index
+* @param {Uint8Array} statement
+* @param {number} current_time
+* @returns {BorrowPositionInfo}
+*/
+  get_borrow_position_info(vault_index: number, statement: Uint8Array, current_time: number): BorrowPositionInfo;
+/**
+* @param {number} vault_index
+* @param {number} strategy_index
+* @param {Uint8Array} statement
+* @param {number} current_time
+* @returns {LpPositionInfo}
+*/
+  get_lp_position_info(vault_index: number, strategy_index: number, statement: Uint8Array, current_time: number): LpPositionInfo;
 /**
 * @param {number} vault
 * @param {number} strategy
@@ -190,6 +284,14 @@ export class VaultsAccount {
 */
   static load(account_info: Uint8Array): VaultsAccount;
 /**
+* @param {Uint8Array} account_info
+*/
+  reload(account_info: Uint8Array): void;
+/**
+* @returns {Uint8Array}
+*/
+  buffer(): Uint8Array;
+/**
 * @returns {number}
 */
   vaults_len(): number;
@@ -258,9 +360,19 @@ export class VaultsAccount {
   refresh(index: number, current_time: number): void;
 /**
 * @param {number} index
+* @param {number} timestamp
 * @returns {bigint}
 */
-  lending_apy(index: number): bigint;
+  lending_apy(index: number, timestamp: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @param {bigint} amount
+* @param {boolean} deposit_base
+* @param {number} current_time
+* @returns {bigint}
+*/
+  deposit(vault: number, strategy: number, amount: bigint, deposit_base: boolean, current_time: number): bigint;
 }
 /**
 */

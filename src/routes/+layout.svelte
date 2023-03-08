@@ -50,7 +50,7 @@
 					<a href="/trade" class="nav__link">Trade</a>
 				</li>
 				<li class="nav__item">
-					<a href="/borrow" class="nav__link">Borrow</a>
+					<a href="/borrow/RAY" class="nav__link">Borrow</a>
 				</li>
 				<li class="nav__item">
 					<a href="/strategy" class="nav__link">Strategy</a>

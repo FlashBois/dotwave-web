@@ -1,0 +1,8 @@
+.borrow-repay-info {
+    height: 100%;
+
+    display: grid;
+    grid-template-rows: 7rem 1fr;
+    @include background-blur;
+    border-radius: 20px;
+}

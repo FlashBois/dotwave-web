@@ -6,7 +6,7 @@
 	$: selected = $protocolStateStore.vaultsSupport.find(
 		(s) =>
 			s.baseTokenInfo.symbol === $page.params?.which &&
-			$protocolStateStore.vaultsAccounts?.does_any_trade(s.id)
+			$protocolStateStore.vaultsAccounts?.has_trading(s.id)
 	);
 
 	$: if (!selected) console.log('!selected', $page.params?.which);

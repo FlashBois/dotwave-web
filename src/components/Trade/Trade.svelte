@@ -60,7 +60,7 @@
 
 	async function trade() {
 		if (size && side && support)
-			await useChangePosition($anchorStore.connection, size, side, support);
+			await useChangePosition($anchorStore.connection, size, side, support, position);
 		else console.log("couldn't trade");
 	}
 

@@ -1,4 +1,4 @@
-import type { Side } from '$components/Trade/types';
+import type { Position, Side } from '$components/Trade/types';
 import { anchorStore } from '$src/stores/anchorStore';
 import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 import { userStore } from '$src/stores/userStore';
@@ -9,7 +9,6 @@ import { PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
-import { useCreateStatementProgramAddress } from '../web3/useCreateStatementProgramAddress';
 import { useAddCreateIfNotExists } from './useAddCreateIfNotExists';
 import { useCreateStatement } from './useCreateStatement';
 
@@ -17,7 +16,8 @@ export async function useChangePosition(
 	connection: Connection,
 	amount: Decimal,
 	side: Side,
-	support: IVaultSupport
+	support: IVaultSupport,
+	position?: Position
 ) {
 	const { program } = get(anchorStore);
 
@@ -50,6 +50,29 @@ export async function useChangePosition(
 	if (!(await connection.getAccountInfo(user.statementAddress)))
 		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
+	const remainingAccounts = [support.baseOracle, support.quoteOracle].map((pubkey) => {
+		return { isSigner: false, isWritable: false, pubkey };
+	});
+
+	if (position)
+		tx.add(
+			await program.methods
+				.closePosition(support.id, position.side === 'long' ? true : false)
+				.accounts({
+					state: protocolState.stateAddress,
+					vaults: protocolState.vaultsAddress,
+					statement: user.statementAddress,
+					signer: wallet.publicKey,
+					accountBase,
+					accountQuote,
+					reserveBase: new PublicKey(protocolState.vaultsAccounts.base_reserve(support.id)),
+					reserveQuote: new PublicKey(protocolState.vaultsAccounts.quote_reserve(support.id)),
+					tokenProgram: TOKEN_PROGRAM_ID
+				})
+				.remainingAccounts(remainingAccounts)
+				.instruction()
+		);
+
 	tx.add(
 		await program.methods
 			.openPosition(support.id, new BN(parsed), side === 'long' ? true : false)
@@ -64,18 +87,7 @@ export async function useChangePosition(
 				reserveQuote: new PublicKey(protocolState.vaultsAccounts.quote_reserve(support.id)),
 				tokenProgram: TOKEN_PROGRAM_ID
 			})
-			.remainingAccounts([
-				{
-					isSigner: false,
-					isWritable: false,
-					pubkey: support.baseOracle
-				},
-				{
-					isSigner: false,
-					isWritable: false,
-					pubkey: support.quoteOracle
-				}
-			])
+			.remainingAccounts(remainingAccounts)
 			.instruction()
 	);
 

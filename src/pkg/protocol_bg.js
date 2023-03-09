@@ -8,9 +8,18 @@ const heap = new Array(128).fill(undefined);
 
 heap.push(undefined, null, true, false);
 
-function getObject(idx) { return heap[idx]; }
-
 let heap_next = heap.length;
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+
+function getObject(idx) { return heap[idx]; }
 
 function dropObject(idx) {
     if (idx < 132) return;
@@ -22,15 +31,6 @@ function takeObject(idx) {
     const ret = getObject(idx);
     dropObject(idx);
     return ret;
-}
-
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
 }
 
 const lTextDecoder = typeof TextDecoder === 'undefined' ? (0, module.require)('util').TextDecoder : TextDecoder;
@@ -912,6 +912,7 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
+<<<<<<< HEAD
     * @param {number} strategy
     * @returns {boolean}
     */
@@ -1111,6 +1112,8 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
+=======
+>>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
     * @param {bigint} amount
     * @param {boolean} from_base
     * @param {boolean} by_amount_out
@@ -1405,6 +1408,25 @@ export class VaultsAccount {
     }
     /**
     * @param {number} index
+    * @returns {boolean}
+    */
+    has_trading(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_has_trading(retptr, this.ptr, index);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 !== 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
     * @param {number} current_time
     */
     refresh(index, current_time) {
@@ -1585,6 +1607,11 @@ export class VaultsKeysWithId {
     }
 }
 
+export function __wbindgen_number_new(arg0) {
+    const ret = arg0;
+    return addHeapObject(ret);
+};
+
 export function __wbindgen_object_drop_ref(arg0) {
     takeObject(arg0);
 };
@@ -1596,11 +1623,6 @@ export function __wbindgen_object_clone_ref(arg0) {
 
 export function __wbindgen_error_new(arg0, arg1) {
     const ret = new Error(getStringFromWasm0(arg0, arg1));
-    return addHeapObject(ret);
-};
-
-export function __wbindgen_number_new(arg0) {
-    const ret = arg0;
     return addHeapObject(ret);
 };
 

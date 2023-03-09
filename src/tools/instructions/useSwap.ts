@@ -92,6 +92,18 @@ export async function useSwap(
 					reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
 					tokenProgram: TOKEN_PROGRAM_ID
 				})
+				.remainingAccounts([
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index))
+					},
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index))
+					}
+				])
 				.instruction()
 		);
 	} else {
@@ -116,6 +128,18 @@ export async function useSwap(
 					reserveOutQuote: new PublicKey(vaultsAccounts.quote_reserve(foundTo.index)),
 					tokenProgram: TOKEN_PROGRAM_ID
 				})
+				.remainingAccounts([
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index))
+					},
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index))
+					}
+				])
 				.instruction()
 		);
 	}

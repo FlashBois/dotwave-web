@@ -14,6 +14,7 @@
 	&__operation {
 		padding: 0 3rem;
 		padding-bottom: 4rem;
+		padding-top: 1rem;
 
 		display: flex;
 		flex-direction: column;
@@ -22,17 +23,52 @@
 	}
 
 	&__operation-box {
-		width: 70%;
+		width: 80%;
 		padding: 2rem;
 	}
 
-    &__label {
+	&__label {
 		width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 0.5rem;
-    }
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 1.7rem;
+		font-size: 1.2rem;
+
+		span {
+			cursor: pointer;
+		}
+	}
+
+	&__tools {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 2rem;
+		font-size: 1.2rem;
+
+		&__item {
+			// margin-top: 0.5rem;
+			display: flex;
+			justify-content: space-between;
+			width: 25%;
+
+			span {
+				display: flex;
+
+				justify-content: space-between;
+
+				background: var(--color-primary-green);
+				border-end-end-radius: 20px;
+				border-end-start-radius: 20px;
+				color: black;
+				padding: 0 0.8rem;
+				cursor: pointer;
+				font-size: 1rem;
+			}
+		}
+	}
 
 	&__input-container {
 		width: 100%;
@@ -74,14 +110,14 @@
 		@include background-blur;
 		border-radius: 10px;
 
-        display: flex;
-        justify-content: space-around;
+		display: flex;
+		justify-content: space-around;
 
-        &__col {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+		&__col {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
 	}
 
 	&__input-center {
@@ -108,7 +144,7 @@
 
 	&__switch {
 		display: flex;
-        flex-direction: column;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 	}

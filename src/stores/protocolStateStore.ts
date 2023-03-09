@@ -6,7 +6,7 @@ import { StateAccount, VaultsAccount } from '$src/pkg';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('9wfXRJeV6S8mjMXpEw143VFybkSV7idNjfSb3u8YwFaC');
+export const PROGRAM_ID = new PublicKey('AiGz15UrwCR6bpSLUhjPNXWQ84FmJ9q2y2ka7XzaZZFH');
 
 export interface ITokenInfo {
 	address: string;
@@ -22,7 +22,8 @@ export interface IVaultSupport {
 	baseTokenInfo: ITokenInfo;
 	quoteTokenAddress: PublicKey;
 	quoteTokenInfo: ITokenInfo;
-	oracleAddress: PublicKey;
+	baseOracle: PublicKey;
+	quoteOracle: PublicKey;
 }
 
 export interface IProtocolStateStore {
@@ -97,7 +98,12 @@ export async function loadProtocolState(): Promise<void> {
 							symbol: quoteTokenInfo.symbol
 						},
 						id: item.index,
+<<<<<<< HEAD
 						oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.id))
+=======
+						baseOracle: new PublicKey(vaultsAccounts.oracle_base(item.index)),
+						quoteOracle: new PublicKey(vaultsAccounts.oracle_quote(item.index))
+>>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
 					};
 				} else throw Error('Token address does not exist in the token list');
 			});

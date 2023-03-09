@@ -70,6 +70,7 @@ export function __wbg_get_strategyinfo_utilization_quote(a: number): number;
 export function __wbg_set_strategyinfo_utilization_quote(a: number, b: number): void;
 export function vaultsaccount_strategy_info(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_count_strategies(a: number, b: number, c: number): void;
+<<<<<<< HEAD
 export function vaultsaccount_does_lend(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_does_swap(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_does_trade(a: number, b: number, c: number, d: number): void;
@@ -80,6 +81,8 @@ export function vaultsaccount_lock_base(a: number, b: number, c: number, d: numb
 export function vaultsaccount_lock_quote(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_utilization_base(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_utilization_quote(a: number, b: number, c: number, d: number): void;
+=======
+>>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
 export function vaultsaccount_swap(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function vaultsaccount_liquidity(a: number, b: number, c: number, d: number): void;
 export function __wbg_vaultsaccount_free(a: number): void;
@@ -106,6 +109,7 @@ export function vaultsaccount_base_oracle_enabled(a: number, b: number, c: numbe
 export function vaultsaccount_quote_oracle_enabled(a: number, b: number, c: number): void;
 export function vaultsaccount_has_lending(a: number, b: number, c: number): void;
 export function vaultsaccount_has_swap(a: number, b: number, c: number): void;
+export function vaultsaccount_has_trading(a: number, b: number, c: number): void;
 export function vaultsaccount_refresh(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_max_leverage(a: number, b: number, c: number): void;

@@ -12,6 +12,8 @@ interface IDepositAccounts {
 	signer: PublicKey;
 	reserveBase: PublicKey;
 	reserveQuote: PublicKey;
+	baseOracle: PublicKey;
+	quoteOracle: PublicKey;
 }
 
 export async function useDeposit(
@@ -28,5 +30,17 @@ export async function useDeposit(
 			...accounts,
 			tokenProgram: TOKEN_PROGRAM_ID
 		})
+		.remainingAccounts([
+			{
+				isSigner: false,
+				isWritable: false,
+				pubkey: accounts.baseOracle
+			},
+			{
+				isSigner: false,
+				isWritable: false,
+				pubkey: accounts.quoteOracle
+			}
+		])
 		.instruction();
 }

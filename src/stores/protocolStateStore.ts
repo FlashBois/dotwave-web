@@ -4,6 +4,9 @@ import * as anchor from '@project-serum/anchor';
 import { get } from 'svelte/store';
 import { StateAccount, VaultsAccount } from '$src/pkg';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
+import { delay } from 'lodash';
+import { userStore } from './userStore';
+import { web3Store } from './web3Store';
 
 const STATE_SEED = 'state';
 export const PROGRAM_ID = new PublicKey('AiGz15UrwCR6bpSLUhjPNXWQ84FmJ9q2y2ka7XzaZZFH');
@@ -116,4 +119,34 @@ export async function loadProtocolState(): Promise<void> {
 			});
 		}
 	}
+}
+
+export async function onChangeProtocolState(): Promise<void> {
+	const { connection } = get(web3Store);
+	const { vaultsAddress, vaultsAccounts } = get(protocolStateStore)
+	const { statement, statementAddress } = get(userStore)
+
+	if(statement && vaultsAccounts && statementAddress) {
+		const id1 = connection.onAccountChange(
+			vaultsAddress,
+			async (info) => {
+				console.log('Vaults', info.data);
+
+				protocolStateStore.update(store => {
+					if(store.vaultsAccounts)
+						store.vaultsAccounts.reload(info.data)
+				
+					return store
+				})
+
+				await connection.removeAccountChangeListener(id1);
+			},
+			'recent'
+		);
+	
+		delay(async () => {
+			await connection.removeAccountChangeListener(id1);
+		}, 15000);
+	}
+
 }

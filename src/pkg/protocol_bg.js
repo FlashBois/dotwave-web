@@ -912,7 +912,6 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
-<<<<<<< HEAD
     * @param {number} strategy
     * @returns {boolean}
     */
@@ -960,25 +959,6 @@ export class VaultsAccount {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             wasm.vaultsaccount_does_trade(retptr, this.ptr, vault, strategy);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return r0 !== 0;
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault
-    * @returns {boolean}
-    */
-    does_any_trade(vault) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_does_any_trade(retptr, this.ptr, vault);
             var r0 = getInt32Memory0()[retptr / 4 + 0];
             var r1 = getInt32Memory0()[retptr / 4 + 1];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -1112,8 +1092,6 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
-=======
->>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
     * @param {bigint} amount
     * @param {boolean} from_base
     * @param {boolean} by_amount_out

@@ -217,7 +217,6 @@ export class VaultsAccount {
   count_strategies(vault: number): number;
 /**
 * @param {number} vault
-<<<<<<< HEAD
 * @param {number} strategy
 * @returns {boolean}
 */
@@ -234,11 +233,6 @@ export class VaultsAccount {
 * @returns {boolean}
 */
   does_trade(vault: number, strategy: number): boolean;
-/**
-* @param {number} vault
-* @returns {boolean}
-*/
-  does_any_trade(vault: number): boolean;
 /**
 * @param {number} vault
 * @param {number} strategy
@@ -277,8 +271,6 @@ export class VaultsAccount {
   utilization_quote(vault: number, strategy: number): bigint;
 /**
 * @param {number} vault
-=======
->>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
 * @param {bigint} amount
 * @param {boolean} from_base
 * @param {boolean} by_amount_out

@@ -1,21 +1,21 @@
 import type { Side } from '$components/Trade/types';
 import { anchorStore } from '$src/stores/anchorStore';
 import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-import { swapStore } from '$src/stores/swapStore';
 import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
-import { createAssociatedTokenAccountInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
-import { findVault } from '../findVault';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
+import { useCreateStatementProgramAddress } from '../web3/useCreateStatementProgramAddress';
 import { useAddCreateIfNotExists } from './useAddCreateIfNotExists';
+import { useCreateStatement } from './useCreateStatement';
 
-export async function useSwap(
+export async function useChangePosition(
 	connection: Connection,
-	amount: number,
+	amount: Decimal,
 	side: Side,
 	support: IVaultSupport
 ) {
@@ -36,14 +36,19 @@ export async function useSwap(
 
 	const tx = new Transaction();
 
-	const accountBase = user.getTokenAccountAddress(support.baseTokenAddress);
-	const accountQuote = user.getTokenAccountAddress(support.quoteTokenAddress);
+	console.log(user.statementAddress, program.programId.toBase58());
+
+	const accountBase = await getAssociatedTokenAddress(support.baseTokenAddress, wallet.publicKey);
+	const accountQuote = await getAssociatedTokenAddress(support.quoteTokenAddress, wallet.publicKey);
 	if (!accountBase || !accountQuote) throw new Error("Couldn't find token account");
 
 	await useAddCreateIfNotExists(tx, connection, [
 		support.baseTokenAddress,
 		support.quoteTokenAddress
 	]);
+
+	if (!(await connection.getAccountInfo(user.statementAddress)))
+		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
 	tx.add(
 		await program.methods
@@ -59,6 +64,18 @@ export async function useSwap(
 				reserveQuote: new PublicKey(protocolState.vaultsAccounts.quote_reserve(support.id)),
 				tokenProgram: TOKEN_PROGRAM_ID
 			})
+			.remainingAccounts([
+				{
+					isSigner: false,
+					isWritable: false,
+					pubkey: support.baseOracle
+				},
+				{
+					isSigner: false,
+					isWritable: false,
+					pubkey: support.quoteOracle
+				}
+			])
 			.instruction()
 	);
 

@@ -1,6 +1,9 @@
 import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
-import { createAssociatedTokenAccountInstruction } from '@solana/spl-token';
+import {
+	createAssociatedTokenAccountInstruction,
+	getAssociatedTokenAddress
+} from '@solana/spl-token';
 import type { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import { get } from 'svelte/store';
 
@@ -15,7 +18,8 @@ export async function useAddCreateIfNotExists(
 	if (!user.statementAddress || !wallet?.publicKey) throw new Error('Statement not loaded');
 
 	for (const token of tokens) {
-		const account = user.getTokenAccountAddress(token);
+		const account = await getAssociatedTokenAddress(token, wallet.publicKey);
+
 		if (!account) throw new Error("Couldn't find token account");
 
 		if ((await connection.getAccountInfo(account)) === null) {

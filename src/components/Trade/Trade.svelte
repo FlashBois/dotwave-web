@@ -15,6 +15,8 @@
 	import TokenList from '$components/TokenList/TokenList.svelte';
 	import { goto } from '$app/navigation';
 	import { userStore } from '$src/stores/userStore';
+	import { useChangePosition } from '$src/tools/instructions/useChangePosition';
+	import { anchorStore } from '$src/stores/anchorStore';
 
 	export let support: IVaultSupport | undefined;
 
@@ -42,6 +44,8 @@
 
 	$: if (!side || !size) {
 		message = 'Enter values';
+	} else if (!support) {
+		message = 'Select token';
 	} else if (!position) {
 		message = `Open ${side} position`;
 	} else if (position && position.side == side) {
@@ -54,7 +58,11 @@
 		message = 'Close position';
 	}
 
-	function trade() {}
+	async function trade() {
+		if (size && side && support)
+			await useChangePosition($anchorStore.connection, size, side, support);
+		else console.log("couldn't trade");
+	}
 
 	let visibleTokenList = false;
 	function onCloseTokenList() {

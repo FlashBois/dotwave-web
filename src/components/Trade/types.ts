@@ -11,7 +11,7 @@ export interface Position {
 	leverage: number;
 	size: number;
 	side: Side;
-	openPrice?: number;
+	openPrice: number;
 }
 
 export type Side = 'long' | 'short';

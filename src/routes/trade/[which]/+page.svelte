@@ -18,7 +18,6 @@
 	$: if (!selected) console.log('!selected', $page.params?.which);
 
 	async function closeTokenList(e: MouseEvent) {
-		console.log('here');
 		if (e.target === backdrop) {
 			visibleTokenList = false;
 		}

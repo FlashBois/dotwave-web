@@ -53,7 +53,6 @@ export async function loadStrategies(): Promise<void> {
 	let extractStrategy: IStrategyTable[] = [];
 
 	if (vaultsAccounts) {
-		// console.log('here', vaultsAccounts.strategy_info(0, 0).balance_base.toString());
 		for (const vault of vaultsSupport) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 
@@ -93,7 +92,7 @@ export async function loadStrategies(): Promise<void> {
 						depositToken: 2,
 						depositStable: 1,
 						dailyAPY: 2.01,
-						APY: 2.00,
+						APY: 2.0,
 						utilizationToken: 20.5,
 						utilizationStable: 20.5,
 						withDetails: false

@@ -1,12 +1,22 @@
 <script lang="ts">
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
+	import type Decimal from 'decimal.js';
 	import type { Side } from './types';
 
 	export let pnl: number = 0;
 
 	let long = 0;
 	let short = 0;
-	let side: Side | undefined = undefined;
+	export let side: Side | undefined = undefined;
+	export let size: number | undefined = undefined;
+
+	$: if (side == 'long') {
+		size = long;
+	} else if (side == 'short') {
+		size = short;
+	} else {
+		size = undefined;
+	}
 
 	$: {
 		if (long > 0 && side != 'long') {

@@ -99,7 +99,7 @@ export async function loadProtocolState(): Promise<void> {
 							symbol: quoteTokenInfo.symbol
 						},
 						id: item.index,
-						oracleAddress: new PublicKey(baseTokenInfo.oracle)
+						oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.id))
 					};
 				} else throw Error('Token address does not exist in the token list');
 			});

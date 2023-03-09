@@ -217,54 +217,6 @@ export class VaultsAccount {
   count_strategies(vault: number): number;
 /**
 * @param {number} vault
-* @param {number} strategy
-* @returns {boolean}
-*/
-  does_lend(vault: number, strategy: number): boolean;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {boolean}
-*/
-  does_swap(vault: number, strategy: number): boolean;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  balance_base(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  balance_quote(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  lock_base(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  lock_quote(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  utilization_base(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  utilization_quote(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
 * @param {bigint} amount
 * @param {boolean} from_base
 * @param {boolean} by_amount_out
@@ -355,6 +307,11 @@ export class VaultsAccount {
   has_swap(index: number): boolean;
 /**
 * @param {number} index
+* @returns {boolean}
+*/
+  has_trading(index: number): boolean;
+/**
+* @param {number} index
 * @param {number} current_time
 */
   refresh(index: number, current_time: number): void;
@@ -364,11 +321,6 @@ export class VaultsAccount {
 * @returns {bigint}
 */
   lending_apy(index: number, timestamp: number): bigint;
-/**
-* @param {number} index
-* @returns {number}
-*/
-  timestamp(index: number): number;
 /**
 * @param {number} vault
 * @param {number} strategy

@@ -10,7 +10,8 @@ export default defineConfig({
 		alias: {
 			$src: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src'),
 			$stores: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'stores'),
-			$components: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'components')
+			$components: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'components'),
+			$tools: path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'src', 'tools')
 		}
 	},
 	define: {

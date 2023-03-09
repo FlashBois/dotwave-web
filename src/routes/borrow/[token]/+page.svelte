@@ -32,7 +32,7 @@
 			} else goto('RAY');
 		}
 	});
-	$: ({ id, baseTokenInfo, quoteTokenInfo } = $vaultSupport)
+	$: ({ id, baseTokenInfo } = $vaultSupport)
 
 	$: maxBorrowAmount =
 		vaultsAccounts && statement
@@ -40,9 +40,9 @@
 			: undefined;
 
 	$: userBorrowInfo = vaultsAccounts && statementBuffer ? vaultsAccounts.get_borrow_position_info(id, statementBuffer, getCurrentUnixTime()) : undefined
-	$: maxRepayAmount = userBorrowInfo ? getDecimalFromBigint(userBorrowInfo.borrowed_quantity, 6).add(getDecimalFromBigint(userBorrowInfo.owed_quantity, 6)) : undefined
+	$: maxRepayAmount = userBorrowInfo ? getDecimalFromBigint(userBorrowInfo.owed_quantity, 6) : undefined
 
-	function onTokenClick(token: string) {
+	async function onTokenClick(token: string) {
 		goto(`${token}`);
 	}
 </script>

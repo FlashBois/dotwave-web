@@ -13,14 +13,14 @@
 <div class="both-infos">
 	<div class="info">
 		<ul>
-			<li>Price: <b>{price?.toString() ?? '-'}</b></li>
-			<li>Max Leverage: <b>{maxLeverage?.toString() ?? '-'}</b></li>
+			<li>Price: <b>{price?.toPrecision(6) ?? '-'}</b></li>
+			<li>Max Leverage: <b>{maxLeverage?.toPrecision(2) ?? '-'}</b></li>
 		</ul>
 	</div>
 	<div class="info">
 		<ul>
-			<li>Collateral: <b>{collateral?.toString() ?? '0'}$</b></li>
-			<li>Open price: <b>{position?.openPrice ?? '-'}</b></li>
+			<li>Collateral: <b>{collateral?.toPrecision(6) ?? '0'}$</b></li>
+			<li>Open price: <b>{position?.openPrice.toPrecision(6) ?? '-'}</b></li>
 			{#if position != undefined}
 				<li>Open position: <b>{position.size} {position.side}</b></li>
 			{:else}

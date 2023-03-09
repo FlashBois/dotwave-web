@@ -9,9 +9,9 @@ export interface ITradeInfo {
 
 export interface Position {
 	leverage: number;
-	size: number;
+	size: Decimal;
 	side: Side;
-	openPrice: number;
+	openPrice: Decimal;
 }
 
 export type Side = 'long' | 'short';

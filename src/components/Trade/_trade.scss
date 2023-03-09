@@ -31,4 +31,34 @@
 		width: 80%;
 		height: 60%;
 	}
+
+	.trade__select {
+		background: linear-gradient(135deg, rgba(1, 157, 154, 0.5), rgba(176, 30, 157, 0.5));
+		border-radius: 200px;
+		color: var(--color-primary-white);
+		cursor: pointer;
+		border: none;
+		padding: 10px 20px;
+
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+
+		img {
+			width: 30px;
+			border-radius: 50%;
+		}
+
+		svg {
+			fill: var(--color-primary-white);
+			width: 12px;
+			opacity: 0.7;
+
+			transition: all 0.2s ease-in-out;
+		}
+
+		&:hover svg {
+			transform: rotate(-90deg);
+		}
+	}
 }

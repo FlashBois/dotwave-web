@@ -9,7 +9,6 @@
 			$protocolStateStore.vaultsAccounts?.does_any_trade(s.id)
 	);
 
-	$: if (selected) console.log('selected');
 	$: if (!selected) console.log('!selected', $page.params?.which);
 </script>
 

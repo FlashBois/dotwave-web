@@ -5,23 +5,30 @@
 	import TradeInputs from '$components/Trade/TradeInputs.svelte';
 	import TradeInfo from './TradeInfo.svelte';
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-	import { getDecimalFromFraction } from '$src/tools/decimal/getDecimalFromBigInt';
+	import {
+		getDecimalFromFraction,
+		getDecimalFromValue
+	} from '$src/tools/decimal/getDecimalFromBigInt';
 	import { pricesStore } from '$src/stores/oracleStore';
 	import type { Side } from './types';
 	import Decimal from 'decimal.js';
 	import TokenList from '$components/TokenList/TokenList.svelte';
 	import { goto } from '$app/navigation';
+	import { userStore } from '$src/stores/userStore';
 
 	export let support: IVaultSupport | undefined;
 
 	$: vaults = $protocolStateStore?.vaultsAccounts;
-	$: price = support ? $pricesStore?.get(support.oracleAddress.toBase58()) : undefined;
-	$: support ? pricesStore.fetch([support.oracleAddress]) : undefined;
+	$: price = support ? $pricesStore?.get(support.baseOracle.toBase58()) : undefined;
+	$: support ? pricesStore.fetch([support.baseOracle]) : undefined;
 
 	$: maxLeverage =
 		vaults && support ? getDecimalFromFraction(vaults.max_leverage(support.id)) : undefined;
 
-	$: collateral = new Decimal(324.234234);
+	$: collateral = $userStore.statement
+		? getDecimalFromValue($userStore.statement?.remaining_permitted_debt())
+		: undefined;
+
 	$: position = {
 		side: 'long' as Side,
 		size: new Decimal(2),
@@ -40,7 +47,7 @@
 	} else if (position && position.side == side) {
 		message = `Increase ${side} position`;
 	} else if (position && position.side != side && position.size > size) {
-		message = `Decrease ${side} position`;
+		message = `Decrease ${position.side} position`;
 	} else if (position && position.side != side && position.size < size) {
 		message = `Reverse position to ${side}`;
 	} else {

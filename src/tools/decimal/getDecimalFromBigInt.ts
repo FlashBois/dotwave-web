@@ -9,6 +9,10 @@ export const getDecimalFromPrice = (value: bigint) => {
 	return getDecimalFromPlaces(value, 9);
 };
 
+export const getDecimalFromValue = (value: bigint) => {
+	return getDecimalFromPlaces(value, 9);
+};
+
 export const getDecimalFromFraction = (value: bigint) => {
 	return getDecimalFromPlaces(value, 6);
 };

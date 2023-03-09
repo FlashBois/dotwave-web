@@ -75,13 +75,30 @@ export async function loadStrategies(): Promise<void> {
 				let depositStable = 0;
 
 				if (vaultsAccounts && statementBuffer) {
-					const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
-					depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
-					depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
+					const lpPositionInfo = vaultsAccounts.get_lp_position_info(
+						vault.id,
+						strategyId,
+						statementBuffer,
+						getCurrentUnixTime()
+					);
+					depositToken = getNumberFromBigInt(
+						lpPositionInfo.deposited_base_quantity,
+						baseTokenInfo?.decimals
+					);
+					depositStable = getNumberFromBigInt(
+						lpPositionInfo.deposited_quote_quantity,
+						quoteTokenInfo?.decimals
+					);
 				}
 
-				const providedToken = getNumberFromBigInt(vaultsAccounts.balance_base(vault.id, strategyId), baseTokenInfo?.decimals);
-				const providedStable = getNumberFromBigInt(vaultsAccounts.balance_quote(vault.id, strategyId), quoteTokenInfo?.decimals);
+				const providedToken = getNumberFromBigInt(
+					vaultsAccounts.balance_base(vault.id, strategyId),
+					baseTokenInfo?.decimals
+				);
+				const providedStable = getNumberFromBigInt(
+					vaultsAccounts.balance_quote(vault.id, strategyId),
+					quoteTokenInfo?.decimals
+				);
 
 				if (strategyInfo && baseTokenInfo && quoteTokenInfo) {
 					extractStrategy.push({
@@ -107,17 +124,16 @@ export async function loadStrategies(): Promise<void> {
 							address: vault.quoteTokenAddress,
 							decimals: quoteTokenInfo.decimals
 						},
-<<<<<<< HEAD
-						depositToken: 2,
-						depositStable: 1,
-						dailyAPY: 2.01,
-						APY: 2.0,
-						utilizationToken: 20.5,
-						utilizationStable: 20.5,
-=======
 						deposit: [depositToken, depositStable],
-						dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
-						APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()), 6),
+						dailyAPY: getNumberFromBigInt(
+							// vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime()),
+							0n,
+							6
+						),
+						APY: getNumberFromBigInt(
+							0n, // vaultsAccounts.lending_apy(vault.id, getCurrentUnixTime())
+							6
+						),
 						provided: [providedToken, providedStable],
 						utilizationToken: getDecimalFromBigint(strategyInfo.utilization_base)
 							.div(10 ** 6)
@@ -129,7 +145,6 @@ export async function loadStrategies(): Promise<void> {
 							.mul(100)
 							.toDecimalPlaces(2)
 							.toNumber(),
->>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
 						withDetails: false
 					});
 				}

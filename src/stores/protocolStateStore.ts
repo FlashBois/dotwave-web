@@ -98,12 +98,8 @@ export async function loadProtocolState(): Promise<void> {
 							symbol: quoteTokenInfo.symbol
 						},
 						id: item.index,
-<<<<<<< HEAD
-						oracleAddress: new PublicKey(vaultsAccounts.oracle_base(item.id))
-=======
 						baseOracle: new PublicKey(vaultsAccounts.oracle_base(item.index)),
 						quoteOracle: new PublicKey(vaultsAccounts.oracle_quote(item.index))
->>>>>>> 560ee8cd2c23b50e24f3fffc494dde4c2f43fb0f
 					};
 				} else throw Error('Token address does not exist in the token list');
 			});

@@ -274,6 +274,48 @@ export type Protocol = {
       ]
     },
     {
+      "name": "enableTrading",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u8"
+        },
+        {
+          "name": "openFee",
+          "type": "u32"
+        },
+        {
+          "name": "maxLeverage",
+          "type": "u32"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "u32"
+        },
+        {
+          "name": "liquidationThreshold",
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "addStrategy",
       "accounts": [
         {
@@ -303,6 +345,10 @@ export type Protocol = {
         },
         {
           "name": "swapping",
+          "type": "bool"
+        },
+        {
+          "name": "trading",
           "type": "bool"
         },
         {
@@ -2414,6 +2460,11 @@ export type Protocol = {
       "code": 6039,
       "name": "NoVaultsToRefresh",
       "msg": "Statement does not contain any vault to refresh"
+    },
+    {
+      "code": 6040,
+      "name": "ServiceAlreadyExists",
+      "msg": "Given service was enabled before"
     }
   ]
 };
@@ -2694,6 +2745,48 @@ export const IDL: Protocol = {
       ]
     },
     {
+      "name": "enableTrading",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "index",
+          "type": "u8"
+        },
+        {
+          "name": "openFee",
+          "type": "u32"
+        },
+        {
+          "name": "maxLeverage",
+          "type": "u32"
+        },
+        {
+          "name": "collateralRatio",
+          "type": "u32"
+        },
+        {
+          "name": "liquidationThreshold",
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "addStrategy",
       "accounts": [
         {
@@ -2723,6 +2816,10 @@ export const IDL: Protocol = {
         },
         {
           "name": "swapping",
+          "type": "bool"
+        },
+        {
+          "name": "trading",
           "type": "bool"
         },
         {
@@ -4834,6 +4931,11 @@ export const IDL: Protocol = {
       "code": 6039,
       "name": "NoVaultsToRefresh",
       "msg": "Statement does not contain any vault to refresh"
+    },
+    {
+      "code": 6040,
+      "name": "ServiceAlreadyExists",
+      "msg": "Given service was enabled before"
     }
   ]
 };

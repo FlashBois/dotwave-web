@@ -912,6 +912,186 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
+    * @param {number} strategy
+    * @returns {boolean}
+    */
+    does_lend(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_does_lend(retptr, this.ptr, vault, strategy);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 !== 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {boolean}
+    */
+    does_swap(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_does_swap(retptr, this.ptr, vault, strategy);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 !== 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {boolean}
+    */
+    does_trade(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_does_trade(retptr, this.ptr, vault, strategy);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 !== 0;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    balance_base(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_balance_base(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    balance_quote(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_balance_quote(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    lock_base(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_lock_base(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    lock_quote(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_lock_quote(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    utilization_base(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_utilization_base(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @returns {bigint}
+    */
+    utilization_quote(vault, strategy) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_utilization_quote(retptr, this.ptr, vault, strategy);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
     * @param {bigint} amount
     * @param {boolean} from_base
     * @param {boolean} by_amount_out
@@ -1249,6 +1429,64 @@ export class VaultsAccount {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, timestamp);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
+    max_leverage(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_max_leverage(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
+    trading_open_fee(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_trading_open_fee(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @param {boolean} long
+    * @returns {bigint}
+    */
+    trading_fee(index, long) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_trading_fee(retptr, this.ptr, index, long);
             var r0 = getBigInt64Memory0()[retptr / 8 + 0];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
             var r3 = getInt32Memory0()[retptr / 4 + 3];

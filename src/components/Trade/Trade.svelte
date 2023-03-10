@@ -42,7 +42,7 @@
 	let size: Decimal | undefined = undefined;
 	let message = '';
 
-	$: if (!side || !size) {
+	$: if (!side || !size || side == position.side || size == position.size) {
 		message = 'Enter values';
 	} else if (!support) {
 		message = 'Select token';
@@ -102,7 +102,7 @@
 		</button>
 
 		<TradeInfo {price} {maxLeverage} {collateral} {position} />
-		<TradeInputs bind:size bind:side />
+		<TradeInputs bind:size bind:side {position} />
 	</div>
 
 	<div class="trade__button">

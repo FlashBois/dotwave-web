@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let placeholder: string = '0.00';
-	export let value: number;
+	export let value: number | undefined;
 
 	let className: string = '';
 	export { className as class };

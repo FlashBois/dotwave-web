@@ -1,31 +1,32 @@
 <script lang="ts">
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 	import Decimal from 'decimal.js';
-	import type { Side } from './types';
+	import type { Position, Side } from './types';
 
 	export let pnl: number = 0;
 
-	let long = 0;
-	let short = 0;
-	export let side: Side | undefined = undefined;
-	export let size: Decimal | undefined = undefined;
+	let long: number | undefined = undefined;
+	let short: number | undefined = undefined;
+	export let side: Side | undefined;
+	export let size: Decimal | undefined;
+	export let position: Position | undefined;
 
 	$: if (side == 'long') {
-		size = new Decimal(long);
+		size = long ? new Decimal(long) : undefined;
 	} else if (side == 'short') {
-		size = new Decimal(short);
+		size = short ? new Decimal(short) : undefined;
 	} else {
 		size = undefined;
 	}
 
 	$: {
-		if (long > 0 && side != 'long') {
+		if (long && side != 'long') {
 			side = 'long';
-			short = 0;
-		} else if (short > 0 && side != 'short') {
+			short = undefined;
+		} else if (short && side != 'short') {
 			side = 'short';
-			long = 0;
-		} else if (long == 0 && short == 0) {
+			long = undefined;
+		} else if (!long && !short) {
 			side = undefined;
 		}
 		console.log(long, short, side);
@@ -48,11 +49,18 @@
 	</div> -->
 	<div class="strategy-row-details__input-container .pnl-box">
 		<span>LONG</span>
-		<DecimalInput bind:value={long} />
+		<DecimalInput
+			bind:value={long}
+			placeholder={position?.side == 'long' && side != 'short' ? position.size.toString() : '0'}
+		/>
 		<div class="strategy-row-details__input-center">
 			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">Settle</span>
 		</div>
-		<DecimalInput bind:value={short} class="strategy-row-details__input--right" />
+		<DecimalInput
+			bind:value={short}
+			class="strategy-row-details__input--right"
+			placeholder={position?.side == 'short' && side != 'long' ? position.size.toString() : '0'}
+		/>
 		<span>SHORT</span>
 	</div>
 </div>

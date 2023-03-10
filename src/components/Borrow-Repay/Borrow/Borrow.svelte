@@ -11,11 +11,17 @@
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
+	$: buttonMessage = { message: 'Enter a value', disabled: true };
 
 	export let vaultSupport: IVaultSupport;
 	export let maxBorrowAmount: Decimal | undefined;
 
 	let borrowInputValue: number;
+
+	$: if (borrowInputValue == 0) buttonMessage = { message: 'Enter a value', disabled: true };
+	else if (maxBorrowAmount && borrowInputValue > maxBorrowAmount.toNumber())
+		buttonMessage = { message: 'Max borrow exceeded', disabled: true };
+	else if (borrowInputValue > 0) buttonMessage = { message: '', disabled: false };
 
 	async function onBorrowClick() {
 		const signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
@@ -42,7 +48,11 @@
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="borrow__button-box">
-				<GradientButton on:click={onBorrowClick}>Borrow</GradientButton>
+				{#if buttonMessage.disabled}
+					<GradientButton disabled>{buttonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={onBorrowClick}>Borrow</GradientButton>
+				{/if}
 			</div>
 		</div>
 	</div>

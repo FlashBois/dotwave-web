@@ -9,6 +9,10 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
+	import { getNotificationsContext } from 'svelte-notifications';
+
+	const { addNotification } = getNotificationsContext();
+
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
 	$: buttonMessage = { message: 'Enter a value', disabled: true };
@@ -29,6 +33,11 @@
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		borrowInputValue = 0;
+		addNotification({
+			text: 'Notification',
+			position: 'bottom-left',
+			removeAfter: 2000
+		});
 	}
 </script>
 

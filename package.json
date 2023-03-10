@@ -48,6 +48,7 @@
 		"decimal.js": "^10.4.3",
 		"fuse.js": "^6.6.2",
 		"lodash": "^4.17.21",
+		"svelte-notifications": "^0.9.98",
 		"vite-plugin-wasm": "^3.2.1"
 	}
 }

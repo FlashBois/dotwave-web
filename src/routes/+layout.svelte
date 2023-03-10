@@ -15,6 +15,8 @@
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import ConnectionProvider from '$components/Web3/ConnectionProvider.svelte';
 	import AnchorConnectionProvider from '$components/AnchorConnectionProvider/AnchorConnectionProvider.svelte';
+	import Notifications from 'svelte-notifications';
+	import Notification from '$components/Notification/Notification.svelte';
 
 	const localStorageKey = 'walletAdapter';
 	const network = clusterApiUrl('devnet');
@@ -34,34 +36,36 @@
 <ConnectionProvider {network} />
 <WalletProvider {localStorageKey} {wallets} autoConnect />
 
-<div class="container">
-	<header class="header">
-		<nav class="nav">
-			<div class="logo-box">
-				<!-- <a href="/" class="logo-box__link"><img src="" alt="protocol-logo" class="logo-box__logo" /></a> -->
-				<h1 style="color: white;font-size: 40px;">LOGO</h1>
+<Notifications item={Notification}>
+	<div class="container">
+		<header class="header">
+			<nav class="nav">
+				<div class="logo-box">
+					<!-- <a href="/" class="logo-box__link"><img src="" alt="protocol-logo" class="logo-box__logo" /></a> -->
+					<h1 style="color: white;font-size: 40px;">LOGO</h1>
+				</div>
+
+				<ul class="nav__list">
+					<li class="nav__item">
+						<a href="/swap/RAY_USDC" class="nav__link">Swap</a>
+					</li>
+					<li class="nav__item">
+						<a href="/trade" class="nav__link">Trade</a>
+					</li>
+					<li class="nav__item">
+						<a href="/borrow/RAY" class="nav__link">Borrow</a>
+					</li>
+					<li class="nav__item">
+						<a href="/strategy" class="nav__link">Strategy</a>
+					</li>
+				</ul>
+			</nav>
+
+			<div class="wallet-wrapper">
+				<WalletMultiButton />
 			</div>
+		</header>
 
-			<ul class="nav__list">
-				<li class="nav__item">
-					<a href="/swap/RAY_USDC" class="nav__link">Swap</a>
-				</li>
-				<li class="nav__item">
-					<a href="/trade" class="nav__link">Trade</a>
-				</li>
-				<li class="nav__item">
-					<a href="/borrow/RAY" class="nav__link">Borrow</a>
-				</li>
-				<li class="nav__item">
-					<a href="/strategy" class="nav__link">Strategy</a>
-				</li>
-			</ul>
-		</nav>
-
-		<div class="wallet-wrapper">
-			<WalletMultiButton />
-		</div>
-	</header>
-
-	<slot />
-</div>
+		<slot />
+	</div>
+</Notifications>

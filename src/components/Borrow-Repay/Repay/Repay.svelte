@@ -19,7 +19,7 @@
 
 	let repayInputValue: number;
 
-	$: if (!maxRepayAmount) buttonMessage = { message: 'No open positions', disabled: true };
+	$: if (!maxRepayAmount) buttonMessage = { message: 'No open position', disabled: true };
 	else if (baseAmount && repayInputValue > baseAmount.toNumber() && maxRepayAmount)
 		buttonMessage = { message: 'Insufficient funds', disabled: true };
 	else if (repayInputValue == 0 && maxRepayAmount)

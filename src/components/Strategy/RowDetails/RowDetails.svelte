@@ -3,20 +3,14 @@
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
 	import { loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
-	import { derived, get, writable } from 'svelte/store';
+	import { derived } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
 	import { walletStore } from '$src/stores/walletStore';
-	import { useDeposit } from '$src/tools/instructions/useDeposit';
-	import { ComputeBudgetProgram, PublicKey, Transaction } from '@solana/web3.js';
-	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
-	import { anchorStore } from '$src/stores/anchorStore';
 	import { loadProtocolState, protocolStateStore } from '$src/stores/protocolStateStore';
-	import { BN } from '@project-serum/anchor';
-	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { web3Store } from '$src/stores/web3Store';
-	import { delay } from 'lodash';
 	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
+	import { useWithdrawTransaction } from '$src/tools/transactions/useWithdrawTransaction';
 
 	export let row: IStrategyTable;
 
@@ -25,8 +19,8 @@
 
 	$: buttonMessage = { message: 'Enter a value', disabled: true };
 
-	let baseDepositValue = writable<number>(undefined);
-	let quoteDepositValue = writable<number>(undefined);
+	let baseDepositValue: number;
+	let quoteDepositValue: number;
 	let baseWithdrawValue: number;
 	let quoteWithdrawValue: number;
 
@@ -50,59 +44,67 @@
 	);
 	$: ({ baseAmount, quoteAmount } = $userData);
 
+	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
+		buttonMessage = { message: 'Enter a value', disabled: true };
+	else if (baseDepositValue > baseAmount.toNumber() || quoteDepositValue > quoteAmount.toNumber())
+		buttonMessage = { message: 'Insufficient funds', disabled: true };
+	else if (baseDepositValue > 0 && quoteDepositValue > 0)
+		buttonMessage = { message: '', disabled: false };
+
 	async function onDepositClick(vaultId: number, strategyId: number) {
 		const signature = await useDepositTransaction(
 			connection,
 			vaultId,
 			strategyId,
-			$baseDepositValue
+			baseDepositValue
 		);
 		await connection.confirmTransaction(signature, 'confirmed');
 		await loadProtocolState();
 		await loadUserStoreAccounts();
-		await loadStrategies()
+		await loadStrategies();
+		clearInputs();
+	}
+
+	async function onWithdrawClick(vaultId: number, strategyId: number) {
+		const signature = await useWithdrawTransaction(
+			connection,
+			vaultId,
+			strategyId,
+			baseWithdrawValue
+		);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		await loadStrategies();
 		clearInputs();
 	}
 
 	function onBaseDepositChange() {
-		quoteDepositValue.set(
+		quoteDepositValue =
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
 					row.vaultId,
 					row.strategyId,
-					BigInt($baseDepositValue * 10 ** row.tokenBase.decimals),
+					BigInt(baseDepositValue * 10 ** row.tokenBase.decimals),
 					true,
 					Math.floor(Date.now() / 1000)
 				)
 			) /
-				10 ** row.tokenQuote.decimals
-		);
-		checkDepositInput();
+			10 ** row.tokenQuote.decimals;
 	}
 
 	function onQuoteDepositChange() {
-		baseDepositValue.set(
+		baseDepositValue =
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
 					row.vaultId,
 					row.strategyId,
-					BigInt($quoteDepositValue * 10 ** row.tokenQuote.decimals),
+					BigInt(quoteDepositValue * 10 ** row.tokenQuote.decimals),
 					false,
 					Math.floor(Date.now() / 1000)
 				)
 			) /
-				10 ** row.tokenBase.decimals
-		);
-		checkDepositInput();
-	}
-
-	function checkDepositInput() {
-		if ($baseDepositValue == 0 || $quoteDepositValue == 0)
-			buttonMessage = { message: 'Enter a value', disabled: true };
-		if ($baseDepositValue > 0 && $quoteDepositValue > 0)
-			buttonMessage = { message: '', disabled: false };
-		if ($baseDepositValue > baseAmount.toNumber() || $quoteDepositValue > quoteAmount.toNumber())
-			buttonMessage = { message: 'Insufficient funds', disabled: true };
+			10 ** row.tokenBase.decimals;
 	}
 
 	// function onHalfDepositClick() {
@@ -114,8 +116,8 @@
 	// }
 
 	function clearInputs() {
-		baseDepositValue.set(0);
-		quoteDepositValue.set(0);
+		baseDepositValue = 0;
+		quoteDepositValue = 0;
 	}
 </script>
 
@@ -143,7 +145,7 @@
 					<span
 						on:click={() => {
 							if (publicKey) {
-								baseDepositValue.set(baseAmount.toNumber());
+								baseDepositValue = baseAmount.toNumber();
 								onBaseDepositChange();
 							}
 						}}
@@ -153,7 +155,7 @@
 					<span
 						on:click={() => {
 							if (publicKey) {
-								quoteDepositValue.set(quoteAmount.toNumber());
+								quoteDepositValue = quoteAmount.toNumber();
 								onQuoteDepositChange();
 							}
 						}}
@@ -161,14 +163,14 @@
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={$baseDepositValue} on:keyup={onBaseDepositChange} />
+					<DecimalInput bind:value={baseDepositValue} on:keyup={onBaseDepositChange} />
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						class="strategy-row-details__input--right"
-						bind:value={$quoteDepositValue}
+						bind:value={quoteDepositValue}
 						on:keyup={onQuoteDepositChange}
 					/>
 				</div>
@@ -206,7 +208,9 @@
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">
-				<GradientButton>Withdraw</GradientButton>
+				<GradientButton on:click={() => onWithdrawClick(row.vaultId, row.strategyId)}
+					>Withdraw</GradientButton
+				>
 			</div>
 		</div>
 	</div>

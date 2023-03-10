@@ -2,7 +2,7 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import type { IStrategyTable } from '$src/stores/strategyStore';
+	import { loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
 	import { derived, get, writable } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
@@ -11,14 +11,16 @@
 	import { ComputeBudgetProgram, PublicKey, Transaction } from '@solana/web3.js';
 	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
 	import { anchorStore } from '$src/stores/anchorStore';
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
+	import { loadProtocolState, protocolStateStore } from '$src/stores/protocolStateStore';
 	import { BN } from '@project-serum/anchor';
 	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
 	import { web3Store } from '$src/stores/web3Store';
 	import { delay } from 'lodash';
+	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
 
 	export let row: IStrategyTable;
 
+	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
 
 	$: buttonMessage = { message: 'Enter a value', disabled: true };
@@ -49,64 +51,17 @@
 	$: ({ baseAmount, quoteAmount } = $userData);
 
 	async function onDepositClick(vaultId: number, strategyId: number) {
-		const anchorCopy = get(anchorStore);
-		const walletCopy = get(walletStore);
-		const web3Copy = get(web3Store);
-		const userStoreCopy = get(userStore);
-		const { vaultsAccounts, vaultsAddress, stateAddress, vaultsSupport } = get(protocolStateStore);
-
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
-			const { program } = anchorCopy;
-			const { publicKey } = walletCopy;
-
-			const tx = new Transaction();
-
-			if (!userStoreCopy.statement) {
-				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-					userStoreCopy.statementAddress
-				);
-				if (!userStatemantAccount) {
-					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
-				}
-			}
-
-			tx.add(
-				ComputeBudgetProgram.setComputeUnitLimit({
-					units: 400000
-				})
-			);
-
-			tx.add(
-				await useDeposit(
-					program,
-					vaultId,
-					strategyId,
-					{
-						statement: userStoreCopy.statementAddress,
-						accountBase: userStoreCopy.getTokenAccountAddress(
-							vaultsSupport[vaultId].baseTokenAddress
-						)!,
-						accountQuote: userStoreCopy.getTokenAccountAddress(
-							vaultsSupport[vaultId].quoteTokenAddress
-						)!,
-						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultId)),
-						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultId)),
-						vaults: vaultsAddress,
-						state: stateAddress,
-						signer: publicKey,
-						baseOracle: vaultsSupport[vaultId].baseOracle,
-						quoteOracle: vaultsSupport[vaultId].quoteOracle
-					},
-					new BN($baseDepositValue * 10 ** row.tokenBase.decimals)
-				)
-			);
-
-			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
-			clearInputs();
-			delay(async () => {
-				await loadUserStoreAccounts();
-			}, 3000);
-		}
+		const signature = await useDepositTransaction(
+			connection,
+			vaultId,
+			strategyId,
+			$baseDepositValue
+		);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		await loadStrategies()
+		clearInputs();
 	}
 
 	function onBaseDepositChange() {
@@ -142,13 +97,11 @@
 	}
 
 	function checkDepositInput() {
-		if ($baseDepositValue == 0 || $quoteDepositValue == 0) buttonMessage = { message: 'Enter a value', disabled: true };
+		if ($baseDepositValue == 0 || $quoteDepositValue == 0)
+			buttonMessage = { message: 'Enter a value', disabled: true };
 		if ($baseDepositValue > 0 && $quoteDepositValue > 0)
 			buttonMessage = { message: '', disabled: false };
-		if (
-			$baseDepositValue > baseAmount.toNumber() ||
-			$quoteDepositValue > quoteAmount.toNumber()
-		)
+		if ($baseDepositValue > baseAmount.toNumber() || $quoteDepositValue > quoteAmount.toNumber())
 			buttonMessage = { message: 'Insufficient funds', disabled: true };
 	}
 

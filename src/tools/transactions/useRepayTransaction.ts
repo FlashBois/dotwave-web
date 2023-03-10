@@ -11,6 +11,7 @@ import {
 	type AccountMeta
 } from '@solana/web3.js';
 import { get } from 'svelte/store';
+import { getCurrentUnixTime } from '../getCurrentUnixTime';
 import { useCreateStatement } from '../instructions/useCreateStatement';
 import { useRepay } from '../instructions/useRepay';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
@@ -47,7 +48,7 @@ export async function useRepayTransaction(
 			})
 		);
 
-		const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh();
+		const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh(getCurrentUnixTime());
 		const remainingAccounts: AccountMeta[] = [];
 
 		if (vaultsToRefresh) {

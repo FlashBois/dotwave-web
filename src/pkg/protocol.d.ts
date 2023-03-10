@@ -88,9 +88,10 @@ export class StatementAccount {
 */
   get_bump(): number;
 /**
+* @param {number} current
 * @returns {Array<any>}
 */
-  vaults_to_refresh(): Array<any>;
+  vaults_to_refresh(current: number): Array<any>;
 /**
 * @param {Uint8Array} vaults
 */
@@ -142,6 +143,41 @@ export class StrategyInfo {
 }
 /**
 */
+export class TradingPositionInfo {
+  free(): void;
+/**
+*/
+  fees: bigint;
+/**
+*/
+  fees_value: bigint;
+/**
+*/
+  locked: bigint;
+/**
+*/
+  long: boolean;
+/**
+*/
+  open_price: bigint;
+/**
+*/
+  open_value: bigint;
+/**
+*/
+  pnl: bigint;
+/**
+*/
+  pnl_value: bigint;
+/**
+*/
+  size: bigint;
+/**
+*/
+  vault_id: number;
+}
+/**
+*/
 export class VaultsAccount {
   free(): void;
 /**
@@ -184,26 +220,33 @@ export class VaultsAccount {
 */
   update_quote_oracle(index: number, price: bigint, confidence: bigint, time: number): void;
 /**
-* @param {number} id
-* @param {bigint} value
-* @returns {bigint}
-*/
-  max_borrow_for(id: number, value: bigint): bigint;
-/**
 * @param {number} vault_index
 * @param {Uint8Array} statement
 * @param {number} current_time
-* @returns {BorrowPositionInfo}
+* @returns {BorrowPositionInfo | undefined}
 */
-  get_borrow_position_info(vault_index: number, statement: Uint8Array, current_time: number): BorrowPositionInfo;
+  get_borrow_position_info(vault_index: number, statement: Uint8Array, current_time: number): BorrowPositionInfo | undefined;
 /**
 * @param {number} vault_index
 * @param {number} strategy_index
 * @param {Uint8Array} statement
 * @param {number} current_time
-* @returns {LpPositionInfo}
+* @returns {LpPositionInfo | undefined}
 */
-  get_lp_position_info(vault_index: number, strategy_index: number, statement: Uint8Array, current_time: number): LpPositionInfo;
+  get_lp_position_info(vault_index: number, strategy_index: number, statement: Uint8Array, current_time: number): LpPositionInfo | undefined;
+/**
+* @param {number} vault_index
+* @param {Uint8Array} statement
+* @param {number} current_time
+* @returns {TradingPositionInfo}
+*/
+  get_trading_position_info(vault_index: number, statement: Uint8Array, current_time: number): TradingPositionInfo;
+/**
+* @param {number} id
+* @param {bigint} value
+* @returns {bigint}
+*/
+  max_borrow_for(id: number, value: bigint): bigint;
 /**
 * @param {number} vault
 * @param {number} strategy
@@ -215,6 +258,60 @@ export class VaultsAccount {
 * @returns {number}
 */
   count_strategies(vault: number): number;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_lend(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_swap(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_trade(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  balance_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  balance_quote(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  lock_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  lock_quote(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  utilization_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  utilization_quote(vault: number, strategy: number): bigint;
 /**
 * @param {number} vault
 * @param {bigint} amount
@@ -317,10 +414,41 @@ export class VaultsAccount {
   refresh(index: number, current_time: number): void;
 /**
 * @param {number} index
+* @returns {bigint}
+*/
+  borrow_limit(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  available_lend(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  max_utilization(index: number): bigint;
+/**
+* @param {number} index
 * @param {number} timestamp
 * @returns {bigint}
 */
   lending_apy(index: number, timestamp: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  max_leverage(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  trading_open_fee(index: number): bigint;
+/**
+* @param {number} index
+* @param {boolean} long
+* @returns {bigint}
+*/
+  trading_fee(index: number, long: boolean): bigint;
 /**
 * @param {number} vault
 * @param {number} strategy

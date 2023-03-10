@@ -100,6 +100,7 @@
 				/>
 			</svg>
 		</button>
+
 		<TradeInfo {price} {maxLeverage} {collateral} {position} />
 		<TradeInputs bind:size bind:side />
 	</div>
@@ -119,6 +120,7 @@
 			vaultsSupport={$protocolStateStore.vaultsSupport}
 			visible={visibleTokenList}
 			on:click={onTokenClick}
+			withQuote={false}
 		/>
 	{/if}
 </div>

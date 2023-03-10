@@ -30,30 +30,37 @@
 		}
 		console.log(long, short, side);
 	}
+
+	let baseWithdrawValue;
+	let quoteWithdrawValue;
 </script>
 
 <div class="inputs">
-	<div class="input-box">
+	<!-- <div class="input-box">
 		<span> Short </span>
 
 		<DecimalInput placeholder="0" bind:value={short} />
-	</div>
+	</div> -->
 
-	<div class="input-box pnl-box">
-		<span>Settle</span>
-		<div class="pnl {pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? '-'}</div>
-	</div>
-
-	<div class="input-box">
+	<!-- <div class="input-box">
 		<span> Long </span>
 		<DecimalInput bind:value={long} />
+	</div> -->
+	<div class="strategy-row-details__input-container .pnl-box">
+		<span>LONG</span>
+		<DecimalInput bind:value={long} />
+		<div class="strategy-row-details__input-center">
+			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">Settle</span>
+		</div>
+		<DecimalInput bind:value={short} class="strategy-row-details__input--right" />
+		<span>SHORT</span>
 	</div>
 </div>
 
 <style lang="scss">
 	.inputs {
 		position: relative;
-		width: 80%;
+		width: 65%;
 
 		display: flex;
 		flex-direction: row;
@@ -61,26 +68,14 @@
 		align-items: center;
 		gap: 1rem;
 
-		.input-box {
-			width: 100%;
-			border-radius: 10px;
-			border: none;
-			backdrop-filter: none;
-
-			span {
-				font-size: 1.7rem;
-				color: var(--color-primary-white);
-			}
-
-			.input {
-				width: 100%;
-				border-radius: 10px;
-				backdrop-filter: blur(50px);
-			}
+		span {
+			margin: 10px;
+			font-size: 1.7rem;
+			color: var(--color-primary-white);
 		}
 
-		.pnl-box {
-			width: 30%;
+		.strategy-row-details__input-center {
+			cursor: pointer;
 		}
 
 		.pnl {

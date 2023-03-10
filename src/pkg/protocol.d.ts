@@ -217,6 +217,60 @@ export class VaultsAccount {
   count_strategies(vault: number): number;
 /**
 * @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_lend(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_swap(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {boolean}
+*/
+  does_trade(vault: number, strategy: number): boolean;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  balance_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  balance_quote(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  lock_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  lock_quote(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  utilization_base(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @returns {bigint}
+*/
+  utilization_quote(vault: number, strategy: number): bigint;
+/**
+* @param {number} vault
 * @param {bigint} amount
 * @param {boolean} from_base
 * @param {boolean} by_amount_out
@@ -321,6 +375,22 @@ export class VaultsAccount {
 * @returns {bigint}
 */
   lending_apy(index: number, timestamp: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  max_leverage(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  trading_open_fee(index: number): bigint;
+/**
+* @param {number} index
+* @param {boolean} long
+* @returns {bigint}
+*/
+  trading_fee(index: number, long: boolean): bigint;
 /**
 * @param {number} vault
 * @param {number} strategy

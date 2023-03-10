@@ -3,14 +3,14 @@ import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
-import { ComputeBudgetProgram, Connection, PublicKey, Transaction } from '@solana/web3.js';
+import { ComputeBudgetProgram, Connection, PublicKey, Transaction, type AccountMeta } from '@solana/web3.js';
 import { get } from 'svelte/store';
 import { useCreateStatement } from '../instructions/useCreateStatement';
 import { useWithdraw } from '../instructions/useWithdraw';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 import { useCreateStatementProgramAddress } from '../web3/useCreateStatementProgramAddress';
 
-export async function useWithdrawransaction(
+export async function useWithdrawTransaction(
 	connection: Connection,
 	vaultId: number,
 	strategyId: number,
@@ -43,6 +43,30 @@ export async function useWithdrawransaction(
 			})
 		);
 
+		const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh(vaultId);
+		const remainingAccounts: AccountMeta[] = [];
+
+		if (vaultsToRefresh) {
+			const refresh = vaultsToRefresh.filter(
+				(value, index) => vaultsToRefresh.indexOf(value) === index
+			);
+
+			for (const id of refresh) {
+				remainingAccounts.push(
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: vaultsSupport[id].baseOracle
+					},
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: vaultsSupport[id].quoteOracle
+					}
+				);
+			}
+		}
+
 		const userAccountBase = userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress);
 		const userAccountQuote = userStoreCopy.getTokenAccountAddress(vaultSupport.quoteTokenAddress);
 
@@ -58,12 +82,11 @@ export async function useWithdrawransaction(
 						accountQuote: userAccountQuote,
 						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
 						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultSupport.id)),
-						baseOracle: vaultSupport.baseOracle,
-						quoteOracle: vaultSupport.quoteOracle,
 						vaults: vaultsAddress,
 						state: stateAddress,
 						signer: publicKey
 					},
+					remainingAccounts,
 					new BN(amount * 10 ** vaultSupport.baseTokenInfo.decimals)
 				)
 			);

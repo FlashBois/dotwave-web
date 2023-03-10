@@ -11,12 +11,13 @@
 	import BorrowRepayInfo from '$components/Borrow-Repay/BorrowRepayInfo/BorrowRepayInfo.svelte';
 	import Repay from '$components/Borrow-Repay/Repay/Repay.svelte';
 	import TokenList from '$components/TokenList/TokenList.svelte';
+	import Decimal from 'decimal.js';
 
 	$: ({ params } = $page);
 	$: ({ statement, statementBuffer } = $userStore);
 	$: ({ vaultsAccounts } = $protocolStateStore);
 
-	$: borrowListVisible = false;
+	let borrowListVisible = false
 
 	$: vaultSupport = derived<[typeof page], IVaultSupport>([page], ([$page], set) => {
 		if ($page.params) {
@@ -32,15 +33,46 @@
 			} else goto('RAY');
 		}
 	});
-	$: ({ id, baseTokenInfo } = $vaultSupport)
+	$: ({ id, baseTokenInfo } = $vaultSupport);
 
 	$: maxBorrowAmount =
 		vaultsAccounts && statement
-			? getDecimalFromBigint(vaultsAccounts.max_borrow_for(id, statement.remaining_permitted_debt()), 6)
+			? getDecimalFromBigint(
+					vaultsAccounts.max_borrow_for(id, statement.remaining_permitted_debt()),
+					6
+			  )
 			: undefined;
 
-	$: userBorrowInfo = vaultsAccounts && statementBuffer ? vaultsAccounts.get_borrow_position_info(id, statementBuffer, getCurrentUnixTime()) : undefined
-	$: maxRepayAmount = userBorrowInfo ? getDecimalFromBigint(userBorrowInfo.owed_quantity, 6) : undefined
+	$: userBorrowInfo =
+		vaultsAccounts && statementBuffer
+			? vaultsAccounts.get_borrow_position_info(id, statementBuffer, getCurrentUnixTime())
+			: undefined;
+
+	$: owedQuantity = userBorrowInfo
+		? getDecimalFromBigint(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
+		: undefined;
+
+	$: borrowedQuantity = userBorrowInfo
+		? getDecimalFromBigint(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
+		: undefined;
+
+	$: userData = derived<[typeof userStore], { baseAmount: Decimal }>(
+		[userStore],
+		([$userStore], set) => {
+			if ($userStore.accounts) {
+				const from = $userStore.accounts.find(
+					(e) => e.mint.toString() == $vaultSupport.baseTokenInfo.address
+				);
+
+				set({
+					baseAmount: from?.amount
+						? from.amount.div(new Decimal(10).pow($vaultSupport.baseTokenInfo.decimals))
+						: new Decimal(0)
+				});
+			}
+		}
+	);
+	$: ({ baseAmount } = $userData);
 
 	async function onTokenClick(token: string) {
 		goto(`${token}`);
@@ -49,34 +81,17 @@
 
 <div class="borrow-page">
 	<div class="borrow-repay-section">
+		<div class="borrow-header-section">
+			<!-- <p>Borrow</p> -->
+		</div>
+
 		{#if $vaultSupport}
 			<Borrow vaultSupport={$vaultSupport} {maxBorrowAmount} />
-			<div class="borrow-repay-section__select-box">
-				<button
-					on:click={() => borrowListVisible = true}
-					class="borrow-repay-section__select"
-				>
-					<img src={baseTokenInfo.logoURI} alt={baseTokenInfo.symbol} />
-					<p>{baseTokenInfo.symbol}</p>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="currentColor"
-						class="bi bi-caret-down-fill"
-						viewBox="0 0 16 16"
-					>
-						<path
-							d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-						/>
-					</svg>
-				</button>
-			</div>
-			<Repay vaultSupport={$vaultSupport} {maxRepayAmount} />
+			<Repay vaultSupport={$vaultSupport} maxRepayAmount={owedQuantity} {baseAmount} />
 		{/if}
 
 		<div class="borrow-info-section">
-			<BorrowRepayInfo />
+			<BorrowRepayInfo {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} on:click={() => borrowListVisible = true} />
 		</div>
 	</div>
 

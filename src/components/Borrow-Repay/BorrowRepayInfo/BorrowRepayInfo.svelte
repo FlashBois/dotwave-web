@@ -36,7 +36,8 @@
 		<p>
 			User fee: <span>{borrowedQuantity && owedQuantity ? owedQuantity.sub(borrowedQuantity).toNumber() : '-'}</span>
 		</p>
-		<p>Utilization: <span><PrograssBar percent={20} /> 20%</span> </p>
+		<p>Utilization: <span>20%</span></p>
+		<!-- <p>Utilization: <span><PrograssBar percent={20} /> 20%</span></p> -->
 		<p>Max utilization: <span>80%</span></p>
 	</div>
 </div>

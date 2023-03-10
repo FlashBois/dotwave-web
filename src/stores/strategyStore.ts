@@ -54,12 +54,10 @@ export async function loadStrategies(): Promise<void> {
 	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
 	const { statementBuffer } = get(userStore);
 
-	// eslint-disable-next-line prefer-const
-	let extractStrategy: IStrategyTable[] = [];
+	const extractStrategy: IStrategyTable[] = [];
 	let id = 0;
 
 	if (vaultsAccounts) {
-		// console.log('here', vaultsAccounts.strategy_info(0, 0).balance_base.toString());
 		for (const vault of vaultsSupport) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 
@@ -72,13 +70,16 @@ export async function loadStrategies(): Promise<void> {
 					(e) => e.address == vault.quoteTokenAddress.toString()
 				);
 
-				const depositToken = 0;
-				const depositStable = 0;
+				let depositToken = 0;
+				let depositStable = 0;
 
 				if (vaultsAccounts && statementBuffer) {
-					// const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
-					// depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
-					// depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
+					const lpPositionInfo = vaultsAccounts.get_lp_position_info(vault.id, strategyId, statementBuffer, getCurrentUnixTime())
+
+					if(lpPositionInfo) {
+						depositToken = getNumberFromBigInt(lpPositionInfo.deposited_base_quantity, baseTokenInfo?.decimals)
+						depositStable = getNumberFromBigInt(lpPositionInfo.deposited_quote_quantity, quoteTokenInfo?.decimals)
+					}
 				}
 
 				const providedToken = getNumberFromBigInt(strategyInfo.balance_base, baseTokenInfo?.decimals);

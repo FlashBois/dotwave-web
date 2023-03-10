@@ -1,7 +1,7 @@
 import type { Protocol } from '$src/utils/Idl/protocol';
 import type { BN, Program } from '@project-serum/anchor';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import type { PublicKey, TransactionInstruction } from '@solana/web3.js';
+import type { AccountMeta, PublicKey, TransactionInstruction } from '@solana/web3.js';
 
 interface IWithdrawAccounts {
 	state: PublicKey;
@@ -12,8 +12,6 @@ interface IWithdrawAccounts {
 	signer: PublicKey;
 	reserveBase: PublicKey;
 	reserveQuote: PublicKey;
-	baseOracle: PublicKey;
-	quoteOracle: PublicKey;
 }
 
 export async function useWithdraw(
@@ -21,6 +19,7 @@ export async function useWithdraw(
 	vaultId: number,
 	strategyId: number,
 	accounts: IWithdrawAccounts,
+	remainingAccounts: AccountMeta[],
 	amount: BN,
 	direction = true
 ): Promise<TransactionInstruction> {
@@ -30,17 +29,6 @@ export async function useWithdraw(
 			...accounts,
 			tokenProgram: TOKEN_PROGRAM_ID
 		})
-		.remainingAccounts([
-			{
-				isSigner: false,
-				isWritable: false,
-				pubkey: accounts.baseOracle
-			},
-			{
-				isSigner: false,
-				isWritable: false,
-				pubkey: accounts.quoteOracle
-			}
-		])
+		.remainingAccounts(remainingAccounts)
 		.instruction();
 }

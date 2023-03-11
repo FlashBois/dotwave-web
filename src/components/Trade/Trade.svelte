@@ -10,19 +10,29 @@
 		getDecimalFromValue
 	} from '$src/tools/decimal/getDecimalFromBigInt';
 	import { pricesStore } from '$src/stores/oracleStore';
-	import type { Side } from './types';
+	import type { Position, Side } from './types';
 	import Decimal from 'decimal.js';
 	import TokenList from '$components/TokenList/TokenList.svelte';
 	import { goto } from '$app/navigation';
 	import { userStore } from '$src/stores/userStore';
 	import { useChangePosition } from '$src/tools/instructions/useChangePosition';
 	import { anchorStore } from '$src/stores/anchorStore';
+	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 
 	export let support: IVaultSupport | undefined;
 
 	$: vaults = $protocolStateStore?.vaultsAccounts;
 	$: price = support ? $pricesStore?.get(support.baseOracle.toBase58()) : undefined;
 	$: support ? pricesStore.fetch([support.baseOracle]) : undefined;
+
+	$: positionInfo =
+		$userStore.statementBuffer && support
+			? $protocolStateStore.vaultsAccounts?.get_trading_position_info(
+					support.id,
+					$userStore.statementBuffer,
+					getCurrentUnixTime()
+			  )
+			: undefined;
 
 	$: maxLeverage =
 		vaults && support ? getDecimalFromFraction(vaults.max_leverage(support.id)) : undefined;
@@ -31,28 +41,39 @@
 		? getDecimalFromValue($userStore.statement?.remaining_permitted_debt())
 		: undefined;
 
-	$: position = {
-		side: 'long' as Side,
-		size: new Decimal(2),
-		leverage: 3,
-		openPrice: new Decimal(4.543534)
-	};
+	$: position =
+		positionInfo && support && collateral
+			? ({
+					side: positionInfo.long ? 'long' : 'short',
+					size: new Decimal(positionInfo.size.toString()).div(10 ** support.baseTokenInfo.decimals),
+					leverage: getDecimalFromValue(positionInfo.size_value).div(collateral),
+					openPrice: new Decimal(4.543534)
+			  } as Position)
+			: undefined;
+
+	$: {
+		console.log('positionInfo', positionInfo);
+		console.log('statement', $userStore.statement);
+		console.log('support', support);
+		console.log('position', position);
+		console.log('should', positionInfo && support && collateral);
+	}
 
 	let side: Side | undefined = undefined;
 	let size: Decimal | undefined = undefined;
 	let message = '';
 
-	$: if (!side || !size || side == position.side || size == position.size) {
+	$: if (!side || !size || (side == position?.side && size == position?.size && size)) {
 		message = 'Enter values';
 	} else if (!support) {
 		message = 'Select token';
 	} else if (!position) {
 		message = `Open ${side} position`;
-	} else if (position && position.side == side) {
+	} else if (position && position.side == side && size > position.size) {
 		message = `Increase ${side} position`;
-	} else if (position && position.side != side && position.size > size) {
+	} else if (position && position.side == side && position.size < size) {
 		message = `Decrease ${position.side} position`;
-	} else if (position && position.side != side && position.size < size) {
+	} else if (position && position.side != side) {
 		message = `Reverse position to ${side}`;
 	} else {
 		message = 'Close position';

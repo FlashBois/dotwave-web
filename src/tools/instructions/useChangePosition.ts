@@ -5,7 +5,7 @@ import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { PublicKey, Transaction, type Connection } from '@solana/web3.js';
+import { ComputeBudgetProgram, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
@@ -34,7 +34,11 @@ export async function useChangePosition(
 
 	if (!user.statementAddress) throw new Error('Statement not loaded');
 
-	const tx = new Transaction();
+	const tx = new Transaction().add(		
+		ComputeBudgetProgram.setComputeUnitLimit({
+			units: 1000000
+		})
+	);
 
 	console.log(user.statementAddress, program.programId.toBase58());
 
@@ -72,6 +76,8 @@ export async function useChangePosition(
 				.remainingAccounts(remainingAccounts)
 				.instruction()
 		);
+
+	
 
 	tx.add(
 		await program.methods

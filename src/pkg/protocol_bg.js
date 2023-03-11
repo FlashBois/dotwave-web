@@ -444,12 +444,13 @@ export class StatementAccount {
         return ret;
     }
     /**
+    * @param {number} current
     * @returns {Array<any>}
     */
-    vaults_to_refresh() {
+    vaults_to_refresh(current) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.statementaccount_vaults_to_refresh(retptr, this.ptr);
+            wasm.statementaccount_vaults_to_refresh(retptr, this.ptr, current);
             var r0 = getInt32Memory0()[retptr / 4 + 0];
             var r1 = getInt32Memory0()[retptr / 4 + 1];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
@@ -653,6 +654,172 @@ export class StrategyInfo {
 }
 /**
 */
+export class TradingPositionInfo {
+
+    static __wrap(ptr) {
+        const obj = Object.create(TradingPositionInfo.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_tradingpositioninfo_free(ptr);
+    }
+    /**
+    * @returns {number}
+    */
+    get vault_id() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_vault_id(this.ptr);
+        return ret;
+    }
+    /**
+    * @param {number} arg0
+    */
+    set vault_id(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_vault_id(this.ptr, arg0);
+    }
+    /**
+    * @returns {boolean}
+    */
+    get long() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_long(this.ptr);
+        return ret !== 0;
+    }
+    /**
+    * @param {boolean} arg0
+    */
+    set long(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_long(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get size() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_size(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set size(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_size(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get locked() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_locked(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set locked(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_locked(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get size_value() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_size_value(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set size_value(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_size_value(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get open_price() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_open_price(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set open_price(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_open_price(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get open_value() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_open_value(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set open_value(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_open_value(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get pnl() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_pnl(this.ptr);
+        return ret;
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set pnl(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_pnl(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get pnl_value() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_pnl_value(this.ptr);
+        return ret;
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set pnl_value(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_pnl_value(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get fees() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_fees(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set fees(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_fees(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get fees_value() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_fees_value(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set fees_value(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_fees_value(this.ptr, arg0);
+    }
+}
+/**
+*/
 export class VaultsAccount {
 
     static __wrap(ptr) {
@@ -807,6 +974,73 @@ export class VaultsAccount {
         }
     }
     /**
+    * @param {number} vault_index
+    * @param {Uint8Array} statement
+    * @param {number} current_time
+    * @returns {BorrowPositionInfo | undefined}
+    */
+    get_borrow_position_info(vault_index, statement, current_time) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_get_borrow_position_info(retptr, this.ptr, vault_index, addBorrowedObject(statement), current_time);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 === 0 ? undefined : BorrowPositionInfo.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            heap[stack_pointer++] = undefined;
+        }
+    }
+    /**
+    * @param {number} vault_index
+    * @param {number} strategy_index
+    * @param {Uint8Array} statement
+    * @param {number} current_time
+    * @returns {LpPositionInfo | undefined}
+    */
+    get_lp_position_info(vault_index, strategy_index, statement, current_time) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_get_lp_position_info(retptr, this.ptr, vault_index, strategy_index, addBorrowedObject(statement), current_time);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 === 0 ? undefined : LpPositionInfo.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            heap[stack_pointer++] = undefined;
+        }
+    }
+    /**
+    * @param {number} vault_index
+    * @param {Uint8Array} statement
+    * @param {number} current_time
+    * @returns {TradingPositionInfo | undefined}
+    */
+    get_trading_position_info(vault_index, statement, current_time) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_get_trading_position_info(retptr, this.ptr, vault_index, addBorrowedObject(statement), current_time);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return r0 === 0 ? undefined : TradingPositionInfo.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            heap[stack_pointer++] = undefined;
+        }
+    }
+    /**
     * @param {number} id
     * @param {bigint} value
     * @returns {bigint}
@@ -824,51 +1058,6 @@ export class VaultsAccount {
             return BigInt.asUintN(64, r0);
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault_index
-    * @param {Uint8Array} statement
-    * @param {number} current_time
-    * @returns {BorrowPositionInfo}
-    */
-    get_borrow_position_info(vault_index, statement, current_time) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_get_borrow_position_info(retptr, this.ptr, vault_index, addBorrowedObject(statement), current_time);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return BorrowPositionInfo.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            heap[stack_pointer++] = undefined;
-        }
-    }
-    /**
-    * @param {number} vault_index
-    * @param {number} strategy_index
-    * @param {Uint8Array} statement
-    * @param {number} current_time
-    * @returns {LpPositionInfo}
-    */
-    get_lp_position_info(vault_index, strategy_index, statement, current_time) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_get_lp_position_info(retptr, this.ptr, vault_index, strategy_index, addBorrowedObject(statement), current_time);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return LpPositionInfo.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            heap[stack_pointer++] = undefined;
         }
     }
     /**
@@ -1416,6 +1605,63 @@ export class VaultsAccount {
             if (r1) {
                 throw takeObject(r0);
             }
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
+    borrow_limit(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_borrow_limit(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
+    available_lend(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_available_lend(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
+    max_utilization(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_max_utilization(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
         }

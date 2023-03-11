@@ -81,14 +81,17 @@ export async function loadStrategies(): Promise<void> {
 						statementBuffer,
 						getCurrentUnixTime()
 					);
-					depositToken = getNumberFromBigInt(
-						lpPositionInfo.deposited_base_quantity,
+					if(lpPositionInfo) {
+
+						depositToken = getNumberFromBigInt(
+							lpPositionInfo.deposited_base_quantity,
 						baseTokenInfo?.decimals
 					);
 					depositStable = getNumberFromBigInt(
 						lpPositionInfo.deposited_quote_quantity,
 						quoteTokenInfo?.decimals
-					);
+						);
+					}
 				}
 
 				const providedToken = getNumberFromBigInt(

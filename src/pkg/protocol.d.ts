@@ -40,6 +40,12 @@ export class LpPositionInfo {
   earned_quote_quantity: bigint;
 /**
 */
+  max_withdraw_base: bigint;
+/**
+*/
+  max_withdraw_quote: bigint;
+/**
+*/
   position_value: bigint;
 /**
 */
@@ -238,9 +244,9 @@ export class VaultsAccount {
 * @param {number} vault_index
 * @param {Uint8Array} statement
 * @param {number} current_time
-* @returns {TradingPositionInfo}
+* @returns {TradingPositionInfo | undefined}
 */
-  get_trading_position_info(vault_index: number, statement: Uint8Array, current_time: number): TradingPositionInfo;
+  get_trading_position_info(vault_index: number, statement: Uint8Array, current_time: number): TradingPositionInfo | undefined;
 /**
 * @param {number} id
 * @param {bigint} value
@@ -450,6 +456,19 @@ export class VaultsAccount {
 */
   trading_fee(index: number, long: boolean): bigint;
 /**
+* @param {number} current_time
+*/
+  refresh_lend_fees(current_time: number): void;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @param {bigint} amount
+* @param {boolean} withdraw_base
+* @param {Uint8Array} statement
+* @returns {WithdrawAmounts}
+*/
+  withdraw(vault: number, strategy: number, amount: bigint, withdraw_base: boolean, statement: Uint8Array): WithdrawAmounts;
+/**
 * @param {number} vault
 * @param {number} strategy
 * @param {bigint} amount
@@ -472,4 +491,15 @@ export class VaultsKeysWithId {
 /**
 */
   quote_key: Uint8Array;
+}
+/**
+*/
+export class WithdrawAmounts {
+  free(): void;
+/**
+*/
+  base: bigint;
+/**
+*/
+  quote: bigint;
 }

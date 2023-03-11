@@ -9,9 +9,8 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import { getNotificationsContext } from 'svelte-notifications';
-
-	const { addNotification } = getNotificationsContext();
+	import { delay } from 'lodash';
+	import { clearNotifications, createNotification, updateNotification } from '$components/Notification/notificationsStore';
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
@@ -29,15 +28,15 @@
 
 	async function onBorrowClick() {
 		const signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
+		const notificationId = createNotification({
+			text: 'Notification',
+			type: 'loading'
+		});
 		await connection.confirmTransaction(signature, 'confirmed');
+		updateNotification(notificationId, { type: 'success', removeAfter: 3000 })
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		borrowInputValue = 0;
-		addNotification({
-			text: 'Notification',
-			position: 'bottom-left',
-			removeAfter: 2000
-		});
 	}
 </script>
 

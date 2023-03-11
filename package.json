@@ -18,6 +18,7 @@
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@types/lodash": "^4.14.191",
+		"@types/uuid": "^9.0.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"eslint": "^8.28.0",
@@ -48,7 +49,7 @@
 		"decimal.js": "^10.4.3",
 		"fuse.js": "^6.6.2",
 		"lodash": "^4.17.21",
-		"svelte-notifications": "^0.9.98",
+		"uuid": "^9.0.0",
 		"vite-plugin-wasm": "^3.2.1"
 	}
 }

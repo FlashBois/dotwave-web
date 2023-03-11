@@ -15,8 +15,8 @@
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import ConnectionProvider from '$components/Web3/ConnectionProvider.svelte';
 	import AnchorConnectionProvider from '$components/AnchorConnectionProvider/AnchorConnectionProvider.svelte';
-	import Notifications from 'svelte-notifications';
-	import Notification from '$components/Notification/Notification.svelte';
+	import Notifications from '$components/Notification/Notifications.svelte';
+	import Notification from '$components/Notification/CustomNotification.svelte';
 
 	const localStorageKey = 'walletAdapter';
 	const network = clusterApiUrl('devnet');

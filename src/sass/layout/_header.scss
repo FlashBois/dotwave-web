@@ -4,6 +4,7 @@
 
     grid-column: full-start / full-end;
     grid-row: 1;
+    backdrop-filter: blur(10px);
 
     display: flex;
     justify-content: space-between;

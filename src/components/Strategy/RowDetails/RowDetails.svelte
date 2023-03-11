@@ -107,6 +107,34 @@
 			10 ** row.tokenBase.decimals;
 	}
 
+	function onBaseWithdrawChange() {
+		quoteWithdrawValue =
+			Number(
+				$protocolStateStore.vaultsAccounts?.withdraw(
+					row.vaultId,
+					row.strategyId,
+					BigInt(baseWithdrawValue * 10 ** row.tokenBase.decimals),
+					true,
+					$userStore.statementBuffer!
+				).quote
+			) /
+			10 ** row.tokenQuote.decimals;
+	}
+
+	function onQuoteWithdrawChange() {
+		baseWithdrawValue =
+			Number(
+				$protocolStateStore.vaultsAccounts?.withdraw(
+					row.vaultId,
+					row.strategyId,
+					BigInt(quoteWithdrawValue * 10 ** row.tokenQuote.decimals),
+					false,
+					$userStore.statementBuffer!
+				).base
+			) /
+			10 ** row.tokenBase.decimals;
+	}
+
 	// function onHalfDepositClick() {
 	// 	depositValue = Number(baseToken.amount.mul(0.5).toFixed(9));
 	// }
@@ -192,17 +220,36 @@
 		<div class="strategy-row-details__operation">
 			<div class="strategy-row-details__operation-box">
 				<div class="strategy-row-details__label">
-					<span>Balance: -- </span>
-					<span>Balance: -- </span>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span
+						on:click={() => {
+							if (publicKey) {
+								baseWithdrawValue = row.max_withdraw_base;
+								onBaseWithdrawChange();
+							}
+						}}
+						>Max: {#if !publicKey} -- {:else} {row.max_withdraw_base} {/if}</span
+					>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span
+						on:click={() => {
+							if (publicKey) {
+								quoteWithdrawValue = row.max_withdraw_quote;
+								onQuoteWithdrawChange();
+							}
+						}}
+						>Max: {#if !publicKey} -- {:else} {row.max_withdraw_quote} {/if}</span
+					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={baseWithdrawValue} />
+					<DecimalInput bind:value={baseWithdrawValue} on:keyup={onBaseWithdrawChange} />
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						bind:value={quoteWithdrawValue}
+						on:keyup={onQuoteWithdrawChange}
 						class="strategy-row-details__input--right"
 					/>
 				</div>

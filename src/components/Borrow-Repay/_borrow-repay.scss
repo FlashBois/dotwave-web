@@ -23,6 +23,10 @@
 		padding: 0 1.7rem;
 		font-size: 1.2rem;
 		color: var(--color-primary-white);
+
+		span {
+			cursor: pointer;
+		}
 	}
 
 	&__input {

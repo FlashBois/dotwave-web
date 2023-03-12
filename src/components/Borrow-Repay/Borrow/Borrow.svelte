@@ -1,71 +1,34 @@
 <script lang="ts">
-	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
-	import Input from '$components/Inputs/Input/Input.svelte';
-
-	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-	import { get } from 'svelte/store';
-	import { anchorStore } from '$src/stores/anchorStore';
-	import { walletStore } from '$src/stores/walletStore';
+	import { loadProtocolState, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { web3Store } from '$src/stores/web3Store';
-	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
-	import { PublicKey, Transaction } from '@solana/web3.js';
-	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
-	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
-	import { useBorrow } from '$src/tools/instructions/useBorrow';
-	import { BN } from '@project-serum/anchor';
-	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
-	import { delay } from 'lodash';
+	import { loadUserStoreAccounts } from '$src/stores/userStore';
+	import type Decimal from 'decimal.js';
+	import { useBorrowTransaction } from '$src/tools/transactions/useBorrowTransaction';
+	import { walletStore } from '$src/stores/walletStore';
+
+	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
+	$: ({ connection } = $web3Store);
+	$: ({ publicKey } = $walletStore);
+	$: buttonMessage = { message: 'Borrow', disabled: true };
+
 	export let vaultSupport: IVaultSupport;
+	export let maxBorrowAmount: Decimal | undefined;
+
 	let borrowInputValue: number;
 
+	$: if (borrowInputValue == 0) buttonMessage = { message: 'Borrow', disabled: true };
+	else if (maxBorrowAmount && borrowInputValue > maxBorrowAmount.toNumber())
+		buttonMessage = { message: 'Max borrow exceeded', disabled: true };
+	else if (borrowInputValue > 0) buttonMessage = { message: '', disabled: false };
+
 	async function onBorrowClick() {
-		const anchorCopy = get(anchorStore);
-		const walletCopy = get(walletStore);
-		const web3Copy = get(web3Store);
-		const userStoreCopy = get(userStore);
-		const { vaultsAccounts, vaultsAddress, stateAddress } = get(protocolStateStore);
-
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
-			const { program } = anchorCopy;
-			const { publicKey } = walletCopy;
-
-			const tx = new Transaction();
-			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
-
-			if (!userStoreCopy.statement) {
-				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-					userStoreCopy.statementAddress
-				);
-				if (!userStatemantAccount) {
-					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
-				}
-			}
-
-			tx.add(
-				await useBorrow(
-					program,
-					vaultSupport.id,
-					{
-						statement: statementProgramAddress,
-						accountBase: userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress)!,
-						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
-						vaults: vaultsAddress,
-						state: stateAddress,
-						signer: publicKey,
-						baseOracle: vaultSupport.baseOracle,
-						quoteOracle: vaultSupport.quoteOracle
-					},
-					new BN(borrowInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
-				)
-			);
-
-			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
-			delay(async () => {
-				await loadUserStoreAccounts();
-			}, 3000);
-		}
+		const signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		borrowInputValue = 0;
 	}
 </script>
 
@@ -73,14 +36,23 @@
 	<div class="borrow__operation">
 		<div class="borrow__operation-box">
 			<div class="borrow__label">
-				<span>Max borrow: -- </span>
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<span
+					on:click={() =>
+						publicKey && maxBorrowAmount ? (borrowInputValue = maxBorrowAmount.toNumber()) : null}
+					>Max borrow: {maxBorrowAmount?.toString() ?? '--'}
+				</span>
 			</div>
 			<div class="borrow__input">
 				<DecimalInput bind:value={borrowInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="borrow__button-box">
-				<GradientButton on:click={onBorrowClick}>Borrow</GradientButton>
+				{#if buttonMessage.disabled}
+					<GradientButton disabled>{buttonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={onBorrowClick}>Borrow</GradientButton>
+				{/if}
 			</div>
 		</div>
 	</div>

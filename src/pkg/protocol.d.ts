@@ -40,6 +40,12 @@ export class LpPositionInfo {
   earned_quote_quantity: bigint;
 /**
 */
+  max_withdraw_base: bigint;
+/**
+*/
+  max_withdraw_quote: bigint;
+/**
+*/
   position_value: bigint;
 /**
 */
@@ -88,9 +94,10 @@ export class StatementAccount {
 */
   get_bump(): number;
 /**
+* @param {number} current
 * @returns {Array<any>}
 */
-  vaults_to_refresh(): Array<any>;
+  vaults_to_refresh(current: number): Array<any>;
 /**
 * @param {Uint8Array} vaults
 */
@@ -142,6 +149,41 @@ export class StrategyInfo {
 }
 /**
 */
+export class TradingPositionInfo {
+  free(): void;
+/**
+*/
+  fees: bigint;
+/**
+*/
+  fees_value: bigint;
+/**
+*/
+  locked: bigint;
+/**
+*/
+  long: boolean;
+/**
+*/
+  open_price: bigint;
+/**
+*/
+  open_value: bigint;
+/**
+*/
+  pnl: bigint;
+/**
+*/
+  pnl_value: bigint;
+/**
+*/
+  size: bigint;
+/**
+*/
+  vault_id: number;
+}
+/**
+*/
 export class VaultsAccount {
   free(): void;
 /**
@@ -184,26 +226,33 @@ export class VaultsAccount {
 */
   update_quote_oracle(index: number, price: bigint, confidence: bigint, time: number): void;
 /**
-* @param {number} id
-* @param {bigint} value
-* @returns {bigint}
-*/
-  max_borrow_for(id: number, value: bigint): bigint;
-/**
 * @param {number} vault_index
 * @param {Uint8Array} statement
 * @param {number} current_time
-* @returns {BorrowPositionInfo}
+* @returns {BorrowPositionInfo | undefined}
 */
-  get_borrow_position_info(vault_index: number, statement: Uint8Array, current_time: number): BorrowPositionInfo;
+  get_borrow_position_info(vault_index: number, statement: Uint8Array, current_time: number): BorrowPositionInfo | undefined;
 /**
 * @param {number} vault_index
 * @param {number} strategy_index
 * @param {Uint8Array} statement
 * @param {number} current_time
-* @returns {LpPositionInfo}
+* @returns {LpPositionInfo | undefined}
 */
-  get_lp_position_info(vault_index: number, strategy_index: number, statement: Uint8Array, current_time: number): LpPositionInfo;
+  get_lp_position_info(vault_index: number, strategy_index: number, statement: Uint8Array, current_time: number): LpPositionInfo | undefined;
+/**
+* @param {number} vault_index
+* @param {Uint8Array} statement
+* @param {number} current_time
+* @returns {TradingPositionInfo | undefined}
+*/
+  get_trading_position_info(vault_index: number, statement: Uint8Array, current_time: number): TradingPositionInfo | undefined;
+/**
+* @param {number} id
+* @param {bigint} value
+* @returns {bigint}
+*/
+  max_borrow_for(id: number, value: bigint): bigint;
 /**
 * @param {number} vault
 * @param {number} strategy
@@ -371,6 +420,21 @@ export class VaultsAccount {
   refresh(index: number, current_time: number): void;
 /**
 * @param {number} index
+* @returns {bigint}
+*/
+  borrow_limit(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  available_lend(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
+  max_utilization(index: number): bigint;
+/**
+* @param {number} index
 * @param {number} timestamp
 * @returns {bigint}
 */
@@ -391,6 +455,19 @@ export class VaultsAccount {
 * @returns {bigint}
 */
   trading_fee(index: number, long: boolean): bigint;
+/**
+* @param {number} current_time
+*/
+  refresh_lend_fees(current_time: number): void;
+/**
+* @param {number} vault
+* @param {number} strategy
+* @param {bigint} amount
+* @param {boolean} withdraw_base
+* @param {Uint8Array} statement
+* @returns {WithdrawAmounts}
+*/
+  withdraw(vault: number, strategy: number, amount: bigint, withdraw_base: boolean, statement: Uint8Array): WithdrawAmounts;
 /**
 * @param {number} vault
 * @param {number} strategy
@@ -414,4 +491,15 @@ export class VaultsKeysWithId {
 /**
 */
   quote_key: Uint8Array;
+}
+/**
+*/
+export class WithdrawAmounts {
+  free(): void;
+/**
+*/
+  base: bigint;
+/**
+*/
+  quote: bigint;
 }

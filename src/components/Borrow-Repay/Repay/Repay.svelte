@@ -1,112 +1,61 @@
 <script lang="ts">
-	import { BN } from '@project-serum/anchor';
-	import { delay } from 'lodash';
-	import { useRepay } from '$src/tools/instructions/useRepay';
-	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-	import { derived, get } from 'svelte/store';
-	import { anchorStore } from '$src/stores/anchorStore';
+	import { loadProtocolState, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { walletStore } from '$src/stores/walletStore';
 	import { web3Store } from '$src/stores/web3Store';
-	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
-	import { PublicKey, Transaction } from '@solana/web3.js';
+	import { loadUserStoreAccounts } from '$src/stores/userStore';
+	import type Decimal from 'decimal.js';
+	import { useRepayTransaction } from '$src/tools/transactions/useRepayTransaction';
 
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
-	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
-	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
-	import Decimal from 'decimal.js';
-
+	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
+	$: buttonMessage = { message: 'Repay', disabled: true };
+
 	export let vaultSupport: IVaultSupport;
+	export let maxRepayAmount: Decimal | undefined;
+	export let baseAmount: Decimal | undefined;
+
 	let repayInputValue: number;
 
+	$: if (!maxRepayAmount) buttonMessage = { message: 'No open position', disabled: true };
+	else if (baseAmount && repayInputValue > baseAmount.toNumber() && maxRepayAmount)
+		buttonMessage = { message: 'Insufficient funds', disabled: true };
+	else if (repayInputValue == 0 && maxRepayAmount)
+		buttonMessage = { message: 'Repay', disabled: true };
+	else if (repayInputValue > 0 && maxRepayAmount) buttonMessage = { message: '', disabled: false };
+
 	async function onRepayClick() {
-		const anchorCopy = get(anchorStore);
-		const walletCopy = get(walletStore);
-		const web3Copy = get(web3Store);
-		const userStoreCopy = get(userStore);
-		const { vaultsAccounts, vaultsAddress, stateAddress } = get(protocolStateStore);
-
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
-			const { program } = anchorCopy;
-			const { publicKey } = walletCopy;
-
-			const tx = new Transaction();
-			const statementProgramAddress = useCreateStatementProgramAddress(program, publicKey);
-
-			if (!userStoreCopy.statement) {
-				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-					userStoreCopy.statementAddress
-				);
-				if (!userStatemantAccount) {
-					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
-				}
-			}
-
-			tx.add(
-				await useRepay(
-					program,
-					vaultSupport.id,
-					{
-						statement: statementProgramAddress,
-						accountBase: userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress)!,
-						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
-						vaults: vaultsAddress,
-						state: stateAddress,
-						signer: publicKey,
-						baseOracle: vaultSupport.baseOracle,
-						quoteOracle: vaultSupport.quoteOracle
-					},
-					new BN(repayInputValue * 10 ** vaultSupport.baseTokenInfo.decimals)
-				)
-			);
-
-			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
-			delay(async () => {
-				await loadUserStoreAccounts();
-			}, 3000);
-		}
+		const signature = await useRepayTransaction(connection, vaultSupport, repayInputValue);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		repayInputValue = 0;
 	}
-
-	$: userData = derived<[typeof userStore], { baseTokenAmount: Decimal }>(
-		[userStore],
-		([$userStore], set) => {
-			if ($userStore.accounts) {
-				const baseAccount = $userStore.accounts.find(
-					(e) => e.mint.toString() == vaultSupport.baseTokenInfo.address
-				);
-
-				set({
-					baseTokenAmount: baseAccount?.amount
-						? baseAccount.amount.div(new Decimal(10).pow(vaultSupport.baseTokenInfo.decimals))
-						: new Decimal(0)
-				});
-			}
-		}
-	);
-	$: ({ baseTokenAmount } = $userData);
 </script>
 
 <div class="repay">
 	<div class="repay__operation">
 		<div class="repay__operation-box">
 			<div class="borrow__label">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<span
-					>Balance: {#if !publicKey}
-						--
-					{:else}
-						{baseTokenAmount}
-					{/if}</span
-				>
+					on:click={() =>
+						publicKey && maxRepayAmount ? (repayInputValue = maxRepayAmount.toNumber()) : null}
+					>To repay: {maxRepayAmount?.toString() ?? '--'}
+				</span>
 			</div>
 			<div class="repay__input">
-				<DecimalInput bind:value={repayInputValue} />
+				<DecimalInput bind:value={repayInputValue} disabled={!maxRepayAmount ? true : false}/>
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="repay__button-box">
-				<GradientButton on:click={onRepayClick}>Repay</GradientButton>
+				{#if buttonMessage.disabled}
+					<GradientButton disabled>{buttonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={onRepayClick}>Repay</GradientButton>
+				{/if}
 			</div>
 		</div>
 	</div>

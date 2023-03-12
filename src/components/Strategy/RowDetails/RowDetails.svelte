@@ -2,151 +2,152 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import type { IStrategyTable } from '$src/stores/strategyStore';
-	import { derived, get, writable } from 'svelte/store';
+	import { loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
+	import { derived } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
 	import { walletStore } from '$src/stores/walletStore';
-	import { useDeposit } from '$src/tools/instructions/useDeposit';
-	import { PublicKey, Transaction } from '@solana/web3.js';
-	import { useCreateStatement } from '$src/tools/instructions/useCreateStatement';
-	import { anchorStore } from '$src/stores/anchorStore';
-	import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateStatementProgramAddress';
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import { BN } from '@project-serum/anchor';
-	import { useSignAndSendTransaction } from '$src/tools/wallet/useSignAndSendTransaction';
+	import { loadProtocolState, protocolStateStore } from '$src/stores/protocolStateStore';
 	import { web3Store } from '$src/stores/web3Store';
-	import { delay } from 'lodash';
+	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
+	import { useWithdrawTransaction } from '$src/tools/transactions/useWithdrawTransaction';
 
 	export let row: IStrategyTable;
 
+	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
 
-	let baseDepositValue = writable<number>(undefined);
-	let quoteDepositValue = writable<number>(undefined);
+	$: depositButtonMessage = { message: 'Deposit', disabled: true };
+	$: withdrawButtonMessage = { message: 'Withdraw', disabled: true };
+
+	let baseDepositValue: number;
+	let quoteDepositValue: number;
 	let baseWithdrawValue: number;
 	let quoteWithdrawValue: number;
 
-	$: userData = derived<
-		[typeof userStore],
-		{ baseToken: { amount: Decimal }; quoteToken: { amount: Decimal } }
-	>([userStore], ([$userStore], set) => {
-		if ($userStore.accounts) {
-			const from = $userStore.accounts.find((e) => e.mint.equals(row.tokenBase.address));
-			const to = $userStore.accounts.find((e) => e.mint.equals(row.tokenQuote.address));
+	$: userData = derived<[typeof userStore], { baseAmount: Decimal; quoteAmount: Decimal }>(
+		[userStore],
+		([$userStore], set) => {
+			if ($userStore.accounts) {
+				const from = $userStore.accounts.find((e) => e.mint.equals(row.tokenBase.address));
+				const to = $userStore.accounts.find((e) => e.mint.equals(row.tokenQuote.address));
 
-			set({
-				baseToken: {
-					amount: from?.amount
+				set({
+					baseAmount: from?.amount
 						? from.amount.div(new Decimal(10).pow(row.tokenBase.decimals))
-						: new Decimal(0)
-				},
-				quoteToken: {
-					amount: to?.amount
+						: new Decimal(0),
+					quoteAmount: to?.amount
 						? to.amount.div(new Decimal(10).pow(row.tokenBase.decimals))
 						: new Decimal(0)
-				}
-			});
+				});
+			}
 		}
-	});
-	$: ({ baseToken, quoteToken } = $userData);
+	);
+	$: ({ baseAmount, quoteAmount } = $userData);
+
+	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
+		depositButtonMessage = { message: 'Deposit', disabled: true };
+	else if (baseDepositValue > baseAmount.toNumber() || quoteDepositValue > quoteAmount.toNumber())
+		depositButtonMessage = { message: 'Insufficient funds', disabled: true };
+	else if (baseDepositValue > 0 && quoteDepositValue > 0)
+		depositButtonMessage = { message: '', disabled: false };
+
+	$: if (baseWithdrawValue == 0 || quoteWithdrawValue == 0)
+		withdrawButtonMessage = { message: 'Withdraw', disabled: true };
+	else if (baseWithdrawValue > row.max_withdraw_base || quoteWithdrawValue > row.max_withdraw_quote)
+		withdrawButtonMessage = { message: 'Max withdraw exceeded', disabled: true };
+	else if (baseWithdrawValue > 0 && quoteWithdrawValue > 0)
+		withdrawButtonMessage = { message: '', disabled: false };
 
 	async function onDepositClick(vaultId: number, strategyId: number) {
-		const anchorCopy = get(anchorStore);
-		const walletCopy = get(walletStore);
-		const web3Copy = get(web3Store);
-		const userStoreCopy = get(userStore);
-		const { vaultsAccounts, vaultsAddress, stateAddress, vaultsSupport } = get(protocolStateStore);
+		const signature = await useDepositTransaction(
+			connection,
+			vaultId,
+			strategyId,
+			baseDepositValue
+		);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		await loadStrategies();
+		clearInputs();
+	}
 
-		if (anchorCopy && walletCopy.publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
-			const { program } = anchorCopy;
-			const { publicKey } = walletCopy;
-
-			const tx = new Transaction();
-
-			if (!userStoreCopy.statement) {
-				const userStatemantAccount = await web3Copy.connection.getAccountInfo(
-					userStoreCopy.statementAddress
-				);
-				if (!userStatemantAccount) {
-					tx.add(await useCreateStatement(program, { payer: walletCopy.publicKey! }));
-				}
-			}
-
-			tx.add(
-				await useDeposit(
-					program,
-					vaultId,
-					strategyId,
-					{
-						statement: userStoreCopy.statementAddress,
-						accountBase: userStoreCopy.getTokenAccountAddress(
-							vaultsSupport[vaultId].baseTokenAddress
-						)!,
-						accountQuote: userStoreCopy.getTokenAccountAddress(
-							vaultsSupport[vaultId].quoteTokenAddress
-						)!,
-						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultId)),
-						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultId)),
-						vaults: vaultsAddress,
-						state: stateAddress,
-						signer: publicKey,
-						baseOracle: vaultsSupport[vaultId].baseOracle,
-						quoteOracle: vaultsSupport[vaultId].quoteOracle
-					},
-					new BN($baseDepositValue * 10 ** row.tokenBase.decimals)
-				)
-			);
-
-			await useSignAndSendTransaction(web3Copy.connection, walletCopy, tx);
-			clearInputs();
-			delay(async () => {
-				await loadUserStoreAccounts();
-			}, 3000);
-		}
+	async function onWithdrawClick(vaultId: number, strategyId: number) {
+		const signature = await useWithdrawTransaction(
+			connection,
+			vaultId,
+			strategyId,
+			baseWithdrawValue
+		);
+		await connection.confirmTransaction(signature, 'confirmed');
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		await loadStrategies();
+		clearInputs();
 	}
 
 	function onBaseDepositChange() {
-		quoteDepositValue.set(
+		quoteDepositValue =
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
-					row.id,
+					row.vaultId,
 					row.strategyId,
-					BigInt($baseDepositValue * 10 ** row.tokenBase.decimals),
+					BigInt(baseDepositValue * 10 ** row.tokenBase.decimals),
 					true,
 					Math.floor(Date.now() / 1000)
 				)
 			) /
-				10 ** row.tokenQuote.decimals
-		);
+			10 ** row.tokenQuote.decimals;
 	}
 
 	function onQuoteDepositChange() {
-		baseDepositValue.set(
+		baseDepositValue =
 			Number(
 				$protocolStateStore.vaultsAccounts?.deposit(
-					row.id,
+					row.vaultId,
 					row.strategyId,
-					BigInt($quoteDepositValue * 10 ** row.tokenQuote.decimals),
+					BigInt(quoteDepositValue * 10 ** row.tokenQuote.decimals),
 					false,
 					Math.floor(Date.now() / 1000)
 				)
 			) /
-				10 ** row.tokenBase.decimals
-		);
+			10 ** row.tokenBase.decimals;
 	}
 
-	// function onHalfDepositClick() {
-	// 	depositValue = Number(baseToken.amount.mul(0.5).toFixed(9));
-	// }
+	function onBaseWithdrawChange() {
+		quoteWithdrawValue =
+			Number(
+				$protocolStateStore.vaultsAccounts?.withdraw(
+					row.vaultId,
+					row.strategyId,
+					BigInt(baseWithdrawValue * 10 ** row.tokenBase.decimals),
+					true,
+					$userStore.statementBuffer!
+				).quote
+			) /
+			10 ** row.tokenQuote.decimals;
+	}
 
-	// function onMaxDepositClick() {
-	// 	depositValue = Number(baseToken.amount.toFixed(9));
-	// }
+	function onQuoteWithdrawChange() {
+		baseWithdrawValue =
+			Number(
+				$protocolStateStore.vaultsAccounts?.withdraw(
+					row.vaultId,
+					row.strategyId,
+					BigInt(quoteWithdrawValue * 10 ** row.tokenQuote.decimals),
+					false,
+					$userStore.statementBuffer!
+				).base
+			) /
+			10 ** row.tokenBase.decimals;
+	}
 
 	function clearInputs() {
-		baseDepositValue.set(0);
-		quoteDepositValue.set(0);
+		baseDepositValue = 0;
+		quoteDepositValue = 0;
+		baseWithdrawValue = 0;
+		quoteWithdrawValue = 0;
 	}
 </script>
 
@@ -174,32 +175,32 @@
 					<span
 						on:click={() => {
 							if (publicKey) {
-								baseDepositValue.set(baseToken.amount.toNumber());
+								baseDepositValue = baseAmount.toNumber();
 								onBaseDepositChange();
 							}
 						}}
-						>Balance: {#if !publicKey} -- {:else} {baseToken.amount.toString()} {/if}</span
+						>Balance: {#if !publicKey} -- {:else} {baseAmount.toString()} {/if}</span
 					>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
 						on:click={() => {
 							if (publicKey) {
-								quoteDepositValue.set(quoteToken.amount.toNumber());
+								quoteDepositValue = quoteAmount.toNumber();
 								onQuoteDepositChange();
 							}
 						}}
-						>Balance: {#if !publicKey} -- {:else} {quoteToken.amount.toString()} {/if}</span
+						>Balance: {#if !publicKey} -- {:else} {quoteAmount.toString()} {/if}</span
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={$baseDepositValue} on:keyup={onBaseDepositChange} />
+					<DecimalInput bind:value={baseDepositValue} on:keyup={onBaseDepositChange} />
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						class="strategy-row-details__input--right"
-						bind:value={$quoteDepositValue}
+						bind:value={quoteDepositValue}
 						on:keyup={onQuoteDepositChange}
 					/>
 				</div>
@@ -209,37 +210,74 @@
 				</div> -->
 			</div>
 			<div class="strategy-row-details__button-box">
-				{#if $baseDepositValue <= baseToken.amount.toNumber()}<GradientButton
-						on:click={() => onDepositClick(row.vaultId, row.strategyId)}>Deposit</GradientButton
-					>{/if}
+				{#if depositButtonMessage.disabled}
+					<GradientButton disabled>{depositButtonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={() => onDepositClick(row.vaultId, row.strategyId)}
+						>Deposit</GradientButton
+					>
+				{/if}
 			</div>
 		</div>
 		<div class="strategy-row-details__operation">
 			<div class="strategy-row-details__operation-box">
 				<div class="strategy-row-details__label">
-					<span>Balance: -- </span>
-					<span>Balance: -- </span>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span
+						on:click={() => {
+							if (publicKey && row.max_withdraw_base != 0) {
+								baseWithdrawValue = row.max_withdraw_base;
+								onBaseWithdrawChange();
+							}
+						}}
+						>Max: {#if !publicKey || row.max_withdraw_base == 0}
+							--
+						{:else}
+							{row.max_withdraw_base}
+						{/if}</span
+					>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span
+						on:click={() => {
+							if (publicKey && row.max_withdraw_quote != 0) {
+								quoteWithdrawValue = row.max_withdraw_quote;
+								onQuoteWithdrawChange();
+							}
+						}}
+						>Max: {#if !publicKey || row.max_withdraw_quote == 0}
+							--
+						{:else}
+							{row.max_withdraw_quote}
+						{/if}</span
+					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={baseWithdrawValue} />
+					<DecimalInput
+						bind:value={baseWithdrawValue}
+						on:keyup={onBaseWithdrawChange}
+						disabled={row.max_withdraw_base == 0 ? true : false}
+					/>
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
 					</div>
 					<DecimalInput
 						bind:value={quoteWithdrawValue}
+						on:keyup={onQuoteWithdrawChange}
+						disabled={row.max_withdraw_quote == 0 ? true : false}
 						class="strategy-row-details__input--right"
 					/>
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">
-				<GradientButton>Withdraw</GradientButton>
+				{#if withdrawButtonMessage.disabled}
+					<GradientButton disabled>{withdrawButtonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={() => onWithdrawClick(row.vaultId, row.strategyId)}
+						>Withdraw</GradientButton
+					>
+				{/if}
 			</div>
 		</div>
 	</div>
 </div>
-
-<!-- <div>
-	<span on:click={onHalfDepositClick}>HALF</span>
-	<span on:click={onMaxDepositClick}>MAX</span>
-</div> -->

@@ -1,15 +1,23 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+	import { userStore } from '$src/stores/userStore';
+	import { getDecimalFromBigintWithDecimal } from '$src/tools/decimal/getDecimalFromBigInt';
+	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
+	import { derived, get } from 'svelte/store';
+
 	import Borrow from '$components/Borrow-Repay/Borrow/Borrow.svelte';
 	import BorrowRepayInfo from '$components/Borrow-Repay/BorrowRepayInfo/BorrowRepayInfo.svelte';
 	import Repay from '$components/Borrow-Repay/Repay/Repay.svelte';
 	import TokenList from '$components/TokenList/TokenList.svelte';
-	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
-	import { derived, get, writable } from 'svelte/store';
+	import Decimal from 'decimal.js';
 
 	$: ({ params } = $page);
-	const borrowListVisible = writable(false);
+	$: ({ statement, statementBuffer } = $userStore);
+	$: ({ vaultsAccounts } = $protocolStateStore);
+
+	let borrowListVisible = false
 
 	$: vaultSupport = derived<[typeof page], IVaultSupport>([page], ([$page], set) => {
 		if ($page.params) {
@@ -20,64 +28,77 @@
 			);
 
 			if (vault) {
-				borrowListVisible.set(false);
+				borrowListVisible = false;
 				set(vault);
 			} else goto('RAY');
 		}
 	});
+	$: ({ id, baseTokenInfo } = $vaultSupport);
 
-	function onCloseTokenList() {
-		borrowListVisible.set(false);
-	}
+	$: maxBorrowAmount =
+		vaultsAccounts && statement
+			? getDecimalFromBigintWithDecimal(
+					vaultsAccounts.max_borrow_for(id, statement.remaining_permitted_debt()),
+					6
+			  )
+			: undefined;
 
-	function onTokenListOpen() {
-		borrowListVisible.set(true);
-	}
+	$: userBorrowInfo =
+		vaultsAccounts && statementBuffer
+			? vaultsAccounts.get_borrow_position_info(id, statementBuffer, getCurrentUnixTime())
+			: undefined;
 
-	function onTokenClick(token: string) {
+	$: owedQuantity = userBorrowInfo
+		? getDecimalFromBigintWithDecimal(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
+		: undefined;
+
+	$: borrowedQuantity = userBorrowInfo
+		? getDecimalFromBigintWithDecimal(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
+		: undefined;
+
+	$: userData = derived<[typeof userStore], { baseAmount: Decimal }>(
+		[userStore],
+		([$userStore], set) => {
+			if ($userStore.accounts) {
+				const from = $userStore.accounts.find(
+					(e) => e.mint.toString() == $vaultSupport.baseTokenInfo.address
+				);
+
+				set({
+					baseAmount: from?.amount
+						? from.amount.div(new Decimal(10).pow($vaultSupport.baseTokenInfo.decimals))
+						: new Decimal(0)
+				});
+			}
+		}
+	);
+	$: ({ baseAmount } = $userData);
+
+	async function onTokenClick(token: string) {
 		goto(`${token}`);
 	}
 </script>
 
 <div class="borrow-page">
 	<div class="borrow-repay-section">
+		<div class="borrow-header-section">
+			<!-- <p>Borrow</p> -->
+		</div>
+
 		{#if $vaultSupport}
-			<Borrow vaultSupport={$vaultSupport} />
-			<div class="borrow-repay-section__select-box">
-				<button
-					on:click={() => {
-						onTokenListOpen()
-					}}
-					class="borrow-repay-section__select"
-				>
-					<img src={$vaultSupport.baseTokenInfo.logoURI} alt={$vaultSupport.baseTokenInfo.symbol} />
-					<p>{$vaultSupport.baseTokenInfo.symbol}</p>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						fill="currentColor"
-						class="bi bi-caret-down-fill"
-						viewBox="0 0 16 16"
-					>
-						<path
-							d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-						/>
-					</svg>
-				</button>
-			</div>
-			<Repay vaultSupport={$vaultSupport} />
+			<Borrow vaultSupport={$vaultSupport} {maxBorrowAmount} />
+			<Repay vaultSupport={$vaultSupport} maxRepayAmount={owedQuantity} {baseAmount} />
 		{/if}
 
 		<div class="borrow-info-section">
-			<BorrowRepayInfo />
+			<BorrowRepayInfo {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} on:click={() => borrowListVisible = true} />
 		</div>
 	</div>
 
 	<TokenList
 		on:onTokenClick={(e) => onTokenClick(e.detail)}
-		on:onClose={() => onCloseTokenList()}
-		visible={$borrowListVisible}
+		on:onClose={() => borrowListVisible = false}
+		visible={borrowListVisible}
 		vaultsSupport={$protocolStateStore.vaultsSupport}
 		withQuote={false}
 	/>

@@ -31,8 +31,8 @@
 	<div class="borrow-repay-info__stats">
 		<p>{baseTokenInfo.symbol} price: <span>23.145</span></p>
 		<p>User max borrow: <span>{maxBorrowAmount?.toNumber() ?? '-'}</span></p>
-		<p>User borrowed quantity: <span>{borrowedQuantity?.toNumber() ?? '-'}</span></p>
-		<p>User owed quantity: <span>{owedQuantity?.toNumber() ?? '-'}</span></p>
+		<p>User borrowed: <span>{borrowedQuantity?.toNumber() ?? '-'}</span></p>
+		<p>User owed: <span>{owedQuantity?.toNumber() ?? '-'}</span></p>
 		<p>
 			User fee: <span>{borrowedQuantity && owedQuantity ? owedQuantity.sub(borrowedQuantity).toNumber() : '-'}</span>
 		</p>

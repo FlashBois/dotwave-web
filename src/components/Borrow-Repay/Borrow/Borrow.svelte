@@ -11,14 +11,14 @@
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
-	$: buttonMessage = { message: 'Enter a value', disabled: true };
+	$: buttonMessage = { message: 'Borrow', disabled: true };
 
 	export let vaultSupport: IVaultSupport;
 	export let maxBorrowAmount: Decimal | undefined;
 
 	let borrowInputValue: number;
 
-	$: if (borrowInputValue == 0) buttonMessage = { message: 'Enter a value', disabled: true };
+	$: if (borrowInputValue == 0) buttonMessage = { message: 'Borrow', disabled: true };
 	else if (maxBorrowAmount && borrowInputValue > maxBorrowAmount.toNumber())
 		buttonMessage = { message: 'Max borrow exceeded', disabled: true };
 	else if (borrowInputValue > 0) buttonMessage = { message: '', disabled: false };

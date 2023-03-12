@@ -11,7 +11,7 @@
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
-	$: buttonMessage = { message: 'Enter a value', disabled: true };
+	$: buttonMessage = { message: 'Repay', disabled: true };
 
 	export let vaultSupport: IVaultSupport;
 	export let maxRepayAmount: Decimal | undefined;
@@ -19,11 +19,11 @@
 
 	let repayInputValue: number;
 
-	$: if (!maxRepayAmount) buttonMessage = { message: 'No open positions', disabled: true };
+	$: if (!maxRepayAmount) buttonMessage = { message: 'No open position', disabled: true };
 	else if (baseAmount && repayInputValue > baseAmount.toNumber() && maxRepayAmount)
 		buttonMessage = { message: 'Insufficient funds', disabled: true };
 	else if (repayInputValue == 0 && maxRepayAmount)
-		buttonMessage = { message: 'Enter a value', disabled: true };
+		buttonMessage = { message: 'Repay', disabled: true };
 	else if (repayInputValue > 0 && maxRepayAmount) buttonMessage = { message: '', disabled: false };
 
 	async function onRepayClick() {
@@ -47,7 +47,7 @@
 				</span>
 			</div>
 			<div class="repay__input">
-				<DecimalInput bind:value={repayInputValue} />
+				<DecimalInput bind:value={repayInputValue} disabled={!maxRepayAmount ? true : false}/>
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="repay__button-box">

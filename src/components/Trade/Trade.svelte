@@ -14,7 +14,7 @@
 	import Decimal from 'decimal.js';
 	import TokenList from '$components/TokenList/TokenList.svelte';
 	import { goto } from '$app/navigation';
-	import { userStore } from '$src/stores/userStore';
+	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import { useChangePosition } from '$src/tools/instructions/useChangePosition';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
@@ -80,9 +80,10 @@
 	}
 
 	async function trade() {
-		if (size && side && support)
+		if (size && side && support) {
 			await useChangePosition($anchorStore.connection, size, side, support, position);
-		else console.log("couldn't trade");
+			await loadUserStoreAccounts();
+		} else console.log("couldn't trade");
 	}
 
 	let visibleTokenList = false;

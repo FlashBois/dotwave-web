@@ -5,7 +5,8 @@ export async function useSignAndSendTransaction(
 	connection: Connection,
 	wallet: WalletStore,
 	transaction: Transaction,
-	singers?: Signer[]
+	singers?: Signer[], // way to fun to change this now
+	wait?: boolean
 ): Promise<string> {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const walletAddress = wallet.publicKey!;
@@ -28,9 +29,14 @@ export async function useSignAndSendTransaction(
 	}
 
 	try {
-		return await connection.sendRawTransaction(signedTransaction.serialize(), {
+		const sig = await connection.sendRawTransaction(signedTransaction.serialize(), {
 			skipPreflight: true
 		});
+
+		if (wait) {
+			await connection.confirmTransaction(sig);
+		}
+		return sig;
 	} catch (error) {
 		console.error(error);
 		return 'sending error';

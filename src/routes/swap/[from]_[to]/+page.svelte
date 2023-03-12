@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TokenList from '$components/TokenList/TokenList.svelte'
+	import TokenList from '$components/TokenList/TokenList.svelte';
 	import Exchange from '$components/Exchange/Exchange.svelte';
 	import { swapStore, TokenListType } from '$src/stores/swapStore';
 	import { protocolStateStore } from '$src/stores/protocolStateStore';
@@ -23,17 +23,15 @@
 </script>
 
 <div class="swap-page">
-	{#if $protocolStateStore.ready}
-		<div class="exchange-section">
-			<Exchange />
-		</div>
+	<div class="exchange-section">
+		<Exchange />
+	</div>
 
-		<TokenList
-			on:onTokenClick={(e) => onTokenClick(e.detail)}
-			on:onClose={() => onCloseTokenList()}
-			visible={$swapStore.tokenList.visible}
-			vaultsSupport={$protocolStateStore.vaultsSupport}
-			withQuote={true}
-		/>
-	{/if}
+	<TokenList
+		on:onTokenClick={(e) => onTokenClick(e.detail)}
+		on:onClose={() => onCloseTokenList()}
+		visible={$swapStore.tokenList.visible}
+		vaultsSupport={$protocolStateStore.vaultsSupport}
+		withQuote={true}
+	/>
 </div>

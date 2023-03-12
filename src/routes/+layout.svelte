@@ -50,7 +50,7 @@
 						<a href="/swap/RAY_USDC" class="nav__link">Swap</a>
 					</li>
 					<li class="nav__item">
-						<a href="/trade" class="nav__link">Trade</a>
+						<a href="/trade/RAY" class="nav__link">Trade</a>
 					</li>
 					<li class="nav__item">
 						<a href="/borrow/RAY" class="nav__link">Borrow</a>

@@ -17,7 +17,8 @@
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
 
-	$: buttonMessage = { message: 'Enter a value', disabled: true };
+	$: depositButtonMessage = { message: 'Deposit', disabled: true };
+	$: withdrawButtonMessage = { message: 'Withdraw', disabled: true };
 
 	let baseDepositValue: number;
 	let quoteDepositValue: number;
@@ -45,11 +46,18 @@
 	$: ({ baseAmount, quoteAmount } = $userData);
 
 	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
-		buttonMessage = { message: 'Enter a value', disabled: true };
+		depositButtonMessage = { message: 'Deposit', disabled: true };
 	else if (baseDepositValue > baseAmount.toNumber() || quoteDepositValue > quoteAmount.toNumber())
-		buttonMessage = { message: 'Insufficient funds', disabled: true };
+		depositButtonMessage = { message: 'Insufficient funds', disabled: true };
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
-		buttonMessage = { message: '', disabled: false };
+		depositButtonMessage = { message: '', disabled: false };
+
+	$: if (baseWithdrawValue == 0 || quoteWithdrawValue == 0)
+		withdrawButtonMessage = { message: 'Withdraw', disabled: true };
+	else if (baseWithdrawValue > row.max_withdraw_base || quoteWithdrawValue > row.max_withdraw_quote)
+		withdrawButtonMessage = { message: 'Max withdraw exceeded', disabled: true };
+	else if (baseWithdrawValue > 0 && quoteWithdrawValue > 0)
+		withdrawButtonMessage = { message: '', disabled: false };
 
 	async function onDepositClick(vaultId: number, strategyId: number) {
 		const signature = await useDepositTransaction(
@@ -135,17 +143,11 @@
 			10 ** row.tokenBase.decimals;
 	}
 
-	// function onHalfDepositClick() {
-	// 	depositValue = Number(baseToken.amount.mul(0.5).toFixed(9));
-	// }
-
-	// function onMaxDepositClick() {
-	// 	depositValue = Number(baseToken.amount.toFixed(9));
-	// }
-
 	function clearInputs() {
 		baseDepositValue = 0;
 		quoteDepositValue = 0;
+		baseWithdrawValue = 0;
+		quoteWithdrawValue = 0;
 	}
 </script>
 
@@ -208,8 +210,8 @@
 				</div> -->
 			</div>
 			<div class="strategy-row-details__button-box">
-				{#if buttonMessage.disabled}
-					<GradientButton disabled>{buttonMessage.message}</GradientButton>
+				{#if depositButtonMessage.disabled}
+					<GradientButton disabled>{depositButtonMessage.message}</GradientButton>
 				{:else}
 					<GradientButton on:click={() => onDepositClick(row.vaultId, row.strategyId)}
 						>Deposit</GradientButton
@@ -223,26 +225,38 @@
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
 						on:click={() => {
-							if (publicKey) {
+							if (publicKey && row.max_withdraw_base != 0) {
 								baseWithdrawValue = row.max_withdraw_base;
 								onBaseWithdrawChange();
 							}
 						}}
-						>Max: {#if !publicKey} -- {:else} {row.max_withdraw_base} {/if}</span
+						>Max: {#if !publicKey || row.max_withdraw_base == 0}
+							--
+						{:else}
+							{row.max_withdraw_base}
+						{/if}</span
 					>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<span
 						on:click={() => {
-							if (publicKey) {
+							if (publicKey && row.max_withdraw_quote != 0) {
 								quoteWithdrawValue = row.max_withdraw_quote;
 								onQuoteWithdrawChange();
 							}
 						}}
-						>Max: {#if !publicKey} -- {:else} {row.max_withdraw_quote} {/if}</span
+						>Max: {#if !publicKey || row.max_withdraw_quote == 0}
+							--
+						{:else}
+							{row.max_withdraw_quote}
+						{/if}</span
 					>
 				</div>
 				<div class="strategy-row-details__input-container">
-					<DecimalInput bind:value={baseWithdrawValue} on:keyup={onBaseWithdrawChange} />
+					<DecimalInput
+						bind:value={baseWithdrawValue}
+						on:keyup={onBaseWithdrawChange}
+						disabled={row.max_withdraw_base == 0 ? true : false}
+					/>
 					<div class="strategy-row-details__input-center">
 						<img src={row.tokenBase.logoURI} alt={`${row.tokenBase.symbol} logo`} />
 						<img src={row.tokenQuote.logoURI} alt={`${row.tokenQuote.symbol} logo`} />
@@ -250,20 +264,20 @@
 					<DecimalInput
 						bind:value={quoteWithdrawValue}
 						on:keyup={onQuoteWithdrawChange}
+						disabled={row.max_withdraw_quote == 0 ? true : false}
 						class="strategy-row-details__input--right"
 					/>
 				</div>
 			</div>
 			<div class="strategy-row-details__button-box">
-				<GradientButton on:click={() => onWithdrawClick(row.vaultId, row.strategyId)}
-					>Withdraw</GradientButton
-				>
+				{#if withdrawButtonMessage.disabled}
+					<GradientButton disabled>{withdrawButtonMessage.message}</GradientButton>
+				{:else}
+					<GradientButton on:click={() => onWithdrawClick(row.vaultId, row.strategyId)}
+						>Withdraw</GradientButton
+					>
+				{/if}
 			</div>
 		</div>
 	</div>
 </div>
-
-<!-- <div>
-	<span on:click={onHalfDepositClick}>HALF</span>
-	<span on:click={onMaxDepositClick}>MAX</span>
-</div> -->

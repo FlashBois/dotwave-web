@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { swapStore, TokenListType } from '$src/stores/swapStore';
-	import { userStore } from '$src/stores/userStore';
+	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import { walletStore } from '$stores/walletStore';
 	import { derived, get, writable } from 'svelte/store';
 	import Decimal from 'decimal.js';
@@ -14,6 +14,8 @@
 	import { swapOutput } from '$src/tools/swapOutput';
 	import { useSwap } from '$src/tools/instructions/useSwap';
 	import { anchorStore } from '$src/stores/anchorStore';
+	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import { loadProtocolState } from '$src/stores/protocolStateStore';
 
 	$: ({ wallet } = $walletStore);
 	$: ({ data } = $page);
@@ -136,7 +138,19 @@
 		const gotWalletStore = get(walletStore);
 		const connection = get(anchorStore).connection;
 		const to = get(simulation);
-		await useSwap(connection, gotWalletStore, to.in, to.out);
+		const signature = await useSwap(connection, gotWalletStore, to.in, to.out);
+		const notificationId = createNotification({
+			text: 'Swap',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err) updateNotification(notificationId, { text: 'Swap', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Swap', type: 'success', removeAfter: 3000 });
+
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+		fromValue.set(0)
 	}
 </script>
 

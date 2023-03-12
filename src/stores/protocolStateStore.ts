@@ -6,7 +6,7 @@ import { StateAccount, VaultsAccount } from '$src/pkg';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('AiGz15UrwCR6bpSLUhjPNXWQ84FmJ9q2y2ka7XzaZZFH');
+export const PROGRAM_ID = new PublicKey('5hw24QU1Zekpu2CDWsXDXj9WxiPhcQJ7jo7FJt3ema3B');
 
 export interface ITokenInfo {
 	address: string;

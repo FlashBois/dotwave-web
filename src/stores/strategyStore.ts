@@ -196,7 +196,7 @@ export async function loadStrategies(): Promise<void> {
 	}
 }
 
-export function clearUserStore() {
+export function clearStrategyStore() {
 	strategyStore.set({
 		sort: null,
 		strategyTable: []

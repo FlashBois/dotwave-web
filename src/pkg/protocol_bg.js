@@ -1254,46 +1254,6 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
-    * @param {number} strategy
-    * @returns {bigint}
-    */
-    utilization_base(vault, strategy) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_utilization_base(retptr, this.ptr, vault, strategy);
-            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            var r3 = getInt32Memory0()[retptr / 4 + 3];
-            if (r3) {
-                throw takeObject(r2);
-            }
-            return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault
-    * @param {number} strategy
-    * @returns {bigint}
-    */
-    utilization_quote(vault, strategy) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_utilization_quote(retptr, this.ptr, vault, strategy);
-            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            var r3 = getInt32Memory0()[retptr / 4 + 3];
-            if (r3) {
-                throw takeObject(r2);
-            }
-            return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault
     * @param {bigint} amount
     * @param {boolean} from_base
     * @param {boolean} by_amount_out
@@ -1664,6 +1624,25 @@ export class VaultsAccount {
     * @param {number} index
     * @returns {bigint}
     */
+    utilization_lend(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_utilization_lend(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
     max_utilization(index) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
@@ -1681,13 +1660,13 @@ export class VaultsAccount {
     }
     /**
     * @param {number} index
-    * @param {number} timestamp
+    * @param {number} duration_in_secs
     * @returns {bigint}
     */
-    lending_apy(index, timestamp) {
+    lending_apy(index, duration_in_secs) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, timestamp);
+            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, duration_in_secs);
             var r0 = getBigInt64Memory0()[retptr / 8 + 0];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
             var r3 = getInt32Memory0()[retptr / 4 + 3];

@@ -71,8 +71,6 @@ export function vaultsaccount_balance_base(a: number, b: number, c: number, d: n
 export function vaultsaccount_balance_quote(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lock_base(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lock_quote(a: number, b: number, c: number, d: number): void;
-export function vaultsaccount_utilization_base(a: number, b: number, c: number, d: number): void;
-export function vaultsaccount_utilization_quote(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_swap(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function vaultsaccount_liquidity(a: number, b: number, c: number, d: number): void;
 export function __wbg_vaultsaccount_free(a: number): void;
@@ -101,6 +99,7 @@ export function vaultsaccount_has_trading(a: number, b: number, c: number): void
 export function vaultsaccount_refresh(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_borrow_limit(a: number, b: number, c: number): void;
 export function vaultsaccount_available_lend(a: number, b: number, c: number): void;
+export function vaultsaccount_utilization_lend(a: number, b: number, c: number): void;
 export function vaultsaccount_max_utilization(a: number, b: number, c: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_max_leverage(a: number, b: number, c: number): void;

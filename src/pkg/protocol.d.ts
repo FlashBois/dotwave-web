@@ -308,18 +308,6 @@ export class VaultsAccount {
   lock_quote(vault: number, strategy: number): bigint;
 /**
 * @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  utilization_base(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
-* @param {number} strategy
-* @returns {bigint}
-*/
-  utilization_quote(vault: number, strategy: number): bigint;
-/**
-* @param {number} vault
 * @param {bigint} amount
 * @param {boolean} from_base
 * @param {boolean} by_amount_out
@@ -432,13 +420,18 @@ export class VaultsAccount {
 * @param {number} index
 * @returns {bigint}
 */
+  utilization_lend(index: number): bigint;
+/**
+* @param {number} index
+* @returns {bigint}
+*/
   max_utilization(index: number): bigint;
 /**
 * @param {number} index
-* @param {number} timestamp
+* @param {number} duration_in_secs
 * @returns {bigint}
 */
-  lending_apy(index: number, timestamp: number): bigint;
+  lending_apy(index: number, duration_in_secs: number): bigint;
 /**
 * @param {number} index
 * @returns {bigint}

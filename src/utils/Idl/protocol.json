@@ -817,31 +817,6 @@
           "name": "signer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -912,10 +887,6 @@
         {
           "name": "vault",
           "type": "u8"
-        },
-        {
-          "name": "long",
-          "type": "bool"
         }
       ]
     }
@@ -2542,6 +2513,11 @@
       "code": 6041,
       "name": "UserNotCollateralized",
       "msg": "Withdraw amount is not permitted due to reached limit"
+    },
+    {
+      "code": 6042,
+      "name": "PositionAlreadyExists",
+      "msg": "position already exists, close it to open new one"
     }
   ]
 }

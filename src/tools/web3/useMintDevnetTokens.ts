@@ -58,7 +58,7 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 		.forEach((instruction) => tx.add(instruction));
 
 	accountAddresses.forEach((address, i) => {
-		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e7));
+		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e13));
 	});
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);

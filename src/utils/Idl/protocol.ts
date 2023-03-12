@@ -1,5095 +1,4839 @@
 export type Protocol = {
-  "version": "0.1.0",
-  "name": "protocol",
-  "instructions": [
-    {
-      "name": "createState",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "createStatement",
-      "accounts": [
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "initVault",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "base",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "quote",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "enableOracle",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "priceFeed",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "decimals",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "skipInit",
-          "type": "bool"
-        },
-        {
-          "name": "maxUpdateInterval",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "forceOverrideOracle",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "price",
-          "type": "u32"
-        },
-        {
-          "name": "conf",
-          "type": "u32"
-        },
-        {
-          "name": "exp",
-          "type": "i8"
-        },
-        {
-          "name": "time",
-          "type": {
-            "option": "u32"
-          }
-        }
-      ]
-    },
-    {
-      "name": "enableLending",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "maxUtilization",
-          "type": "u32"
-        },
-        {
-          "name": "maxTotalBorrow",
-          "type": "u64"
-        },
-        {
-          "name": "initialFeeTime",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "enableSwapping",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "keptFee",
-          "type": "u32"
-        },
-        {
-          "name": "maxTotalSold",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "enableTrading",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "openFee",
-          "type": "u32"
-        },
-        {
-          "name": "maxLeverage",
-          "type": "u32"
-        },
-        {
-          "name": "collateralRatio",
-          "type": "u32"
-        },
-        {
-          "name": "liquidationThreshold",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "addStrategy",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "lending",
-          "type": "bool"
-        },
-        {
-          "name": "swapping",
-          "type": "bool"
-        },
-        {
-          "name": "trading",
-          "type": "bool"
-        },
-        {
-          "name": "collateralRatio",
-          "type": "u64"
-        },
-        {
-          "name": "liquidationThreshold",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "deposit",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "strategy",
-          "type": "u8"
-        },
-        {
-          "name": "quantity",
-          "type": "u64"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "withdraw",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "strategy",
-          "type": "u8"
-        },
-        {
-          "name": "quantity",
-          "type": "u64"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "singleSwap",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "minExpected",
-          "type": "u64"
-        },
-        {
-          "name": "fromBase",
-          "type": "bool"
-        },
-        {
-          "name": "byAmountOut",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "doubleSwap",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountIn",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountOut",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveIn",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveOut",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveInQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveOutQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vaultIn",
-          "type": "u8"
-        },
-        {
-          "name": "vaultOut",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "minExpected",
-          "type": "u64"
-        },
-        {
-          "name": "byAmountOut",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "modifyFeeCurve",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "service",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "bound",
-          "type": "u64"
-        },
-        {
-          "name": "a",
-          "type": "u64"
-        },
-        {
-          "name": "b",
-          "type": "u64"
-        },
-        {
-          "name": "c",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "borrow",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "repay",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "openPosition",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "long",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "closePosition",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "long",
-          "type": "bool"
-        }
-      ]
-    }
-  ],
-  "accounts": [
-    {
-      "name": "state",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "admin",
-            "type": "publicKey"
-          },
-          {
-            "name": "vaultsAcc",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "statement",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "statement",
-            "type": {
-              "defined": "UserStatement"
-            }
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "vaults",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "defined": "VaultsArray"
-            }
-          },
-          {
-            "name": "keys",
-            "type": {
-              "defined": "VaultsKeysArray"
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
-    {
-      "name": "BothValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothQuantities",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFractions",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFeeCurves",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFundingRates",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "FundingRate"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "FundingRate"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Balances",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "docs": [
-              "Token characteristic for vault"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "quote",
-            "docs": [
-              "Stable token"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Quantity",
-      "docs": [
-        "Used to represent a quantity of token (of its smallest unit)"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Fraction",
-      "docs": [
-        "Keeps fractions that need less precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Utilization",
-      "docs": [
-        "Keeps fractions that need less precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "BigFraction",
-      "docs": [
-        "Keeps fractions that need greater precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Shares",
-      "docs": [
-        "Keeps shares of pool or debt"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "numberOfShares",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Price",
-      "docs": [
-        "Keeps price data"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Value",
-      "docs": [
-        "Keeps the value of a token, pool or position"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "FundingRate",
-      "docs": [
-        "Used to keep cumulative funding rate (can be positive or negative)"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "i128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Precise",
-      "docs": [
-        "Used for calculations that need more precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Lend",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "liquidity available to borrow by borrower, it's the sum of all strategies containing this service",
-              "it should not be modified inside service"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "borrowed",
-            "docs": [
-              "liquidity already borrowed",
-              "containing accrued fee"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "fee",
-            "docs": [
-              "fee curve"
-            ],
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "lastFeePaid",
-            "docs": [
-              "unix timestamp of last interest rate accrued"
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "initialFeeTime",
-            "docs": [
-              "initial fee time for borrow"
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "utilization",
-            "docs": [
-              "current utilization  (borrowed / balance (available + borrowed))"
-            ],
-            "type": {
-              "defined": "Utilization"
-            }
-          },
-          {
-            "name": "maxUtilization",
-            "docs": [
-              "max utilization"
-            ],
-            "type": {
-              "defined": "Utilization"
-            }
-          },
-          {
-            "name": "borrowShares",
-            "docs": [
-              "borrow shares"
-            ],
-            "type": {
-              "defined": "Shares"
-            }
-          },
-          {
-            "name": "borrowLimit",
-            "docs": [
-              "ratio of borrow/collateral at which statement can be liquidated"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "unclaimedFee",
-            "docs": [
-              "fee that had been accrued, but not yet distributed"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "totalFee",
-            "docs": [
-              "sum of all fees accrued (for statistics)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Services",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "swap",
-            "type": {
-              "option": {
-                "defined": "Swap"
-              }
-            }
-          },
-          {
-            "name": "lend",
-            "type": {
-              "option": {
-                "defined": "Lend"
-              }
-            }
-          },
-          {
-            "name": "trade",
-            "type": {
-              "option": {
-                "defined": "Trade"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Swap",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "Liquidity available to be bought by a swapper."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "balances",
-            "docs": [
-              "Current balance, greater or equal to available."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalEarnedFee",
-            "docs": [
-              "Total amount of tokens earned for liquidity providers."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalPaidFee",
-            "docs": [
-              "Total amount of tokens already paid for liquidity providers."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalKeptFee",
-            "docs": [
-              "Total amount of fee tokens kept as fee (insurance, PoL or burn)."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "sellingFee",
-            "docs": [
-              "Struct for calculation of swapping fee."
-            ],
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "buyingFee",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "keptFee",
-            "docs": [
-              "Fraction of paid fee to be kept."
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Trade",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "liquidity available to be locked"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "total liquidity locked inside the vault"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "openValue",
-            "docs": [
-              "total value at the moment of opening a position"
-            ],
-            "type": {
-              "defined": "BothValues"
-            }
-          },
-          {
-            "name": "borrowFee",
-            "docs": [
-              "struct for calculation of position fee"
-            ],
-            "type": {
-              "defined": "BothFeeCurves"
-            }
-          },
-          {
-            "name": "funding",
-            "type": {
-              "defined": "BothFundingRates"
-            }
-          },
-          {
-            "name": "lastFee",
-            "type": "u32"
-          },
-          {
-            "name": "fundingMultiplier",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "openFee",
-            "docs": [
-              "fee paid on opening a position"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "maxOpenLeverage",
-            "docs": [
-              "maximum leverage allowed at the moment of opening a position"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "maxLeverage",
-            "docs": [
-              "maximum leverage allowed"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "accruedFee",
-            "docs": [
-              "fees waiting to be distributed to liquidity providers"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "collateralRatio",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "liquidationThreshold",
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Strategies",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Strategy"
-                },
-                6
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Strategy",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "lent",
-            "docs": [
-              "Quantity of tokens used in lending (borrowed)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Quantity"
-              }
-            }
-          },
-          {
-            "name": "sold",
-            "docs": [
-              "Quantity of tokens used in swapping (swapped for other tokens)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Balances"
-              }
-            }
-          },
-          {
-            "name": "traded",
-            "docs": [
-              "Quantity of tokens used in trading (currently locked in a position)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Balances"
-              }
-            }
-          },
-          {
-            "name": "available",
-            "docs": [
-              "Quantity of tokens available for use (not used)"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "Sum of all locked tokens for each of the"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalShares",
-            "docs": [
-              "Total amount of shares in a strategy"
-            ],
-            "type": {
-              "defined": "Shares"
-            }
-          },
-          {
-            "name": "accruedFee",
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "collateralRatio",
-            "docs": [
-              "Ratio at which shares in this strategy can be used as a collateral"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "liquidationThreshold",
-            "docs": [
-              "Ratio at which value of shares is calculated during liquidation"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "FeeCurve",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "used",
-            "type": "u8"
-          },
-          {
-            "name": "bounds",
-            "type": {
-              "array": [
-                {
-                  "defined": "Fraction"
-                },
-                5
-              ]
-            }
-          },
-          {
-            "name": "values",
-            "type": {
-              "array": [
-                {
-                  "defined": "CurveSegment"
-                },
-                5
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Oracle",
-      "docs": [
-        "Oracle is a struct that holds the price of an asset."
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "price",
-            "docs": [
-              "The price of the asset."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "confidence",
-            "docs": [
-              "The confidence of the price. It is a range around the price."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "lastUpdate",
-            "docs": [
-              "The time of the last update."
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "maxUpdateInterval",
-            "docs": [
-              "The maximum time interval between updates."
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "useSpread",
-            "docs": [
-              "If true, the oracle will force use the spread instead of the spot price."
-            ],
-            "type": "bool"
-          },
-          {
-            "name": "spreadLimit",
-            "docs": [
-              "Limit of quotient above which the confidence is too great to use spot price."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "decimals",
-            "docs": [
-              "The number of decimals of the asset."
-            ],
-            "type": {
-              "defined": "DecimalPlaces"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Receipt",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "side",
-            "docs": [
-              "side of the position: either long or short"
-            ],
-            "type": {
-              "defined": "Side"
-            }
-          },
-          {
-            "name": "size",
-            "docs": [
-              "size of the position (in base token)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "quantity of tokens locked in the position (size for LONG)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "initialFunding",
-            "docs": [
-              "shares for borrow fee"
-            ],
-            "type": {
-              "defined": "FundingRate"
-            }
-          },
-          {
-            "name": "openPrice",
-            "docs": [
-              "price at which the position was opened"
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "openValue",
-            "docs": [
-              "value o position at the moment of creation"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Positions",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Position"
-                },
-                32
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "UserTemporaryValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "collateral",
-            "type": {
-              "defined": "CollateralValues"
-            }
-          },
-          {
-            "name": "liabilities",
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "UserStatement",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "positions",
-            "type": {
-              "defined": "Positions"
-            }
-          },
-          {
-            "name": "values",
-            "type": {
-              "defined": "UserTemporaryValues"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "CollateralValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "exact",
-            "docs": [
-              "value of collateral 1:1"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "withCollateralRatio",
-            "docs": [
-              "value of collateral with collateral ratio"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "unhealthy",
-            "docs": [
-              "value of collateral with liquidation threshold ratio"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "TestStruct",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "array": [
-                "i32",
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Vault",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "services",
-            "type": {
-              "defined": "Services"
-            }
-          },
-          {
-            "name": "strategies",
-            "type": {
-              "defined": "Strategies"
-            }
-          },
-          {
-            "name": "oracle",
-            "type": {
-              "option": {
-                "defined": "Oracle"
-              }
-            }
-          },
-          {
-            "name": "quoteOracle",
-            "type": {
-              "option": {
-                "defined": "Oracle"
-              }
-            }
-          },
-          {
-            "name": "id",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultKeys",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "baseToken",
-            "type": "publicKey"
-          },
-          {
-            "name": "quoteToken",
-            "type": "publicKey"
-          },
-          {
-            "name": "baseReserve",
-            "type": "publicKey"
-          },
-          {
-            "name": "quoteReserve",
-            "type": "publicKey"
-          },
-          {
-            "name": "baseOracle",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "quoteOracle",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultsArray",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Vault"
-                },
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultsKeysArray",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "VaultKeys"
-                },
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "DecimalPlaces",
-      "docs": [
-        "Used to represent number of decimal points in a quantity of token"
-      ],
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Six"
-          },
-          {
-            "name": "Nine"
-          }
-        ]
-      }
-    },
-    {
-      "name": "BalanceChange",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Profit",
-            "fields": [
-              {
-                "defined": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Loss",
-            "fields": [
-              {
-                "defined": "Quantity"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "ServiceType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Lend"
-          },
-          {
-            "name": "Swap"
-          },
-          {
-            "name": "Trade"
-          }
-        ]
-      }
-    },
-    {
-      "name": "CurveSegment",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Constant",
-            "fields": [
-              {
-                "name": "c",
-                "type": {
-                  "defined": "Fraction"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Linear",
-            "fields": [
-              {
-                "name": "a",
-                "type": {
-                  "defined": "Fraction"
-                }
-              },
-              {
-                "name": "b",
-                "type": {
-                  "defined": "Fraction"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "OraclePriceType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Spot"
-          },
-          {
-            "name": "Sell"
-          },
-          {
-            "name": "Buy"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Side",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Long"
-          },
-          {
-            "name": "Short"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Position",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Empty"
-          },
-          {
-            "name": "LiquidityProvide",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "strategy_index",
-                "type": "u8"
-              },
-              {
-                "name": "shares",
-                "type": {
-                  "defined": "Shares"
-                }
-              },
-              {
-                "name": "amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              },
-              {
-                "name": "quote_amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Borrow",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "shares",
-                "type": {
-                  "defined": "Shares"
-                }
-              },
-              {
-                "name": "amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Trading",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "receipt",
-                "type": {
-                  "defined": "Receipt"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "ValueChange",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Profitable",
-            "fields": [
-              {
-                "defined": "Value"
-              }
-            ]
-          },
-          {
-            "name": "Loss",
-            "fields": [
-              {
-                "defined": "Value"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "Token",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Base"
-          },
-          {
-            "name": "Quote"
-          }
-        ]
-      }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "DataTooLarge",
-      "msg": "Too large data"
-    },
-    {
-      "code": 6001,
-      "name": "ToBeDefined",
-      "msg": "To be defined"
-    },
-    {
-      "code": 6002,
-      "name": "NotEnoughQuoteQuantity",
-      "msg": "Not enough available quote quantity"
-    },
-    {
-      "code": 6003,
-      "name": "NotEnoughBaseQuantity",
-      "msg": "Not enough available base quantity"
-    },
-    {
-      "code": 6004,
-      "name": "UserAllowedBorrowExceeded",
-      "msg": "Borrow value is higher than user max allowed borrow"
-    },
-    {
-      "code": 6005,
-      "name": "LendServiceNone",
-      "msg": "Services does not have lend"
-    },
-    {
-      "code": 6006,
-      "name": "SwapServiceNone",
-      "msg": "Services does not have swap"
-    },
-    {
-      "code": 6007,
-      "name": "OracleNone",
-      "msg": "Vault does not contain base oracle"
-    },
-    {
-      "code": 6008,
-      "name": "QuoteOracleNone",
-      "msg": "Vault does not contain quote oracle"
-    },
-    {
-      "code": 6009,
-      "name": "OracleAlreadyEnabled",
-      "msg": "Given oracle was enabled before"
-    },
-    {
-      "code": 6010,
-      "name": "ConfidenceTooHigh",
-      "msg": "Price confidence is higher than spread limit"
-    },
-    {
-      "code": 6011,
-      "name": "StrategyNoLend",
-      "msg": "Strategy does not provide to lend"
-    },
-    {
-      "code": 6012,
-      "name": "StrategyNoSwap",
-      "msg": "Strategy does not provide to swap"
-    },
-    {
-      "code": 6013,
-      "name": "StrategyNoTrade",
-      "msg": "Strategy does not provide to trade"
-    },
-    {
-      "code": 6014,
-      "name": "StrategyMissing",
-      "msg": "There is no strategy on given index in strategies array"
-    },
-    {
-      "code": 6015,
-      "name": "CannotBorrow",
-      "msg": "Cannot borrow due to high utilization or max borrow limit"
-    },
-    {
-      "code": 6016,
-      "name": "RepayLowerThanFee",
-      "msg": "Given repay amount is lower than accrued fee"
-    },
-    {
-      "code": 6017,
-      "name": "CannotAddStrategy",
-      "msg": "Cannot add strategy (array limit exceeded)"
-    },
-    {
-      "code": 6018,
-      "name": "CannotAddPosition",
-      "msg": "Cannot add user position (array limit exceeded)"
-    },
-    {
-      "code": 6019,
-      "name": "NoVaultOnIndex",
-      "msg": "There is no defined vault on provided index"
-    },
-    {
-      "code": 6020,
-      "name": "ParseError",
-      "msg": "Parsing between types was not successful"
-    },
-    {
-      "code": 6021,
-      "name": "BumpNotFound",
-      "msg": "Bump for given name not found in BSTree"
-    },
-    {
-      "code": 6022,
-      "name": "InvalidDecimalPlaces",
-      "msg": "Given decimal places are not expected"
-    },
-    {
-      "code": 6023,
-      "name": "AddVault",
-      "msg": "Failed to add vault to vaults array"
-    },
-    {
-      "code": 6024,
-      "name": "AddKeys",
-      "msg": "Failed to add vault keys to vaults keys array"
-    },
-    {
-      "code": 6025,
-      "name": "NoMinAmountOut",
-      "msg": "Amount out did not reached passed minimum"
-    },
-    {
-      "code": 6026,
-      "name": "IndexOutOfBounds",
-      "msg": "Provided index is out of bounds"
-    },
-    {
-      "code": 6027,
-      "name": "NoStrategyOnIndex",
-      "msg": "There is no defined strategy on provided index"
-    },
-    {
-      "code": 6028,
-      "name": "InvalidService",
-      "msg": "Service is not valid"
-    },
-    {
-      "code": 6029,
-      "name": "PythAccountParse",
-      "msg": "Parse price account error"
-    },
-    {
-      "code": 6030,
-      "name": "PythPriceGet",
-      "msg": "Cannot get price within DEFAULT_MAX_ORACLE_AGE"
-    },
-    {
-      "code": 6031,
-      "name": "OracleAccountNotFound",
-      "msg": "Cannot find desired oracle account in remaining account infos"
-    },
-    {
-      "code": 6032,
-      "name": "ArrayEmpty",
-      "msg": "Array is empty"
-    },
-    {
-      "code": 6033,
-      "name": "TimeGet",
-      "msg": "Cannot get time"
-    },
-    {
-      "code": 6034,
-      "name": "PubkeyMissing",
-      "msg": "pubkey should be defined"
-    },
-    {
-      "code": 6035,
-      "name": "PositionNotFound",
-      "msg": "Given position was not found"
-    },
-    {
-      "code": 6036,
-      "name": "TradeServiceNone",
-      "msg": "Trade service is none"
-    },
-    {
-      "code": 6037,
-      "name": "PositionMismatch",
-      "msg": "Function called on bad position type"
-    },
-    {
-      "code": 6038,
-      "name": "CollateralizationTooLow",
-      "msg": "Collateralization is lower than max allowed leverage"
-    },
-    {
-      "code": 6039,
-      "name": "NoVaultsToRefresh",
-      "msg": "Statement does not contain any vault to refresh"
-    },
-    {
-      "code": 6040,
-      "name": "ServiceAlreadyExists",
-      "msg": "Given service was enabled before"
-    },
-    {
-      "code": 6041,
-      "name": "UserNotCollateralized",
-      "msg": "Withdraw amount is not permitted due to reached limit"
-    }
-  ]
+	version: '0.1.0';
+	name: 'protocol';
+	instructions: [
+		{
+			name: 'createState';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'rent';
+					isMut: false;
+					isSigner: false;
+				},
+				{
+					name: 'systemProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [];
+		},
+		{
+			name: 'createStatement';
+			accounts: [
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'payer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'rent';
+					isMut: false;
+					isSigner: false;
+				},
+				{
+					name: 'systemProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [];
+		},
+		{
+			name: 'initVault';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'base';
+					isMut: false;
+					isSigner: false;
+				},
+				{
+					name: 'quote';
+					isMut: false;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				},
+				{
+					name: 'systemProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [];
+		},
+		{
+			name: 'enableOracle';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'priceFeed';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'decimals';
+					type: 'u8';
+				},
+				{
+					name: 'base';
+					type: 'bool';
+				},
+				{
+					name: 'skipInit';
+					type: 'bool';
+				},
+				{
+					name: 'maxUpdateInterval';
+					type: 'u32';
+				}
+			];
+		},
+		{
+			name: 'forceOverrideOracle';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'base';
+					type: 'bool';
+				},
+				{
+					name: 'price';
+					type: 'u32';
+				},
+				{
+					name: 'conf';
+					type: 'u32';
+				},
+				{
+					name: 'exp';
+					type: 'i8';
+				},
+				{
+					name: 'time';
+					type: {
+						option: 'u32';
+					};
+				}
+			];
+		},
+		{
+			name: 'enableLending';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'maxUtilization';
+					type: 'u32';
+				},
+				{
+					name: 'maxTotalBorrow';
+					type: 'u64';
+				},
+				{
+					name: 'initialFeeTime';
+					type: 'u32';
+				}
+			];
+		},
+		{
+			name: 'enableSwapping';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'keptFee';
+					type: 'u32';
+				},
+				{
+					name: 'maxTotalSold';
+					type: 'u64';
+				}
+			];
+		},
+		{
+			name: 'enableTrading';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'openFee';
+					type: 'u32';
+				},
+				{
+					name: 'maxLeverage';
+					type: 'u32';
+				},
+				{
+					name: 'collateralRatio';
+					type: 'u32';
+				},
+				{
+					name: 'liquidationThreshold';
+					type: 'u32';
+				}
+			];
+		},
+		{
+			name: 'addStrategy';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'index';
+					type: 'u8';
+				},
+				{
+					name: 'lending';
+					type: 'bool';
+				},
+				{
+					name: 'swapping';
+					type: 'bool';
+				},
+				{
+					name: 'trading';
+					type: 'bool';
+				},
+				{
+					name: 'collateralRatio';
+					type: 'u64';
+				},
+				{
+					name: 'liquidationThreshold';
+					type: 'u64';
+				}
+			];
+		},
+		{
+			name: 'deposit';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'strategy';
+					type: 'u8';
+				},
+				{
+					name: 'quantity';
+					type: 'u64';
+				},
+				{
+					name: 'base';
+					type: 'bool';
+				}
+			];
+		},
+		{
+			name: 'withdraw';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'strategy';
+					type: 'u8';
+				},
+				{
+					name: 'quantity';
+					type: 'u64';
+				},
+				{
+					name: 'base';
+					type: 'bool';
+				}
+			];
+		},
+		{
+			name: 'singleSwap';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'amount';
+					type: 'u64';
+				},
+				{
+					name: 'minExpected';
+					type: 'u64';
+				},
+				{
+					name: 'fromBase';
+					type: 'bool';
+				},
+				{
+					name: 'byAmountOut';
+					type: 'bool';
+				}
+			];
+		},
+		{
+			name: 'doubleSwap';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountIn';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountOut';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveIn';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveOut';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveInQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveOutQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vaultIn';
+					type: 'u8';
+				},
+				{
+					name: 'vaultOut';
+					type: 'u8';
+				},
+				{
+					name: 'amount';
+					type: 'u64';
+				},
+				{
+					name: 'minExpected';
+					type: 'u64';
+				},
+				{
+					name: 'byAmountOut';
+					type: 'bool';
+				}
+			];
+		},
+		{
+			name: 'modifyFeeCurve';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'admin';
+					isMut: true;
+					isSigner: true;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'service';
+					type: 'u8';
+				},
+				{
+					name: 'base';
+					type: 'bool';
+				},
+				{
+					name: 'bound';
+					type: 'u64';
+				},
+				{
+					name: 'a';
+					type: 'u64';
+				},
+				{
+					name: 'b';
+					type: 'u64';
+				},
+				{
+					name: 'c';
+					type: 'u64';
+				}
+			];
+		},
+		{
+			name: 'borrow';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'amount';
+					type: 'u64';
+				}
+			];
+		},
+		{
+			name: 'repay';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'amount';
+					type: 'u64';
+				}
+			];
+		},
+		{
+			name: 'openPosition';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'amount';
+					type: 'u64';
+				},
+				{
+					name: 'long';
+					type: 'bool';
+				}
+			];
+		},
+		{
+			name: 'closePosition';
+			accounts: [
+				{
+					name: 'state';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'vaults';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'statement';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'signer';
+					isMut: true;
+					isSigner: true;
+				},
+				{
+					name: 'accountBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'accountQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveBase';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'reserveQuote';
+					isMut: true;
+					isSigner: false;
+				},
+				{
+					name: 'tokenProgram';
+					isMut: false;
+					isSigner: false;
+				}
+			];
+			args: [
+				{
+					name: 'vault';
+					type: 'u8';
+				},
+				{
+					name: 'long';
+					type: 'bool';
+				}
+			];
+		}
+	];
+	accounts: [
+		{
+			name: 'state';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'bump';
+						type: 'u8';
+					},
+					{
+						name: 'admin';
+						type: 'publicKey';
+					},
+					{
+						name: 'vaultsAcc';
+						type: 'publicKey';
+					}
+				];
+			};
+		},
+		{
+			name: 'statement';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'statement';
+						type: {
+							defined: 'UserStatement';
+						};
+					},
+					{
+						name: 'owner';
+						type: 'publicKey';
+					},
+					{
+						name: 'bump';
+						type: 'u8';
+					}
+				];
+			};
+		},
+		{
+			name: 'vaults';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'arr';
+						type: {
+							defined: 'VaultsArray';
+						};
+					},
+					{
+						name: 'keys';
+						type: {
+							defined: 'VaultsKeysArray';
+						};
+					}
+				];
+			};
+		}
+	];
+	types: [
+		{
+			name: 'BothValues';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						type: {
+							defined: 'Value';
+						};
+					},
+					{
+						name: 'quote';
+						type: {
+							defined: 'Value';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'BothQuantities';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'quote';
+						type: {
+							defined: 'Quantity';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'BothFractions';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'quote';
+						type: {
+							defined: 'Fraction';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'BothFeeCurves';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						type: {
+							defined: 'FeeCurve';
+						};
+					},
+					{
+						name: 'quote';
+						type: {
+							defined: 'FeeCurve';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'BothFundingRates';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						type: {
+							defined: 'FundingRate';
+						};
+					},
+					{
+						name: 'quote';
+						type: {
+							defined: 'FundingRate';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Balances';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'base';
+						docs: ['Token characteristic for vault'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'quote';
+						docs: ['Stable token'];
+						type: {
+							defined: 'Quantity';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Quantity';
+			docs: ['Used to represent a quantity of token (of its smallest unit)'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u64';
+					}
+				];
+			};
+		},
+		{
+			name: 'Fraction';
+			docs: ['Keeps fractions that need less precision'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u64';
+					}
+				];
+			};
+		},
+		{
+			name: 'Utilization';
+			docs: ['Keeps fractions that need less precision'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u128';
+					}
+				];
+			};
+		},
+		{
+			name: 'BigFraction';
+			docs: ['Keeps fractions that need greater precision'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u128';
+					}
+				];
+			};
+		},
+		{
+			name: 'Shares';
+			docs: ['Keeps shares of pool or debt'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'numberOfShares';
+						type: 'u128';
+					}
+				];
+			};
+		},
+		{
+			name: 'Price';
+			docs: ['Keeps price data'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u64';
+					}
+				];
+			};
+		},
+		{
+			name: 'Value';
+			docs: ['Keeps the value of a token, pool or position'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u128';
+					}
+				];
+			};
+		},
+		{
+			name: 'FundingRate';
+			docs: ['Used to keep cumulative funding rate (can be positive or negative)'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'i128';
+					}
+				];
+			};
+		},
+		{
+			name: 'Precise';
+			docs: ['Used for calculations that need more precision'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'val';
+						type: 'u128';
+					}
+				];
+			};
+		},
+		{
+			name: 'Lend';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'available';
+						docs: [
+							"liquidity available to borrow by borrower, it's the sum of all strategies containing this service",
+							'it should not be modified inside service'
+						];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'borrowed';
+						docs: ['liquidity already borrowed', 'containing accrued fee'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'fee';
+						docs: ['fee curve'];
+						type: {
+							defined: 'FeeCurve';
+						};
+					},
+					{
+						name: 'lastFeePaid';
+						docs: ['unix timestamp of last interest rate accrued'];
+						type: 'u32';
+					},
+					{
+						name: 'initialFeeTime';
+						docs: ['initial fee time for borrow'];
+						type: 'u32';
+					},
+					{
+						name: 'utilization';
+						docs: ['current utilization  (borrowed / balance (available + borrowed))'];
+						type: {
+							defined: 'Utilization';
+						};
+					},
+					{
+						name: 'maxUtilization';
+						docs: ['max utilization'];
+						type: {
+							defined: 'Utilization';
+						};
+					},
+					{
+						name: 'borrowShares';
+						docs: ['borrow shares'];
+						type: {
+							defined: 'Shares';
+						};
+					},
+					{
+						name: 'borrowLimit';
+						docs: ['ratio of borrow/collateral at which statement can be liquidated'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'unclaimedFee';
+						docs: ['fee that had been accrued, but not yet distributed'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'totalFee';
+						docs: ['sum of all fees accrued (for statistics)'];
+						type: {
+							defined: 'Quantity';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Services';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'swap';
+						type: {
+							option: {
+								defined: 'Swap';
+							};
+						};
+					},
+					{
+						name: 'lend';
+						type: {
+							option: {
+								defined: 'Lend';
+							};
+						};
+					},
+					{
+						name: 'trade';
+						type: {
+							option: {
+								defined: 'Trade';
+							};
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Swap';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'available';
+						docs: ['Liquidity available to be bought by a swapper.'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'balances';
+						docs: ['Current balance, greater or equal to available.'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'totalEarnedFee';
+						docs: ['Total amount of tokens earned for liquidity providers.'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'totalPaidFee';
+						docs: ['Total amount of tokens already paid for liquidity providers.'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'totalKeptFee';
+						docs: ['Total amount of fee tokens kept as fee (insurance, PoL or burn).'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'sellingFee';
+						docs: ['Struct for calculation of swapping fee.'];
+						type: {
+							defined: 'FeeCurve';
+						};
+					},
+					{
+						name: 'buyingFee';
+						type: {
+							defined: 'FeeCurve';
+						};
+					},
+					{
+						name: 'keptFee';
+						docs: ['Fraction of paid fee to be kept.'];
+						type: {
+							defined: 'Fraction';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Trade';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'available';
+						docs: ['liquidity available to be locked'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'locked';
+						docs: ['total liquidity locked inside the vault'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'openValue';
+						docs: ['total value at the moment of opening a position'];
+						type: {
+							defined: 'BothValues';
+						};
+					},
+					{
+						name: 'borrowFee';
+						docs: ['struct for calculation of position fee'];
+						type: {
+							defined: 'BothFeeCurves';
+						};
+					},
+					{
+						name: 'funding';
+						type: {
+							defined: 'BothFundingRates';
+						};
+					},
+					{
+						name: 'lastFee';
+						type: 'u32';
+					},
+					{
+						name: 'fundingMultiplier';
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'openFee';
+						docs: ['fee paid on opening a position'];
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'maxOpenLeverage';
+						docs: ['maximum leverage allowed at the moment of opening a position'];
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'maxLeverage';
+						docs: ['maximum leverage allowed'];
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'accruedFee';
+						docs: ['fees waiting to be distributed to liquidity providers'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'collateralRatio';
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'liquidationThreshold';
+						type: {
+							defined: 'Fraction';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Strategies';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'head';
+						type: 'u8';
+					},
+					{
+						name: 'elements';
+						type: {
+							array: [
+								{
+									defined: 'Strategy';
+								},
+								6
+							];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Strategy';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'lent';
+						docs: ['Quantity of tokens used in lending (borrowed)'];
+						type: {
+							option: {
+								defined: 'Quantity';
+							};
+						};
+					},
+					{
+						name: 'sold';
+						docs: ['Quantity of tokens used in swapping (swapped for other tokens)'];
+						type: {
+							option: {
+								defined: 'Balances';
+							};
+						};
+					},
+					{
+						name: 'traded';
+						docs: ['Quantity of tokens used in trading (currently locked in a position)'];
+						type: {
+							option: {
+								defined: 'Balances';
+							};
+						};
+					},
+					{
+						name: 'available';
+						docs: ['Quantity of tokens available for use (not used)'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'locked';
+						docs: ['Sum of all locked tokens for each of the'];
+						type: {
+							defined: 'Balances';
+						};
+					},
+					{
+						name: 'totalShares';
+						docs: ['Total amount of shares in a strategy'];
+						type: {
+							defined: 'Shares';
+						};
+					},
+					{
+						name: 'accruedFee';
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'collateralRatio';
+						docs: ['Ratio at which shares in this strategy can be used as a collateral'];
+						type: {
+							defined: 'Fraction';
+						};
+					},
+					{
+						name: 'liquidationThreshold';
+						docs: ['Ratio at which value of shares is calculated during liquidation'];
+						type: {
+							defined: 'Fraction';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'FeeCurve';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'used';
+						type: 'u8';
+					},
+					{
+						name: 'bounds';
+						type: {
+							array: [
+								{
+									defined: 'Fraction';
+								},
+								5
+							];
+						};
+					},
+					{
+						name: 'values';
+						type: {
+							array: [
+								{
+									defined: 'CurveSegment';
+								},
+								5
+							];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Oracle';
+			docs: ['Oracle is a struct that holds the price of an asset.'];
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'price';
+						docs: ['The price of the asset.'];
+						type: {
+							defined: 'Price';
+						};
+					},
+					{
+						name: 'confidence';
+						docs: ['The confidence of the price. It is a range around the price.'];
+						type: {
+							defined: 'Price';
+						};
+					},
+					{
+						name: 'lastUpdate';
+						docs: ['The time of the last update.'];
+						type: 'u32';
+					},
+					{
+						name: 'maxUpdateInterval';
+						docs: ['The maximum time interval between updates.'];
+						type: 'u32';
+					},
+					{
+						name: 'useSpread';
+						docs: ['If true, the oracle will force use the spread instead of the spot price.'];
+						type: 'bool';
+					},
+					{
+						name: 'spreadLimit';
+						docs: ['Limit of quotient above which the confidence is too great to use spot price.'];
+						type: {
+							defined: 'Price';
+						};
+					},
+					{
+						name: 'decimals';
+						docs: ['The number of decimals of the asset.'];
+						type: {
+							defined: 'DecimalPlaces';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Receipt';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'side';
+						docs: ['side of the position: either long or short'];
+						type: {
+							defined: 'Side';
+						};
+					},
+					{
+						name: 'size';
+						docs: ['size of the position (in base token)'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'locked';
+						docs: ['quantity of tokens locked in the position (size for LONG)'];
+						type: {
+							defined: 'Quantity';
+						};
+					},
+					{
+						name: 'initialFunding';
+						docs: ['shares for borrow fee'];
+						type: {
+							defined: 'FundingRate';
+						};
+					},
+					{
+						name: 'openPrice';
+						docs: ['price at which the position was opened'];
+						type: {
+							defined: 'Price';
+						};
+					},
+					{
+						name: 'openValue';
+						docs: ['value o position at the moment of creation'];
+						type: {
+							defined: 'Value';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Positions';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'head';
+						type: 'u8';
+					},
+					{
+						name: 'elements';
+						type: {
+							array: [
+								{
+									defined: 'Position';
+								},
+								32
+							];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'UserTemporaryValues';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'collateral';
+						type: {
+							defined: 'CollateralValues';
+						};
+					},
+					{
+						name: 'liabilities';
+						type: {
+							defined: 'Value';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'UserStatement';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'positions';
+						type: {
+							defined: 'Positions';
+						};
+					},
+					{
+						name: 'values';
+						type: {
+							defined: 'UserTemporaryValues';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'CollateralValues';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'exact';
+						docs: ['value of collateral 1:1'];
+						type: {
+							defined: 'Value';
+						};
+					},
+					{
+						name: 'withCollateralRatio';
+						docs: ['value of collateral with collateral ratio'];
+						type: {
+							defined: 'Value';
+						};
+					},
+					{
+						name: 'unhealthy';
+						docs: ['value of collateral with liquidation threshold ratio'];
+						type: {
+							defined: 'Value';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'TestStruct';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'arr';
+						type: {
+							array: ['i32', 10];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'Vault';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'services';
+						type: {
+							defined: 'Services';
+						};
+					},
+					{
+						name: 'strategies';
+						type: {
+							defined: 'Strategies';
+						};
+					},
+					{
+						name: 'oracle';
+						type: {
+							option: {
+								defined: 'Oracle';
+							};
+						};
+					},
+					{
+						name: 'quoteOracle';
+						type: {
+							option: {
+								defined: 'Oracle';
+							};
+						};
+					},
+					{
+						name: 'id';
+						type: 'u8';
+					}
+				];
+			};
+		},
+		{
+			name: 'VaultKeys';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'baseToken';
+						type: 'publicKey';
+					},
+					{
+						name: 'quoteToken';
+						type: 'publicKey';
+					},
+					{
+						name: 'baseReserve';
+						type: 'publicKey';
+					},
+					{
+						name: 'quoteReserve';
+						type: 'publicKey';
+					},
+					{
+						name: 'baseOracle';
+						type: {
+							option: 'publicKey';
+						};
+					},
+					{
+						name: 'quoteOracle';
+						type: {
+							option: 'publicKey';
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'VaultsArray';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'head';
+						type: 'u8';
+					},
+					{
+						name: 'elements';
+						type: {
+							array: [
+								{
+									defined: 'Vault';
+								},
+								10
+							];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'VaultsKeysArray';
+			type: {
+				kind: 'struct';
+				fields: [
+					{
+						name: 'head';
+						type: 'u8';
+					},
+					{
+						name: 'elements';
+						type: {
+							array: [
+								{
+									defined: 'VaultKeys';
+								},
+								10
+							];
+						};
+					}
+				];
+			};
+		},
+		{
+			name: 'DecimalPlaces';
+			docs: ['Used to represent number of decimal points in a quantity of token'];
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Six';
+					},
+					{
+						name: 'Nine';
+					}
+				];
+			};
+		},
+		{
+			name: 'BalanceChange';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Profit';
+						fields: [
+							{
+								defined: 'Quantity';
+							}
+						];
+					},
+					{
+						name: 'Loss';
+						fields: [
+							{
+								defined: 'Quantity';
+							}
+						];
+					}
+				];
+			};
+		},
+		{
+			name: 'ServiceType';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Lend';
+					},
+					{
+						name: 'Swap';
+					},
+					{
+						name: 'Trade';
+					}
+				];
+			};
+		},
+		{
+			name: 'CurveSegment';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'None';
+					},
+					{
+						name: 'Constant';
+						fields: [
+							{
+								name: 'c';
+								type: {
+									defined: 'Fraction';
+								};
+							}
+						];
+					},
+					{
+						name: 'Linear';
+						fields: [
+							{
+								name: 'a';
+								type: {
+									defined: 'Fraction';
+								};
+							},
+							{
+								name: 'b';
+								type: {
+									defined: 'Fraction';
+								};
+							}
+						];
+					}
+				];
+			};
+		},
+		{
+			name: 'OraclePriceType';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Spot';
+					},
+					{
+						name: 'Sell';
+					},
+					{
+						name: 'Buy';
+					}
+				];
+			};
+		},
+		{
+			name: 'Side';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Long';
+					},
+					{
+						name: 'Short';
+					}
+				];
+			};
+		},
+		{
+			name: 'Position';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Empty';
+					},
+					{
+						name: 'LiquidityProvide';
+						fields: [
+							{
+								name: 'vault_index';
+								type: 'u8';
+							},
+							{
+								name: 'strategy_index';
+								type: 'u8';
+							},
+							{
+								name: 'shares';
+								type: {
+									defined: 'Shares';
+								};
+							},
+							{
+								name: 'amount';
+								type: {
+									defined: 'Quantity';
+								};
+							},
+							{
+								name: 'quote_amount';
+								type: {
+									defined: 'Quantity';
+								};
+							}
+						];
+					},
+					{
+						name: 'Borrow';
+						fields: [
+							{
+								name: 'vault_index';
+								type: 'u8';
+							},
+							{
+								name: 'shares';
+								type: {
+									defined: 'Shares';
+								};
+							},
+							{
+								name: 'amount';
+								type: {
+									defined: 'Quantity';
+								};
+							}
+						];
+					},
+					{
+						name: 'Trading';
+						fields: [
+							{
+								name: 'vault_index';
+								type: 'u8';
+							},
+							{
+								name: 'receipt';
+								type: {
+									defined: 'Receipt';
+								};
+							}
+						];
+					}
+				];
+			};
+		},
+		{
+			name: 'ValueChange';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'None';
+					},
+					{
+						name: 'Profitable';
+						fields: [
+							{
+								defined: 'Value';
+							}
+						];
+					},
+					{
+						name: 'Loss';
+						fields: [
+							{
+								defined: 'Value';
+							}
+						];
+					}
+				];
+			};
+		},
+		{
+			name: 'Token';
+			type: {
+				kind: 'enum';
+				variants: [
+					{
+						name: 'Base';
+					},
+					{
+						name: 'Quote';
+					}
+				];
+			};
+		}
+	];
+	errors: [
+		{
+			code: 6000;
+			name: 'DataTooLarge';
+			msg: 'Too large data';
+		},
+		{
+			code: 6001;
+			name: 'ToBeDefined';
+			msg: 'To be defined';
+		},
+		{
+			code: 6002;
+			name: 'NotEnoughQuoteQuantity';
+			msg: 'Not enough available quote quantity';
+		},
+		{
+			code: 6003;
+			name: 'NotEnoughBaseQuantity';
+			msg: 'Not enough available base quantity';
+		},
+		{
+			code: 6004;
+			name: 'UserAllowedBorrowExceeded';
+			msg: 'Borrow value is higher than user max allowed borrow';
+		},
+		{
+			code: 6005;
+			name: 'LendServiceNone';
+			msg: 'Services does not have lend';
+		},
+		{
+			code: 6006;
+			name: 'SwapServiceNone';
+			msg: 'Services does not have swap';
+		},
+		{
+			code: 6007;
+			name: 'OracleNone';
+			msg: 'Vault does not contain base oracle';
+		},
+		{
+			code: 6008;
+			name: 'QuoteOracleNone';
+			msg: 'Vault does not contain quote oracle';
+		},
+		{
+			code: 6009;
+			name: 'OracleAlreadyEnabled';
+			msg: 'Given oracle was enabled before';
+		},
+		{
+			code: 6010;
+			name: 'ConfidenceTooHigh';
+			msg: 'Price confidence is higher than spread limit';
+		},
+		{
+			code: 6011;
+			name: 'StrategyNoLend';
+			msg: 'Strategy does not provide to lend';
+		},
+		{
+			code: 6012;
+			name: 'StrategyNoSwap';
+			msg: 'Strategy does not provide to swap';
+		},
+		{
+			code: 6013;
+			name: 'StrategyNoTrade';
+			msg: 'Strategy does not provide to trade';
+		},
+		{
+			code: 6014;
+			name: 'StrategyMissing';
+			msg: 'There is no strategy on given index in strategies array';
+		},
+		{
+			code: 6015;
+			name: 'CannotBorrow';
+			msg: 'Cannot borrow due to high utilization or max borrow limit';
+		},
+		{
+			code: 6016;
+			name: 'RepayLowerThanFee';
+			msg: 'Given repay amount is lower than accrued fee';
+		},
+		{
+			code: 6017;
+			name: 'CannotAddStrategy';
+			msg: 'Cannot add strategy (array limit exceeded)';
+		},
+		{
+			code: 6018;
+			name: 'CannotAddPosition';
+			msg: 'Cannot add user position (array limit exceeded)';
+		},
+		{
+			code: 6019;
+			name: 'NoVaultOnIndex';
+			msg: 'There is no defined vault on provided index';
+		},
+		{
+			code: 6020;
+			name: 'ParseError';
+			msg: 'Parsing between types was not successful';
+		},
+		{
+			code: 6021;
+			name: 'BumpNotFound';
+			msg: 'Bump for given name not found in BSTree';
+		},
+		{
+			code: 6022;
+			name: 'InvalidDecimalPlaces';
+			msg: 'Given decimal places are not expected';
+		},
+		{
+			code: 6023;
+			name: 'AddVault';
+			msg: 'Failed to add vault to vaults array';
+		},
+		{
+			code: 6024;
+			name: 'AddKeys';
+			msg: 'Failed to add vault keys to vaults keys array';
+		},
+		{
+			code: 6025;
+			name: 'NoMinAmountOut';
+			msg: 'Amount out did not reached passed minimum';
+		},
+		{
+			code: 6026;
+			name: 'IndexOutOfBounds';
+			msg: 'Provided index is out of bounds';
+		},
+		{
+			code: 6027;
+			name: 'NoStrategyOnIndex';
+			msg: 'There is no defined strategy on provided index';
+		},
+		{
+			code: 6028;
+			name: 'InvalidService';
+			msg: 'Service is not valid';
+		},
+		{
+			code: 6029;
+			name: 'PythAccountParse';
+			msg: 'Parse price account error';
+		},
+		{
+			code: 6030;
+			name: 'PythPriceGet';
+			msg: 'Cannot get price within DEFAULT_MAX_ORACLE_AGE';
+		},
+		{
+			code: 6031;
+			name: 'OracleAccountNotFound';
+			msg: 'Cannot find desired oracle account in remaining account infos';
+		},
+		{
+			code: 6032;
+			name: 'ArrayEmpty';
+			msg: 'Array is empty';
+		},
+		{
+			code: 6033;
+			name: 'TimeGet';
+			msg: 'Cannot get time';
+		},
+		{
+			code: 6034;
+			name: 'PubkeyMissing';
+			msg: 'pubkey should be defined';
+		},
+		{
+			code: 6035;
+			name: 'PositionNotFound';
+			msg: 'Given position was not found';
+		},
+		{
+			code: 6036;
+			name: 'TradeServiceNone';
+			msg: 'Trade service is none';
+		},
+		{
+			code: 6037;
+			name: 'PositionMismatch';
+			msg: 'Function called on bad position type';
+		},
+		{
+			code: 6038;
+			name: 'CollateralizationTooLow';
+			msg: 'Collateralization is lower than max allowed leverage';
+		},
+		{
+			code: 6039;
+			name: 'NoVaultsToRefresh';
+			msg: 'Statement does not contain any vault to refresh';
+		},
+		{
+			code: 6040;
+			name: 'ServiceAlreadyExists';
+			msg: 'Given service was enabled before';
+		},
+		{
+			code: 6041;
+			name: 'UserNotCollateralized';
+			msg: 'Withdraw amount is not permitted due to reached limit';
+		}
+	];
 };
 
 export const IDL: Protocol = {
-  "version": "0.1.0",
-  "name": "protocol",
-  "instructions": [
-    {
-      "name": "createState",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "createStatement",
-      "accounts": [
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "initVault",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "base",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "quote",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "enableOracle",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "priceFeed",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "decimals",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "skipInit",
-          "type": "bool"
-        },
-        {
-          "name": "maxUpdateInterval",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "forceOverrideOracle",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "price",
-          "type": "u32"
-        },
-        {
-          "name": "conf",
-          "type": "u32"
-        },
-        {
-          "name": "exp",
-          "type": "i8"
-        },
-        {
-          "name": "time",
-          "type": {
-            "option": "u32"
-          }
-        }
-      ]
-    },
-    {
-      "name": "enableLending",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "maxUtilization",
-          "type": "u32"
-        },
-        {
-          "name": "maxTotalBorrow",
-          "type": "u64"
-        },
-        {
-          "name": "initialFeeTime",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "enableSwapping",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "keptFee",
-          "type": "u32"
-        },
-        {
-          "name": "maxTotalSold",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "enableTrading",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "openFee",
-          "type": "u32"
-        },
-        {
-          "name": "maxLeverage",
-          "type": "u32"
-        },
-        {
-          "name": "collateralRatio",
-          "type": "u32"
-        },
-        {
-          "name": "liquidationThreshold",
-          "type": "u32"
-        }
-      ]
-    },
-    {
-      "name": "addStrategy",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "index",
-          "type": "u8"
-        },
-        {
-          "name": "lending",
-          "type": "bool"
-        },
-        {
-          "name": "swapping",
-          "type": "bool"
-        },
-        {
-          "name": "trading",
-          "type": "bool"
-        },
-        {
-          "name": "collateralRatio",
-          "type": "u64"
-        },
-        {
-          "name": "liquidationThreshold",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "deposit",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "strategy",
-          "type": "u8"
-        },
-        {
-          "name": "quantity",
-          "type": "u64"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "withdraw",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "strategy",
-          "type": "u8"
-        },
-        {
-          "name": "quantity",
-          "type": "u64"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "singleSwap",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "minExpected",
-          "type": "u64"
-        },
-        {
-          "name": "fromBase",
-          "type": "bool"
-        },
-        {
-          "name": "byAmountOut",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "doubleSwap",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountIn",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountOut",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveIn",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveOut",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveInQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveOutQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vaultIn",
-          "type": "u8"
-        },
-        {
-          "name": "vaultOut",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "minExpected",
-          "type": "u64"
-        },
-        {
-          "name": "byAmountOut",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "modifyFeeCurve",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "admin",
-          "isMut": true,
-          "isSigner": true
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "service",
-          "type": "u8"
-        },
-        {
-          "name": "base",
-          "type": "bool"
-        },
-        {
-          "name": "bound",
-          "type": "u64"
-        },
-        {
-          "name": "a",
-          "type": "u64"
-        },
-        {
-          "name": "b",
-          "type": "u64"
-        },
-        {
-          "name": "c",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "borrow",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "repay",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "openPosition",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "long",
-          "type": "bool"
-        }
-      ]
-    },
-    {
-      "name": "closePosition",
-      "accounts": [
-        {
-          "name": "state",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "vaults",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "statement",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "signer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "vault",
-          "type": "u8"
-        },
-        {
-          "name": "long",
-          "type": "bool"
-        }
-      ]
-    }
-  ],
-  "accounts": [
-    {
-      "name": "state",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "admin",
-            "type": "publicKey"
-          },
-          {
-            "name": "vaultsAcc",
-            "type": "publicKey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "statement",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "statement",
-            "type": {
-              "defined": "UserStatement"
-            }
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "vaults",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "defined": "VaultsArray"
-            }
-          },
-          {
-            "name": "keys",
-            "type": {
-              "defined": "VaultsKeysArray"
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
-    {
-      "name": "BothValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothQuantities",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFractions",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFeeCurves",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "BothFundingRates",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "type": {
-              "defined": "FundingRate"
-            }
-          },
-          {
-            "name": "quote",
-            "type": {
-              "defined": "FundingRate"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Balances",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "base",
-            "docs": [
-              "Token characteristic for vault"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "quote",
-            "docs": [
-              "Stable token"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Quantity",
-      "docs": [
-        "Used to represent a quantity of token (of its smallest unit)"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Fraction",
-      "docs": [
-        "Keeps fractions that need less precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Utilization",
-      "docs": [
-        "Keeps fractions that need less precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "BigFraction",
-      "docs": [
-        "Keeps fractions that need greater precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Shares",
-      "docs": [
-        "Keeps shares of pool or debt"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "numberOfShares",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Price",
-      "docs": [
-        "Keeps price data"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Value",
-      "docs": [
-        "Keeps the value of a token, pool or position"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "FundingRate",
-      "docs": [
-        "Used to keep cumulative funding rate (can be positive or negative)"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "i128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Precise",
-      "docs": [
-        "Used for calculations that need more precision"
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "val",
-            "type": "u128"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Lend",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "liquidity available to borrow by borrower, it's the sum of all strategies containing this service",
-              "it should not be modified inside service"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "borrowed",
-            "docs": [
-              "liquidity already borrowed",
-              "containing accrued fee"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "fee",
-            "docs": [
-              "fee curve"
-            ],
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "lastFeePaid",
-            "docs": [
-              "unix timestamp of last interest rate accrued"
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "initialFeeTime",
-            "docs": [
-              "initial fee time for borrow"
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "utilization",
-            "docs": [
-              "current utilization  (borrowed / balance (available + borrowed))"
-            ],
-            "type": {
-              "defined": "Utilization"
-            }
-          },
-          {
-            "name": "maxUtilization",
-            "docs": [
-              "max utilization"
-            ],
-            "type": {
-              "defined": "Utilization"
-            }
-          },
-          {
-            "name": "borrowShares",
-            "docs": [
-              "borrow shares"
-            ],
-            "type": {
-              "defined": "Shares"
-            }
-          },
-          {
-            "name": "borrowLimit",
-            "docs": [
-              "ratio of borrow/collateral at which statement can be liquidated"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "unclaimedFee",
-            "docs": [
-              "fee that had been accrued, but not yet distributed"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "totalFee",
-            "docs": [
-              "sum of all fees accrued (for statistics)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Services",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "swap",
-            "type": {
-              "option": {
-                "defined": "Swap"
-              }
-            }
-          },
-          {
-            "name": "lend",
-            "type": {
-              "option": {
-                "defined": "Lend"
-              }
-            }
-          },
-          {
-            "name": "trade",
-            "type": {
-              "option": {
-                "defined": "Trade"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Swap",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "Liquidity available to be bought by a swapper."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "balances",
-            "docs": [
-              "Current balance, greater or equal to available."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalEarnedFee",
-            "docs": [
-              "Total amount of tokens earned for liquidity providers."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalPaidFee",
-            "docs": [
-              "Total amount of tokens already paid for liquidity providers."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalKeptFee",
-            "docs": [
-              "Total amount of fee tokens kept as fee (insurance, PoL or burn)."
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "sellingFee",
-            "docs": [
-              "Struct for calculation of swapping fee."
-            ],
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "buyingFee",
-            "type": {
-              "defined": "FeeCurve"
-            }
-          },
-          {
-            "name": "keptFee",
-            "docs": [
-              "Fraction of paid fee to be kept."
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Trade",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "available",
-            "docs": [
-              "liquidity available to be locked"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "total liquidity locked inside the vault"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "openValue",
-            "docs": [
-              "total value at the moment of opening a position"
-            ],
-            "type": {
-              "defined": "BothValues"
-            }
-          },
-          {
-            "name": "borrowFee",
-            "docs": [
-              "struct for calculation of position fee"
-            ],
-            "type": {
-              "defined": "BothFeeCurves"
-            }
-          },
-          {
-            "name": "funding",
-            "type": {
-              "defined": "BothFundingRates"
-            }
-          },
-          {
-            "name": "lastFee",
-            "type": "u32"
-          },
-          {
-            "name": "fundingMultiplier",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "openFee",
-            "docs": [
-              "fee paid on opening a position"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "maxOpenLeverage",
-            "docs": [
-              "maximum leverage allowed at the moment of opening a position"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "maxLeverage",
-            "docs": [
-              "maximum leverage allowed"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "accruedFee",
-            "docs": [
-              "fees waiting to be distributed to liquidity providers"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "collateralRatio",
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "liquidationThreshold",
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Strategies",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Strategy"
-                },
-                6
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Strategy",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "lent",
-            "docs": [
-              "Quantity of tokens used in lending (borrowed)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Quantity"
-              }
-            }
-          },
-          {
-            "name": "sold",
-            "docs": [
-              "Quantity of tokens used in swapping (swapped for other tokens)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Balances"
-              }
-            }
-          },
-          {
-            "name": "traded",
-            "docs": [
-              "Quantity of tokens used in trading (currently locked in a position)"
-            ],
-            "type": {
-              "option": {
-                "defined": "Balances"
-              }
-            }
-          },
-          {
-            "name": "available",
-            "docs": [
-              "Quantity of tokens available for use (not used)"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "Sum of all locked tokens for each of the"
-            ],
-            "type": {
-              "defined": "Balances"
-            }
-          },
-          {
-            "name": "totalShares",
-            "docs": [
-              "Total amount of shares in a strategy"
-            ],
-            "type": {
-              "defined": "Shares"
-            }
-          },
-          {
-            "name": "accruedFee",
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "collateralRatio",
-            "docs": [
-              "Ratio at which shares in this strategy can be used as a collateral"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          },
-          {
-            "name": "liquidationThreshold",
-            "docs": [
-              "Ratio at which value of shares is calculated during liquidation"
-            ],
-            "type": {
-              "defined": "Fraction"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "FeeCurve",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "used",
-            "type": "u8"
-          },
-          {
-            "name": "bounds",
-            "type": {
-              "array": [
-                {
-                  "defined": "Fraction"
-                },
-                5
-              ]
-            }
-          },
-          {
-            "name": "values",
-            "type": {
-              "array": [
-                {
-                  "defined": "CurveSegment"
-                },
-                5
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Oracle",
-      "docs": [
-        "Oracle is a struct that holds the price of an asset."
-      ],
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "price",
-            "docs": [
-              "The price of the asset."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "confidence",
-            "docs": [
-              "The confidence of the price. It is a range around the price."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "lastUpdate",
-            "docs": [
-              "The time of the last update."
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "maxUpdateInterval",
-            "docs": [
-              "The maximum time interval between updates."
-            ],
-            "type": "u32"
-          },
-          {
-            "name": "useSpread",
-            "docs": [
-              "If true, the oracle will force use the spread instead of the spot price."
-            ],
-            "type": "bool"
-          },
-          {
-            "name": "spreadLimit",
-            "docs": [
-              "Limit of quotient above which the confidence is too great to use spot price."
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "decimals",
-            "docs": [
-              "The number of decimals of the asset."
-            ],
-            "type": {
-              "defined": "DecimalPlaces"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Receipt",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "side",
-            "docs": [
-              "side of the position: either long or short"
-            ],
-            "type": {
-              "defined": "Side"
-            }
-          },
-          {
-            "name": "size",
-            "docs": [
-              "size of the position (in base token)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "locked",
-            "docs": [
-              "quantity of tokens locked in the position (size for LONG)"
-            ],
-            "type": {
-              "defined": "Quantity"
-            }
-          },
-          {
-            "name": "initialFunding",
-            "docs": [
-              "shares for borrow fee"
-            ],
-            "type": {
-              "defined": "FundingRate"
-            }
-          },
-          {
-            "name": "openPrice",
-            "docs": [
-              "price at which the position was opened"
-            ],
-            "type": {
-              "defined": "Price"
-            }
-          },
-          {
-            "name": "openValue",
-            "docs": [
-              "value o position at the moment of creation"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Positions",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Position"
-                },
-                32
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "UserTemporaryValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "collateral",
-            "type": {
-              "defined": "CollateralValues"
-            }
-          },
-          {
-            "name": "liabilities",
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "UserStatement",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "positions",
-            "type": {
-              "defined": "Positions"
-            }
-          },
-          {
-            "name": "values",
-            "type": {
-              "defined": "UserTemporaryValues"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "CollateralValues",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "exact",
-            "docs": [
-              "value of collateral 1:1"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "withCollateralRatio",
-            "docs": [
-              "value of collateral with collateral ratio"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          },
-          {
-            "name": "unhealthy",
-            "docs": [
-              "value of collateral with liquidation threshold ratio"
-            ],
-            "type": {
-              "defined": "Value"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "TestStruct",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "array": [
-                "i32",
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Vault",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "services",
-            "type": {
-              "defined": "Services"
-            }
-          },
-          {
-            "name": "strategies",
-            "type": {
-              "defined": "Strategies"
-            }
-          },
-          {
-            "name": "oracle",
-            "type": {
-              "option": {
-                "defined": "Oracle"
-              }
-            }
-          },
-          {
-            "name": "quoteOracle",
-            "type": {
-              "option": {
-                "defined": "Oracle"
-              }
-            }
-          },
-          {
-            "name": "id",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultKeys",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "baseToken",
-            "type": "publicKey"
-          },
-          {
-            "name": "quoteToken",
-            "type": "publicKey"
-          },
-          {
-            "name": "baseReserve",
-            "type": "publicKey"
-          },
-          {
-            "name": "quoteReserve",
-            "type": "publicKey"
-          },
-          {
-            "name": "baseOracle",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "quoteOracle",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultsArray",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "Vault"
-                },
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "VaultsKeysArray",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "head",
-            "type": "u8"
-          },
-          {
-            "name": "elements",
-            "type": {
-              "array": [
-                {
-                  "defined": "VaultKeys"
-                },
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "DecimalPlaces",
-      "docs": [
-        "Used to represent number of decimal points in a quantity of token"
-      ],
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Six"
-          },
-          {
-            "name": "Nine"
-          }
-        ]
-      }
-    },
-    {
-      "name": "BalanceChange",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Profit",
-            "fields": [
-              {
-                "defined": "Quantity"
-              }
-            ]
-          },
-          {
-            "name": "Loss",
-            "fields": [
-              {
-                "defined": "Quantity"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "ServiceType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Lend"
-          },
-          {
-            "name": "Swap"
-          },
-          {
-            "name": "Trade"
-          }
-        ]
-      }
-    },
-    {
-      "name": "CurveSegment",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Constant",
-            "fields": [
-              {
-                "name": "c",
-                "type": {
-                  "defined": "Fraction"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Linear",
-            "fields": [
-              {
-                "name": "a",
-                "type": {
-                  "defined": "Fraction"
-                }
-              },
-              {
-                "name": "b",
-                "type": {
-                  "defined": "Fraction"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "OraclePriceType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Spot"
-          },
-          {
-            "name": "Sell"
-          },
-          {
-            "name": "Buy"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Side",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Long"
-          },
-          {
-            "name": "Short"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Position",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Empty"
-          },
-          {
-            "name": "LiquidityProvide",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "strategy_index",
-                "type": "u8"
-              },
-              {
-                "name": "shares",
-                "type": {
-                  "defined": "Shares"
-                }
-              },
-              {
-                "name": "amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              },
-              {
-                "name": "quote_amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Borrow",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "shares",
-                "type": {
-                  "defined": "Shares"
-                }
-              },
-              {
-                "name": "amount",
-                "type": {
-                  "defined": "Quantity"
-                }
-              }
-            ]
-          },
-          {
-            "name": "Trading",
-            "fields": [
-              {
-                "name": "vault_index",
-                "type": "u8"
-              },
-              {
-                "name": "receipt",
-                "type": {
-                  "defined": "Receipt"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "ValueChange",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "None"
-          },
-          {
-            "name": "Profitable",
-            "fields": [
-              {
-                "defined": "Value"
-              }
-            ]
-          },
-          {
-            "name": "Loss",
-            "fields": [
-              {
-                "defined": "Value"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "name": "Token",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Base"
-          },
-          {
-            "name": "Quote"
-          }
-        ]
-      }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "DataTooLarge",
-      "msg": "Too large data"
-    },
-    {
-      "code": 6001,
-      "name": "ToBeDefined",
-      "msg": "To be defined"
-    },
-    {
-      "code": 6002,
-      "name": "NotEnoughQuoteQuantity",
-      "msg": "Not enough available quote quantity"
-    },
-    {
-      "code": 6003,
-      "name": "NotEnoughBaseQuantity",
-      "msg": "Not enough available base quantity"
-    },
-    {
-      "code": 6004,
-      "name": "UserAllowedBorrowExceeded",
-      "msg": "Borrow value is higher than user max allowed borrow"
-    },
-    {
-      "code": 6005,
-      "name": "LendServiceNone",
-      "msg": "Services does not have lend"
-    },
-    {
-      "code": 6006,
-      "name": "SwapServiceNone",
-      "msg": "Services does not have swap"
-    },
-    {
-      "code": 6007,
-      "name": "OracleNone",
-      "msg": "Vault does not contain base oracle"
-    },
-    {
-      "code": 6008,
-      "name": "QuoteOracleNone",
-      "msg": "Vault does not contain quote oracle"
-    },
-    {
-      "code": 6009,
-      "name": "OracleAlreadyEnabled",
-      "msg": "Given oracle was enabled before"
-    },
-    {
-      "code": 6010,
-      "name": "ConfidenceTooHigh",
-      "msg": "Price confidence is higher than spread limit"
-    },
-    {
-      "code": 6011,
-      "name": "StrategyNoLend",
-      "msg": "Strategy does not provide to lend"
-    },
-    {
-      "code": 6012,
-      "name": "StrategyNoSwap",
-      "msg": "Strategy does not provide to swap"
-    },
-    {
-      "code": 6013,
-      "name": "StrategyNoTrade",
-      "msg": "Strategy does not provide to trade"
-    },
-    {
-      "code": 6014,
-      "name": "StrategyMissing",
-      "msg": "There is no strategy on given index in strategies array"
-    },
-    {
-      "code": 6015,
-      "name": "CannotBorrow",
-      "msg": "Cannot borrow due to high utilization or max borrow limit"
-    },
-    {
-      "code": 6016,
-      "name": "RepayLowerThanFee",
-      "msg": "Given repay amount is lower than accrued fee"
-    },
-    {
-      "code": 6017,
-      "name": "CannotAddStrategy",
-      "msg": "Cannot add strategy (array limit exceeded)"
-    },
-    {
-      "code": 6018,
-      "name": "CannotAddPosition",
-      "msg": "Cannot add user position (array limit exceeded)"
-    },
-    {
-      "code": 6019,
-      "name": "NoVaultOnIndex",
-      "msg": "There is no defined vault on provided index"
-    },
-    {
-      "code": 6020,
-      "name": "ParseError",
-      "msg": "Parsing between types was not successful"
-    },
-    {
-      "code": 6021,
-      "name": "BumpNotFound",
-      "msg": "Bump for given name not found in BSTree"
-    },
-    {
-      "code": 6022,
-      "name": "InvalidDecimalPlaces",
-      "msg": "Given decimal places are not expected"
-    },
-    {
-      "code": 6023,
-      "name": "AddVault",
-      "msg": "Failed to add vault to vaults array"
-    },
-    {
-      "code": 6024,
-      "name": "AddKeys",
-      "msg": "Failed to add vault keys to vaults keys array"
-    },
-    {
-      "code": 6025,
-      "name": "NoMinAmountOut",
-      "msg": "Amount out did not reached passed minimum"
-    },
-    {
-      "code": 6026,
-      "name": "IndexOutOfBounds",
-      "msg": "Provided index is out of bounds"
-    },
-    {
-      "code": 6027,
-      "name": "NoStrategyOnIndex",
-      "msg": "There is no defined strategy on provided index"
-    },
-    {
-      "code": 6028,
-      "name": "InvalidService",
-      "msg": "Service is not valid"
-    },
-    {
-      "code": 6029,
-      "name": "PythAccountParse",
-      "msg": "Parse price account error"
-    },
-    {
-      "code": 6030,
-      "name": "PythPriceGet",
-      "msg": "Cannot get price within DEFAULT_MAX_ORACLE_AGE"
-    },
-    {
-      "code": 6031,
-      "name": "OracleAccountNotFound",
-      "msg": "Cannot find desired oracle account in remaining account infos"
-    },
-    {
-      "code": 6032,
-      "name": "ArrayEmpty",
-      "msg": "Array is empty"
-    },
-    {
-      "code": 6033,
-      "name": "TimeGet",
-      "msg": "Cannot get time"
-    },
-    {
-      "code": 6034,
-      "name": "PubkeyMissing",
-      "msg": "pubkey should be defined"
-    },
-    {
-      "code": 6035,
-      "name": "PositionNotFound",
-      "msg": "Given position was not found"
-    },
-    {
-      "code": 6036,
-      "name": "TradeServiceNone",
-      "msg": "Trade service is none"
-    },
-    {
-      "code": 6037,
-      "name": "PositionMismatch",
-      "msg": "Function called on bad position type"
-    },
-    {
-      "code": 6038,
-      "name": "CollateralizationTooLow",
-      "msg": "Collateralization is lower than max allowed leverage"
-    },
-    {
-      "code": 6039,
-      "name": "NoVaultsToRefresh",
-      "msg": "Statement does not contain any vault to refresh"
-    },
-    {
-      "code": 6040,
-      "name": "ServiceAlreadyExists",
-      "msg": "Given service was enabled before"
-    },
-    {
-      "code": 6041,
-      "name": "UserNotCollateralized",
-      "msg": "Withdraw amount is not permitted due to reached limit"
-    }
-  ]
+	version: '0.1.0',
+	name: 'protocol',
+	instructions: [
+		{
+			name: 'createState',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'rent',
+					isMut: false,
+					isSigner: false
+				},
+				{
+					name: 'systemProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: []
+		},
+		{
+			name: 'createStatement',
+			accounts: [
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'payer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'rent',
+					isMut: false,
+					isSigner: false
+				},
+				{
+					name: 'systemProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: []
+		},
+		{
+			name: 'initVault',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'base',
+					isMut: false,
+					isSigner: false
+				},
+				{
+					name: 'quote',
+					isMut: false,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				},
+				{
+					name: 'systemProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: []
+		},
+		{
+			name: 'enableOracle',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'priceFeed',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'decimals',
+					type: 'u8'
+				},
+				{
+					name: 'base',
+					type: 'bool'
+				},
+				{
+					name: 'skipInit',
+					type: 'bool'
+				},
+				{
+					name: 'maxUpdateInterval',
+					type: 'u32'
+				}
+			]
+		},
+		{
+			name: 'forceOverrideOracle',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'base',
+					type: 'bool'
+				},
+				{
+					name: 'price',
+					type: 'u32'
+				},
+				{
+					name: 'conf',
+					type: 'u32'
+				},
+				{
+					name: 'exp',
+					type: 'i8'
+				},
+				{
+					name: 'time',
+					type: {
+						option: 'u32'
+					}
+				}
+			]
+		},
+		{
+			name: 'enableLending',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'maxUtilization',
+					type: 'u32'
+				},
+				{
+					name: 'maxTotalBorrow',
+					type: 'u64'
+				},
+				{
+					name: 'initialFeeTime',
+					type: 'u32'
+				}
+			]
+		},
+		{
+			name: 'enableSwapping',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'keptFee',
+					type: 'u32'
+				},
+				{
+					name: 'maxTotalSold',
+					type: 'u64'
+				}
+			]
+		},
+		{
+			name: 'enableTrading',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'openFee',
+					type: 'u32'
+				},
+				{
+					name: 'maxLeverage',
+					type: 'u32'
+				},
+				{
+					name: 'collateralRatio',
+					type: 'u32'
+				},
+				{
+					name: 'liquidationThreshold',
+					type: 'u32'
+				}
+			]
+		},
+		{
+			name: 'addStrategy',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'index',
+					type: 'u8'
+				},
+				{
+					name: 'lending',
+					type: 'bool'
+				},
+				{
+					name: 'swapping',
+					type: 'bool'
+				},
+				{
+					name: 'trading',
+					type: 'bool'
+				},
+				{
+					name: 'collateralRatio',
+					type: 'u64'
+				},
+				{
+					name: 'liquidationThreshold',
+					type: 'u64'
+				}
+			]
+		},
+		{
+			name: 'deposit',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'strategy',
+					type: 'u8'
+				},
+				{
+					name: 'quantity',
+					type: 'u64'
+				},
+				{
+					name: 'base',
+					type: 'bool'
+				}
+			]
+		},
+		{
+			name: 'withdraw',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'strategy',
+					type: 'u8'
+				},
+				{
+					name: 'quantity',
+					type: 'u64'
+				},
+				{
+					name: 'base',
+					type: 'bool'
+				}
+			]
+		},
+		{
+			name: 'singleSwap',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'amount',
+					type: 'u64'
+				},
+				{
+					name: 'minExpected',
+					type: 'u64'
+				},
+				{
+					name: 'fromBase',
+					type: 'bool'
+				},
+				{
+					name: 'byAmountOut',
+					type: 'bool'
+				}
+			]
+		},
+		{
+			name: 'doubleSwap',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountIn',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountOut',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveIn',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveOut',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveInQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveOutQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vaultIn',
+					type: 'u8'
+				},
+				{
+					name: 'vaultOut',
+					type: 'u8'
+				},
+				{
+					name: 'amount',
+					type: 'u64'
+				},
+				{
+					name: 'minExpected',
+					type: 'u64'
+				},
+				{
+					name: 'byAmountOut',
+					type: 'bool'
+				}
+			]
+		},
+		{
+			name: 'modifyFeeCurve',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'admin',
+					isMut: true,
+					isSigner: true
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'service',
+					type: 'u8'
+				},
+				{
+					name: 'base',
+					type: 'bool'
+				},
+				{
+					name: 'bound',
+					type: 'u64'
+				},
+				{
+					name: 'a',
+					type: 'u64'
+				},
+				{
+					name: 'b',
+					type: 'u64'
+				},
+				{
+					name: 'c',
+					type: 'u64'
+				}
+			]
+		},
+		{
+			name: 'borrow',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'amount',
+					type: 'u64'
+				}
+			]
+		},
+		{
+			name: 'repay',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'amount',
+					type: 'u64'
+				}
+			]
+		},
+		{
+			name: 'openPosition',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'amount',
+					type: 'u64'
+				},
+				{
+					name: 'long',
+					type: 'bool'
+				}
+			]
+		},
+		{
+			name: 'closePosition',
+			accounts: [
+				{
+					name: 'state',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'vaults',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'statement',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'signer',
+					isMut: true,
+					isSigner: true
+				},
+				{
+					name: 'accountBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'accountQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveBase',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'reserveQuote',
+					isMut: true,
+					isSigner: false
+				},
+				{
+					name: 'tokenProgram',
+					isMut: false,
+					isSigner: false
+				}
+			],
+			args: [
+				{
+					name: 'vault',
+					type: 'u8'
+				},
+				{
+					name: 'long',
+					type: 'bool'
+				}
+			]
+		}
+	],
+	accounts: [
+		{
+			name: 'state',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'bump',
+						type: 'u8'
+					},
+					{
+						name: 'admin',
+						type: 'publicKey'
+					},
+					{
+						name: 'vaultsAcc',
+						type: 'publicKey'
+					}
+				]
+			}
+		},
+		{
+			name: 'statement',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'statement',
+						type: {
+							defined: 'UserStatement'
+						}
+					},
+					{
+						name: 'owner',
+						type: 'publicKey'
+					},
+					{
+						name: 'bump',
+						type: 'u8'
+					}
+				]
+			}
+		},
+		{
+			name: 'vaults',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'arr',
+						type: {
+							defined: 'VaultsArray'
+						}
+					},
+					{
+						name: 'keys',
+						type: {
+							defined: 'VaultsKeysArray'
+						}
+					}
+				]
+			}
+		}
+	],
+	types: [
+		{
+			name: 'BothValues',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						type: {
+							defined: 'Value'
+						}
+					},
+					{
+						name: 'quote',
+						type: {
+							defined: 'Value'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'BothQuantities',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'quote',
+						type: {
+							defined: 'Quantity'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'BothFractions',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'quote',
+						type: {
+							defined: 'Fraction'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'BothFeeCurves',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						type: {
+							defined: 'FeeCurve'
+						}
+					},
+					{
+						name: 'quote',
+						type: {
+							defined: 'FeeCurve'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'BothFundingRates',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						type: {
+							defined: 'FundingRate'
+						}
+					},
+					{
+						name: 'quote',
+						type: {
+							defined: 'FundingRate'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Balances',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'base',
+						docs: ['Token characteristic for vault'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'quote',
+						docs: ['Stable token'],
+						type: {
+							defined: 'Quantity'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Quantity',
+			docs: ['Used to represent a quantity of token (of its smallest unit)'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u64'
+					}
+				]
+			}
+		},
+		{
+			name: 'Fraction',
+			docs: ['Keeps fractions that need less precision'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u64'
+					}
+				]
+			}
+		},
+		{
+			name: 'Utilization',
+			docs: ['Keeps fractions that need less precision'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u128'
+					}
+				]
+			}
+		},
+		{
+			name: 'BigFraction',
+			docs: ['Keeps fractions that need greater precision'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u128'
+					}
+				]
+			}
+		},
+		{
+			name: 'Shares',
+			docs: ['Keeps shares of pool or debt'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'numberOfShares',
+						type: 'u128'
+					}
+				]
+			}
+		},
+		{
+			name: 'Price',
+			docs: ['Keeps price data'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u64'
+					}
+				]
+			}
+		},
+		{
+			name: 'Value',
+			docs: ['Keeps the value of a token, pool or position'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u128'
+					}
+				]
+			}
+		},
+		{
+			name: 'FundingRate',
+			docs: ['Used to keep cumulative funding rate (can be positive or negative)'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'i128'
+					}
+				]
+			}
+		},
+		{
+			name: 'Precise',
+			docs: ['Used for calculations that need more precision'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'val',
+						type: 'u128'
+					}
+				]
+			}
+		},
+		{
+			name: 'Lend',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'available',
+						docs: [
+							"liquidity available to borrow by borrower, it's the sum of all strategies containing this service",
+							'it should not be modified inside service'
+						],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'borrowed',
+						docs: ['liquidity already borrowed', 'containing accrued fee'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'fee',
+						docs: ['fee curve'],
+						type: {
+							defined: 'FeeCurve'
+						}
+					},
+					{
+						name: 'lastFeePaid',
+						docs: ['unix timestamp of last interest rate accrued'],
+						type: 'u32'
+					},
+					{
+						name: 'initialFeeTime',
+						docs: ['initial fee time for borrow'],
+						type: 'u32'
+					},
+					{
+						name: 'utilization',
+						docs: ['current utilization  (borrowed / balance (available + borrowed))'],
+						type: {
+							defined: 'Utilization'
+						}
+					},
+					{
+						name: 'maxUtilization',
+						docs: ['max utilization'],
+						type: {
+							defined: 'Utilization'
+						}
+					},
+					{
+						name: 'borrowShares',
+						docs: ['borrow shares'],
+						type: {
+							defined: 'Shares'
+						}
+					},
+					{
+						name: 'borrowLimit',
+						docs: ['ratio of borrow/collateral at which statement can be liquidated'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'unclaimedFee',
+						docs: ['fee that had been accrued, but not yet distributed'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'totalFee',
+						docs: ['sum of all fees accrued (for statistics)'],
+						type: {
+							defined: 'Quantity'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Services',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'swap',
+						type: {
+							option: {
+								defined: 'Swap'
+							}
+						}
+					},
+					{
+						name: 'lend',
+						type: {
+							option: {
+								defined: 'Lend'
+							}
+						}
+					},
+					{
+						name: 'trade',
+						type: {
+							option: {
+								defined: 'Trade'
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Swap',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'available',
+						docs: ['Liquidity available to be bought by a swapper.'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'balances',
+						docs: ['Current balance, greater or equal to available.'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'totalEarnedFee',
+						docs: ['Total amount of tokens earned for liquidity providers.'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'totalPaidFee',
+						docs: ['Total amount of tokens already paid for liquidity providers.'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'totalKeptFee',
+						docs: ['Total amount of fee tokens kept as fee (insurance, PoL or burn).'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'sellingFee',
+						docs: ['Struct for calculation of swapping fee.'],
+						type: {
+							defined: 'FeeCurve'
+						}
+					},
+					{
+						name: 'buyingFee',
+						type: {
+							defined: 'FeeCurve'
+						}
+					},
+					{
+						name: 'keptFee',
+						docs: ['Fraction of paid fee to be kept.'],
+						type: {
+							defined: 'Fraction'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Trade',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'available',
+						docs: ['liquidity available to be locked'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'locked',
+						docs: ['total liquidity locked inside the vault'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'openValue',
+						docs: ['total value at the moment of opening a position'],
+						type: {
+							defined: 'BothValues'
+						}
+					},
+					{
+						name: 'borrowFee',
+						docs: ['struct for calculation of position fee'],
+						type: {
+							defined: 'BothFeeCurves'
+						}
+					},
+					{
+						name: 'funding',
+						type: {
+							defined: 'BothFundingRates'
+						}
+					},
+					{
+						name: 'lastFee',
+						type: 'u32'
+					},
+					{
+						name: 'fundingMultiplier',
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'openFee',
+						docs: ['fee paid on opening a position'],
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'maxOpenLeverage',
+						docs: ['maximum leverage allowed at the moment of opening a position'],
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'maxLeverage',
+						docs: ['maximum leverage allowed'],
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'accruedFee',
+						docs: ['fees waiting to be distributed to liquidity providers'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'collateralRatio',
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'liquidationThreshold',
+						type: {
+							defined: 'Fraction'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Strategies',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'head',
+						type: 'u8'
+					},
+					{
+						name: 'elements',
+						type: {
+							array: [
+								{
+									defined: 'Strategy'
+								},
+								6
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Strategy',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'lent',
+						docs: ['Quantity of tokens used in lending (borrowed)'],
+						type: {
+							option: {
+								defined: 'Quantity'
+							}
+						}
+					},
+					{
+						name: 'sold',
+						docs: ['Quantity of tokens used in swapping (swapped for other tokens)'],
+						type: {
+							option: {
+								defined: 'Balances'
+							}
+						}
+					},
+					{
+						name: 'traded',
+						docs: ['Quantity of tokens used in trading (currently locked in a position)'],
+						type: {
+							option: {
+								defined: 'Balances'
+							}
+						}
+					},
+					{
+						name: 'available',
+						docs: ['Quantity of tokens available for use (not used)'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'locked',
+						docs: ['Sum of all locked tokens for each of the'],
+						type: {
+							defined: 'Balances'
+						}
+					},
+					{
+						name: 'totalShares',
+						docs: ['Total amount of shares in a strategy'],
+						type: {
+							defined: 'Shares'
+						}
+					},
+					{
+						name: 'accruedFee',
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'collateralRatio',
+						docs: ['Ratio at which shares in this strategy can be used as a collateral'],
+						type: {
+							defined: 'Fraction'
+						}
+					},
+					{
+						name: 'liquidationThreshold',
+						docs: ['Ratio at which value of shares is calculated during liquidation'],
+						type: {
+							defined: 'Fraction'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'FeeCurve',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'used',
+						type: 'u8'
+					},
+					{
+						name: 'bounds',
+						type: {
+							array: [
+								{
+									defined: 'Fraction'
+								},
+								5
+							]
+						}
+					},
+					{
+						name: 'values',
+						type: {
+							array: [
+								{
+									defined: 'CurveSegment'
+								},
+								5
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Oracle',
+			docs: ['Oracle is a struct that holds the price of an asset.'],
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'price',
+						docs: ['The price of the asset.'],
+						type: {
+							defined: 'Price'
+						}
+					},
+					{
+						name: 'confidence',
+						docs: ['The confidence of the price. It is a range around the price.'],
+						type: {
+							defined: 'Price'
+						}
+					},
+					{
+						name: 'lastUpdate',
+						docs: ['The time of the last update.'],
+						type: 'u32'
+					},
+					{
+						name: 'maxUpdateInterval',
+						docs: ['The maximum time interval between updates.'],
+						type: 'u32'
+					},
+					{
+						name: 'useSpread',
+						docs: ['If true, the oracle will force use the spread instead of the spot price.'],
+						type: 'bool'
+					},
+					{
+						name: 'spreadLimit',
+						docs: ['Limit of quotient above which the confidence is too great to use spot price.'],
+						type: {
+							defined: 'Price'
+						}
+					},
+					{
+						name: 'decimals',
+						docs: ['The number of decimals of the asset.'],
+						type: {
+							defined: 'DecimalPlaces'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Receipt',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'side',
+						docs: ['side of the position: either long or short'],
+						type: {
+							defined: 'Side'
+						}
+					},
+					{
+						name: 'size',
+						docs: ['size of the position (in base token)'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'locked',
+						docs: ['quantity of tokens locked in the position (size for LONG)'],
+						type: {
+							defined: 'Quantity'
+						}
+					},
+					{
+						name: 'initialFunding',
+						docs: ['shares for borrow fee'],
+						type: {
+							defined: 'FundingRate'
+						}
+					},
+					{
+						name: 'openPrice',
+						docs: ['price at which the position was opened'],
+						type: {
+							defined: 'Price'
+						}
+					},
+					{
+						name: 'openValue',
+						docs: ['value o position at the moment of creation'],
+						type: {
+							defined: 'Value'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Positions',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'head',
+						type: 'u8'
+					},
+					{
+						name: 'elements',
+						type: {
+							array: [
+								{
+									defined: 'Position'
+								},
+								32
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'UserTemporaryValues',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'collateral',
+						type: {
+							defined: 'CollateralValues'
+						}
+					},
+					{
+						name: 'liabilities',
+						type: {
+							defined: 'Value'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'UserStatement',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'positions',
+						type: {
+							defined: 'Positions'
+						}
+					},
+					{
+						name: 'values',
+						type: {
+							defined: 'UserTemporaryValues'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'CollateralValues',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'exact',
+						docs: ['value of collateral 1:1'],
+						type: {
+							defined: 'Value'
+						}
+					},
+					{
+						name: 'withCollateralRatio',
+						docs: ['value of collateral with collateral ratio'],
+						type: {
+							defined: 'Value'
+						}
+					},
+					{
+						name: 'unhealthy',
+						docs: ['value of collateral with liquidation threshold ratio'],
+						type: {
+							defined: 'Value'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'TestStruct',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'arr',
+						type: {
+							array: ['i32', 10]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'Vault',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'services',
+						type: {
+							defined: 'Services'
+						}
+					},
+					{
+						name: 'strategies',
+						type: {
+							defined: 'Strategies'
+						}
+					},
+					{
+						name: 'oracle',
+						type: {
+							option: {
+								defined: 'Oracle'
+							}
+						}
+					},
+					{
+						name: 'quoteOracle',
+						type: {
+							option: {
+								defined: 'Oracle'
+							}
+						}
+					},
+					{
+						name: 'id',
+						type: 'u8'
+					}
+				]
+			}
+		},
+		{
+			name: 'VaultKeys',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'baseToken',
+						type: 'publicKey'
+					},
+					{
+						name: 'quoteToken',
+						type: 'publicKey'
+					},
+					{
+						name: 'baseReserve',
+						type: 'publicKey'
+					},
+					{
+						name: 'quoteReserve',
+						type: 'publicKey'
+					},
+					{
+						name: 'baseOracle',
+						type: {
+							option: 'publicKey'
+						}
+					},
+					{
+						name: 'quoteOracle',
+						type: {
+							option: 'publicKey'
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'VaultsArray',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'head',
+						type: 'u8'
+					},
+					{
+						name: 'elements',
+						type: {
+							array: [
+								{
+									defined: 'Vault'
+								},
+								10
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'VaultsKeysArray',
+			type: {
+				kind: 'struct',
+				fields: [
+					{
+						name: 'head',
+						type: 'u8'
+					},
+					{
+						name: 'elements',
+						type: {
+							array: [
+								{
+									defined: 'VaultKeys'
+								},
+								10
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			name: 'DecimalPlaces',
+			docs: ['Used to represent number of decimal points in a quantity of token'],
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Six'
+					},
+					{
+						name: 'Nine'
+					}
+				]
+			}
+		},
+		{
+			name: 'BalanceChange',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Profit',
+						fields: [
+							{
+								defined: 'Quantity'
+							}
+						]
+					},
+					{
+						name: 'Loss',
+						fields: [
+							{
+								defined: 'Quantity'
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			name: 'ServiceType',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Lend'
+					},
+					{
+						name: 'Swap'
+					},
+					{
+						name: 'Trade'
+					}
+				]
+			}
+		},
+		{
+			name: 'CurveSegment',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'None'
+					},
+					{
+						name: 'Constant',
+						fields: [
+							{
+								name: 'c',
+								type: {
+									defined: 'Fraction'
+								}
+							}
+						]
+					},
+					{
+						name: 'Linear',
+						fields: [
+							{
+								name: 'a',
+								type: {
+									defined: 'Fraction'
+								}
+							},
+							{
+								name: 'b',
+								type: {
+									defined: 'Fraction'
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			name: 'OraclePriceType',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Spot'
+					},
+					{
+						name: 'Sell'
+					},
+					{
+						name: 'Buy'
+					}
+				]
+			}
+		},
+		{
+			name: 'Side',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Long'
+					},
+					{
+						name: 'Short'
+					}
+				]
+			}
+		},
+		{
+			name: 'Position',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Empty'
+					},
+					{
+						name: 'LiquidityProvide',
+						fields: [
+							{
+								name: 'vault_index',
+								type: 'u8'
+							},
+							{
+								name: 'strategy_index',
+								type: 'u8'
+							},
+							{
+								name: 'shares',
+								type: {
+									defined: 'Shares'
+								}
+							},
+							{
+								name: 'amount',
+								type: {
+									defined: 'Quantity'
+								}
+							},
+							{
+								name: 'quote_amount',
+								type: {
+									defined: 'Quantity'
+								}
+							}
+						]
+					},
+					{
+						name: 'Borrow',
+						fields: [
+							{
+								name: 'vault_index',
+								type: 'u8'
+							},
+							{
+								name: 'shares',
+								type: {
+									defined: 'Shares'
+								}
+							},
+							{
+								name: 'amount',
+								type: {
+									defined: 'Quantity'
+								}
+							}
+						]
+					},
+					{
+						name: 'Trading',
+						fields: [
+							{
+								name: 'vault_index',
+								type: 'u8'
+							},
+							{
+								name: 'receipt',
+								type: {
+									defined: 'Receipt'
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			name: 'ValueChange',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'None'
+					},
+					{
+						name: 'Profitable',
+						fields: [
+							{
+								defined: 'Value'
+							}
+						]
+					},
+					{
+						name: 'Loss',
+						fields: [
+							{
+								defined: 'Value'
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			name: 'Token',
+			type: {
+				kind: 'enum',
+				variants: [
+					{
+						name: 'Base'
+					},
+					{
+						name: 'Quote'
+					}
+				]
+			}
+		}
+	],
+	errors: [
+		{
+			code: 6000,
+			name: 'DataTooLarge',
+			msg: 'Too large data'
+		},
+		{
+			code: 6001,
+			name: 'ToBeDefined',
+			msg: 'To be defined'
+		},
+		{
+			code: 6002,
+			name: 'NotEnoughQuoteQuantity',
+			msg: 'Not enough available quote quantity'
+		},
+		{
+			code: 6003,
+			name: 'NotEnoughBaseQuantity',
+			msg: 'Not enough available base quantity'
+		},
+		{
+			code: 6004,
+			name: 'UserAllowedBorrowExceeded',
+			msg: 'Borrow value is higher than user max allowed borrow'
+		},
+		{
+			code: 6005,
+			name: 'LendServiceNone',
+			msg: 'Services does not have lend'
+		},
+		{
+			code: 6006,
+			name: 'SwapServiceNone',
+			msg: 'Services does not have swap'
+		},
+		{
+			code: 6007,
+			name: 'OracleNone',
+			msg: 'Vault does not contain base oracle'
+		},
+		{
+			code: 6008,
+			name: 'QuoteOracleNone',
+			msg: 'Vault does not contain quote oracle'
+		},
+		{
+			code: 6009,
+			name: 'OracleAlreadyEnabled',
+			msg: 'Given oracle was enabled before'
+		},
+		{
+			code: 6010,
+			name: 'ConfidenceTooHigh',
+			msg: 'Price confidence is higher than spread limit'
+		},
+		{
+			code: 6011,
+			name: 'StrategyNoLend',
+			msg: 'Strategy does not provide to lend'
+		},
+		{
+			code: 6012,
+			name: 'StrategyNoSwap',
+			msg: 'Strategy does not provide to swap'
+		},
+		{
+			code: 6013,
+			name: 'StrategyNoTrade',
+			msg: 'Strategy does not provide to trade'
+		},
+		{
+			code: 6014,
+			name: 'StrategyMissing',
+			msg: 'There is no strategy on given index in strategies array'
+		},
+		{
+			code: 6015,
+			name: 'CannotBorrow',
+			msg: 'Cannot borrow due to high utilization or max borrow limit'
+		},
+		{
+			code: 6016,
+			name: 'RepayLowerThanFee',
+			msg: 'Given repay amount is lower than accrued fee'
+		},
+		{
+			code: 6017,
+			name: 'CannotAddStrategy',
+			msg: 'Cannot add strategy (array limit exceeded)'
+		},
+		{
+			code: 6018,
+			name: 'CannotAddPosition',
+			msg: 'Cannot add user position (array limit exceeded)'
+		},
+		{
+			code: 6019,
+			name: 'NoVaultOnIndex',
+			msg: 'There is no defined vault on provided index'
+		},
+		{
+			code: 6020,
+			name: 'ParseError',
+			msg: 'Parsing between types was not successful'
+		},
+		{
+			code: 6021,
+			name: 'BumpNotFound',
+			msg: 'Bump for given name not found in BSTree'
+		},
+		{
+			code: 6022,
+			name: 'InvalidDecimalPlaces',
+			msg: 'Given decimal places are not expected'
+		},
+		{
+			code: 6023,
+			name: 'AddVault',
+			msg: 'Failed to add vault to vaults array'
+		},
+		{
+			code: 6024,
+			name: 'AddKeys',
+			msg: 'Failed to add vault keys to vaults keys array'
+		},
+		{
+			code: 6025,
+			name: 'NoMinAmountOut',
+			msg: 'Amount out did not reached passed minimum'
+		},
+		{
+			code: 6026,
+			name: 'IndexOutOfBounds',
+			msg: 'Provided index is out of bounds'
+		},
+		{
+			code: 6027,
+			name: 'NoStrategyOnIndex',
+			msg: 'There is no defined strategy on provided index'
+		},
+		{
+			code: 6028,
+			name: 'InvalidService',
+			msg: 'Service is not valid'
+		},
+		{
+			code: 6029,
+			name: 'PythAccountParse',
+			msg: 'Parse price account error'
+		},
+		{
+			code: 6030,
+			name: 'PythPriceGet',
+			msg: 'Cannot get price within DEFAULT_MAX_ORACLE_AGE'
+		},
+		{
+			code: 6031,
+			name: 'OracleAccountNotFound',
+			msg: 'Cannot find desired oracle account in remaining account infos'
+		},
+		{
+			code: 6032,
+			name: 'ArrayEmpty',
+			msg: 'Array is empty'
+		},
+		{
+			code: 6033,
+			name: 'TimeGet',
+			msg: 'Cannot get time'
+		},
+		{
+			code: 6034,
+			name: 'PubkeyMissing',
+			msg: 'pubkey should be defined'
+		},
+		{
+			code: 6035,
+			name: 'PositionNotFound',
+			msg: 'Given position was not found'
+		},
+		{
+			code: 6036,
+			name: 'TradeServiceNone',
+			msg: 'Trade service is none'
+		},
+		{
+			code: 6037,
+			name: 'PositionMismatch',
+			msg: 'Function called on bad position type'
+		},
+		{
+			code: 6038,
+			name: 'CollateralizationTooLow',
+			msg: 'Collateralization is lower than max allowed leverage'
+		},
+		{
+			code: 6039,
+			name: 'NoVaultsToRefresh',
+			msg: 'Statement does not contain any vault to refresh'
+		},
+		{
+			code: 6040,
+			name: 'ServiceAlreadyExists',
+			msg: 'Given service was enabled before'
+		},
+		{
+			code: 6041,
+			name: 'UserNotCollateralized',
+			msg: 'Withdraw amount is not permitted due to reached limit'
+		}
+	]
 };

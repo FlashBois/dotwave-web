@@ -324,6 +324,32 @@ export class LpPositionInfo {
     set earned_quote_quantity(arg0) {
         wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
     }
+    /**
+    * @returns {bigint}
+    */
+    get max_withdraw_quote() {
+        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set max_withdraw_quote(arg0) {
+        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get max_withdraw_base() {
+        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_base(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set max_withdraw_base(arg0) {
+        wasm.__wbg_set_lppositioninfo_max_withdraw_base(this.ptr, arg0);
+    }
 }
 /**
 */
@@ -642,14 +668,14 @@ export class StrategyInfo {
     * @returns {bigint}
     */
     get utilization_quote() {
-        const ret = wasm.__wbg_get_strategyinfo_utilization_quote(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set utilization_quote(arg0) {
-        wasm.__wbg_set_strategyinfo_utilization_quote(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
     }
 }
 /**
@@ -769,27 +795,27 @@ export class TradingPositionInfo {
     * @returns {bigint}
     */
     get pnl_value() {
-        const ret = wasm.__wbg_get_strategyinfo_utilization_quote(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
         return ret;
     }
     /**
     * @param {bigint} arg0
     */
     set pnl_value(arg0) {
-        wasm.__wbg_set_strategyinfo_utilization_quote(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get fees() {
-        const ret = wasm.__wbg_get_tradingpositioninfo_fees(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set fees(arg0) {
-        wasm.__wbg_set_tradingpositioninfo_fees(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_max_withdraw_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -1009,7 +1035,7 @@ export class VaultsAccount {
     * @param {number} vault_index
     * @param {Uint8Array} statement
     * @param {number} current_time
-    * @returns {TradingPositionInfo}
+    * @returns {TradingPositionInfo | undefined}
     */
     get_trading_position_info(vault_index, statement, current_time) {
         try {
@@ -1021,7 +1047,7 @@ export class VaultsAccount {
             if (r2) {
                 throw takeObject(r1);
             }
-            return TradingPositionInfo.__wrap(r0);
+            return r0 === 0 ? undefined : TradingPositionInfo.__wrap(r0);
         } finally {
             wasm.__wbindgen_add_to_stack_pointer(16);
             heap[stack_pointer++] = undefined;
@@ -1732,6 +1758,46 @@ export class VaultsAccount {
         }
     }
     /**
+    * @param {number} current_time
+    */
+    refresh_lend_fees(current_time) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_refresh_lend_fees(retptr, this.ptr, current_time);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            if (r1) {
+                throw takeObject(r0);
+            }
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} vault
+    * @param {number} strategy
+    * @param {bigint} amount
+    * @param {boolean} withdraw_base
+    * @param {Uint8Array} statement
+    * @returns {WithdrawAmounts}
+    */
+    withdraw(vault, strategy, amount, withdraw_base, statement) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_withdraw(retptr, this.ptr, vault, strategy, amount, withdraw_base, addBorrowedObject(statement));
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return WithdrawAmounts.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            heap[stack_pointer++] = undefined;
+        }
+    }
+    /**
     * @param {number} vault
     * @param {number} strategy
     * @param {bigint} amount
@@ -1815,6 +1881,55 @@ export class VaultsKeysWithId {
     */
     set index(arg0) {
         wasm.__wbg_set_vaultskeyswithid_index(this.ptr, arg0);
+    }
+}
+/**
+*/
+export class WithdrawAmounts {
+
+    static __wrap(ptr) {
+        const obj = Object.create(WithdrawAmounts.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_withdrawamounts_free(ptr);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get base() {
+        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set base(arg0) {
+        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get quote() {
+        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set quote(arg0) {
+        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
     }
 }
 

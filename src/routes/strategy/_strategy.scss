@@ -1,13 +1,17 @@
 .strategy-page {
-    background-color: transparent;
-    height: 100%;
-
     grid-column: center-start / center-end;
     grid-row: 2;
+    position: relative;
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 8rem 1fr;
+    grid-template-rows: 1px 1fr;
+    padding: 5rem;
+    border-radius: 20px;
+    overflow-y: hidden;
+    margin-top: 5rem;
+
+    @include background-blur;
 
     .filters-section {
         grid-row: 1;
@@ -17,6 +21,7 @@
     }
 
     .strategy-table-section {
+        position: relative;
         grid-row: 2;
 
         height: 100%;

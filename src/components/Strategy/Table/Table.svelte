@@ -4,7 +4,7 @@
 	import { cloneDeep } from 'lodash';
 	import { tweened } from 'svelte/motion';
 
-	import { strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
+	import { loadStrategies, strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
 	import { walletStore } from '$src/stores/walletStore';
 
 	import Sortable from '$components/Sortable/Sortable.svelte';
@@ -13,15 +13,18 @@
 	import StrategyType from '../StrategyType/StrategyType.svelte';
 	import RowDetails from '../RowDetails/RowDetails.svelte';
 	import PrograssBar from '$components/ProgressBar/PrograssBar.svelte';
+	import { onDestroy } from 'svelte';
+	import { loadUserStoreAccounts } from '$src/stores/userStore';
 
 	$: ({ publicKey } = $walletStore);
 
-	let timer = tweened(60);
+	let timer = 60;
 
-	setInterval(async () => {
-		if ($timer > 0) $timer--;
+	const interval = setInterval(async () => {
+		if (timer > 0) timer--;
 		else {
-			timer.set(60);
+			timer = 60;
+			await onRefresh()
 		}
 	}, 1000);
 
@@ -129,6 +132,17 @@
 			return store;
 		});
 	}
+
+	async function onRefresh() {
+		timer = 60
+		await loadStrategies()
+		await loadUserStoreAccounts()
+		await loadStrategies()
+	}
+
+	onDestroy(()=> {
+		clearInterval(interval)
+	})
 </script>
 
 <div class="strategy-table">
@@ -148,7 +162,7 @@
 			</div>
 		{/each}
 		<div class="strategy-table__header-item--arrow">
-			<CircleProgressBar max={60} value={$timer} />
+			<CircleProgressBar max={60} value={timer} on:click={onRefresh}/>
 		</div>
 	</div>
 	{#each $filteredStrategies as row, i}

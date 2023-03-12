@@ -8,6 +8,7 @@
 
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
+	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
@@ -19,16 +20,23 @@
 
 	let repayInputValue: number;
 
-	$: if (!maxRepayAmount) buttonMessage = { message: 'No open position', disabled: true };
+	$: if (repayInputValue == 0 && maxRepayAmount)
+		buttonMessage = { message: 'Repay', disabled: true };
 	else if (baseAmount && repayInputValue > baseAmount.toNumber() && maxRepayAmount)
 		buttonMessage = { message: 'Insufficient funds', disabled: true };
-	else if (repayInputValue == 0 && maxRepayAmount)
-		buttonMessage = { message: 'Repay', disabled: true };
 	else if (repayInputValue > 0 && maxRepayAmount) buttonMessage = { message: '', disabled: false };
 
 	async function onRepayClick() {
 		const signature = await useRepayTransaction(connection, vaultSupport, repayInputValue);
-		await connection.confirmTransaction(signature, 'confirmed');
+		const notificationId = createNotification({
+			text: 'Repay',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err) updateNotification(notificationId, { text: 'Repay', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Repay', type: 'success', removeAfter: 3000 });
+
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		repayInputValue = 0;
@@ -47,7 +55,7 @@
 				</span>
 			</div>
 			<div class="repay__input">
-				<DecimalInput bind:value={repayInputValue} disabled={!maxRepayAmount ? true : false}/>
+				<DecimalInput bind:value={repayInputValue} disabled={!maxRepayAmount ? true : false} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="repay__button-box">

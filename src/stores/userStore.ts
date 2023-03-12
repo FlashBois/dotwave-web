@@ -7,6 +7,7 @@ import { useCreateStatementProgramAddress } from '$src/tools/web3/useCreateState
 import type { PublicKey } from '@solana/web3.js';
 import { get, writable } from 'svelte/store';
 import { anchorStore } from './anchorStore';
+import { protocolStateStore } from './protocolStateStore';
 import { web3Store } from './web3Store';
 
 export interface IUserStore {
@@ -47,10 +48,11 @@ export function createUserStore(owner: PublicKey): void {
 export async function loadUserStoreAccounts(): Promise<void> {
 	const { address, statementAddress } = get(userStore);
 	const { connection } = get(web3Store);
+	const { vaultsAccounts } = get(protocolStateStore)
 	let statement: StatementAccount | null
 	let statementBuffer: Buffer | null
 
-	if (address && statementAddress) {
+	if (address && statementAddress && vaultsAccounts) {
 		const { accounts } = await getWalletTokenAccounts({
 			connection,
 			owner: address
@@ -61,6 +63,7 @@ export async function loadUserStoreAccounts(): Promise<void> {
 		if(statementAccountInfo){
 			statement = StatementAccount.load(statementAccountInfo)
 			statementBuffer = statementAccountInfo
+			statement.refresh(vaultsAccounts.buffer())
 		}
 
 		userStore.update((store) => {
@@ -86,3 +89,26 @@ export function clearUserStore() {
 		};
 	});
 }
+
+		// connection.onAccountChange(address, async () => {
+		// 	console.log('User - update')
+		// 	const { accounts } = await getWalletTokenAccounts({
+		// 		connection,
+		// 		owner: address
+		// 	});
+
+		// 	const statementAccountInfo = (await connection.getAccountInfo(statementAddress))?.data
+
+		// 	if(statementAccountInfo){
+		// 		statement = StatementAccount.load(statementAccountInfo)
+		// 		statementBuffer = statementAccountInfo
+		// 		statement.refresh(vaultsAccounts.buffer())
+		// 	}
+
+		// 	userStore.update((store) => {
+		// 		return {
+		// 			...store,
+		// 			accounts
+		// 		};
+		// 	});
+		// }, 'confirmed')

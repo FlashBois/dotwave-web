@@ -1,7 +1,7 @@
 import type { Protocol } from '$src/utils/Idl/protocol';
 import type { BN, Program } from '@project-serum/anchor';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import type { PublicKey, TransactionInstruction } from '@solana/web3.js';
+import type { AccountMeta, PublicKey, TransactionInstruction } from '@solana/web3.js';
 
 interface IRepayAccounts {
 	state: PublicKey;
@@ -10,14 +10,13 @@ interface IRepayAccounts {
 	statement: PublicKey;
 	signer: PublicKey;
 	reserveBase: PublicKey;
-	baseOracle: PublicKey;
-	quoteOracle: PublicKey;
 }
 
 export async function useRepay(
 	program: Program<Protocol>,
 	vaultId: number,
 	accounts: IRepayAccounts,
+	remainingAccounts: AccountMeta[],
 	amount: BN
 ): Promise<TransactionInstruction> {
 	return await program.methods
@@ -26,17 +25,6 @@ export async function useRepay(
 			...accounts,
 			tokenProgram: TOKEN_PROGRAM_ID
 		})
-		.remainingAccounts([
-			{
-				isSigner: false,
-				isWritable: false,
-				pubkey: accounts.baseOracle
-			},
-			{
-				isSigner: false,
-				isWritable: false,
-				pubkey: accounts.quoteOracle
-			}
-		])
+		.remainingAccounts(remainingAccounts)
 		.instruction();
 }

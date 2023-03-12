@@ -154,7 +154,7 @@
 	{#each $filteredStrategies as row, i}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div class="strategy-table__row with-details" class:with-details={row.withDetails}>
-			<div class="strategy-table__row-items" on:click={() => displayDetails(row.vaultId)}>
+			<div class="strategy-table__row-items" on:click={() => displayDetails(row.id)}>
 				<div class="strategy-table__row-item--strategy">
 					<div class="strategy-table__strategy-cell">
 						<div class="strategy-table__strategy-cell__img-box">

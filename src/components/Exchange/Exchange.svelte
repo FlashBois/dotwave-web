@@ -11,8 +11,6 @@
 	import ReadonlyInput from '$components/Inputs/Input/ReadonlyInput.svelte';
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import { PublicKey } from '@solana/web3.js';
 	import { swapOutput } from '$src/tools/swapOutput';
 	import { useSwap } from '$src/tools/instructions/useSwap';
 	import { anchorStore } from '$src/stores/anchorStore';

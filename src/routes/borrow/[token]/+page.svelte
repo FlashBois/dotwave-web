@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { userStore } from '$src/stores/userStore';
-	import { getDecimalFromBigint } from '$src/tools/decimal/getDecimalFromBigInt';
+	import { getDecimalFromBigintWithDecimal } from '$src/tools/decimal/getDecimalFromBigInt';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 	import { derived, get } from 'svelte/store';
 
@@ -37,7 +37,7 @@
 
 	$: maxBorrowAmount =
 		vaultsAccounts && statement
-			? getDecimalFromBigint(
+			? getDecimalFromBigintWithDecimal(
 					vaultsAccounts.max_borrow_for(id, statement.remaining_permitted_debt()),
 					6
 			  )
@@ -49,11 +49,11 @@
 			: undefined;
 
 	$: owedQuantity = userBorrowInfo
-		? getDecimalFromBigint(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
+		? getDecimalFromBigintWithDecimal(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
 		: undefined;
 
 	$: borrowedQuantity = userBorrowInfo
-		? getDecimalFromBigint(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
+		? getDecimalFromBigintWithDecimal(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
 		: undefined;
 
 	$: userData = derived<[typeof userStore], { baseAmount: Decimal }>(

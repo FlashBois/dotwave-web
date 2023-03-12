@@ -7,7 +7,6 @@
 @import 'base/topography';
 @import 'base/utilities';
 
-
 // COMPONENTS
 @import '../components/Wallet/wallet';
 
@@ -16,6 +15,7 @@
 @import '../components/Inputs/UnderlineInput/underlineInput';
 
 @import '../components/Exchange/exchange';
+@import '../components/Trade/trade';
 
 @import '../components/TokenList/token-list';
 
@@ -37,6 +37,9 @@
 @import '../routes/borrow/[token]/borrow';
 @import '../routes/swap/[from]_[to]/swap';
 
-
 // LAYOUT
 @import 'layout/header';
+
+:global(*) {
+	font-family: 'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}

@@ -22,6 +22,7 @@
 		on:change
 		on:input
 		on:keyup
+		disabled={$$props.disabled}
 		type="text"
 		bind:value
 		{placeholder}

@@ -44,13 +44,13 @@
 
 			<ul class="nav__list">
 				<li class="nav__item">
-					<a href="/swap/RAY_USDC" class="nav__link">Swap</a>
+					<a href="/swap/SOL_USDC" class="nav__link">Swap</a>
 				</li>
 				<li class="nav__item">
-					<a href="/trade/RAY" class="nav__link">Trade</a>
+					<a href="/trade/SOL" class="nav__link">Trade</a>
 				</li>
 				<li class="nav__item">
-					<a href="/borrow/RAY" class="nav__link">Borrow</a>
+					<a href="/borrow/SOL" class="nav__link">Borrow</a>
 				</li>
 				<li class="nav__item">
 					<a href="/strategy" class="nav__link">Strategy</a>

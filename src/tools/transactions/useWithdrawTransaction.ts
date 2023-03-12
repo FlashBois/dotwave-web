@@ -1,24 +1,19 @@
 import { anchorStore } from '$src/stores/anchorStore';
-import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
-import {
-	ComputeBudgetProgram,
-	Connection,
-	PublicKey,
-	Transaction,
-	type AccountMeta
-} from '@solana/web3.js';
+import { ComputeBudgetProgram, Connection, PublicKey, Transaction, type AccountMeta } from '@solana/web3.js';
 import { get } from 'svelte/store';
-import { useBorrow } from '../instructions/useBorrow';
 import { useCreateStatement } from '../instructions/useCreateStatement';
+import { useWithdraw } from '../instructions/useWithdraw';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 import { useCreateStatementProgramAddress } from '../web3/useCreateStatementProgramAddress';
 
-export async function useBorrowTransaction(
+export async function useWithdrawTransaction(
 	connection: Connection,
-	vaultSupport: IVaultSupport,
+	vaultId: number,
+	strategyId: number,
 	amount: number
 ): Promise<string> {
 	const anchorCopy = get(anchorStore);
@@ -26,6 +21,7 @@ export async function useBorrowTransaction(
 	const userStoreCopy = get(userStore);
 	const { vaultsAccounts, vaultsAddress, stateAddress, vaultsSupport } = get(protocolStateStore);
 	const { publicKey } = walletCopy;
+	const vaultSupport = vaultsSupport[vaultId];
 
 	if (anchorCopy && publicKey && vaultsAccounts && userStoreCopy.statementAddress) {
 		const { program } = anchorCopy;
@@ -47,7 +43,7 @@ export async function useBorrowTransaction(
 			})
 		);
 
-		const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh(vaultSupport.id);
+		const vaultsToRefresh = userStoreCopy.statement?.vaults_to_refresh(vaultId);
 		const remainingAccounts: AccountMeta[] = [];
 
 		if (vaultsToRefresh) {
@@ -72,16 +68,20 @@ export async function useBorrowTransaction(
 		}
 
 		const userAccountBase = userStoreCopy.getTokenAccountAddress(vaultSupport.baseTokenAddress);
+		const userAccountQuote = userStoreCopy.getTokenAccountAddress(vaultSupport.quoteTokenAddress);
 
-		if (userAccountBase) {
+		if (userAccountBase && userAccountQuote) {
 			tx.add(
-				await useBorrow(
+				await useWithdraw(
 					program,
 					vaultSupport.id,
+					strategyId,
 					{
 						statement: statementProgramAddress,
 						accountBase: userAccountBase,
+						accountQuote: userAccountQuote,
 						reserveBase: new PublicKey(vaultsAccounts.base_reserve(vaultSupport.id)),
+						reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vaultSupport.id)),
 						vaults: vaultsAddress,
 						state: stateAddress,
 						signer: publicKey
@@ -92,6 +92,6 @@ export async function useBorrowTransaction(
 			);
 
 			return await useSignAndSendTransaction(connection, walletCopy, tx);
-		} else throw Error('User token account not exists')
-	} else throw Error('Incomplete protocol state')
+		} else throw Error('User token account not exists');
+	} else throw Error('Incomplete protocol state');
 }

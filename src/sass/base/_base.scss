@@ -5,41 +5,44 @@
 *,
 *::before,
 *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
 }
 
 html {
-    font-family: $primary-font;
-    box-sizing: border-box;
-    font-size: 62.5%; // 10px/16px = 62.5% -> 1rem = 10px
+	font-family: $primary-font;
+	box-sizing: border-box;
+	font-size: 62.5%; // 10px/16px = 62.5% -> 1rem = 10px
 }
 
 :global(body) {
-    font-weight: 300;
-    line-height: 1.6;
+	font-weight: 300;
+	line-height: 1.6;
+}
+
+body {
+  background-image: url('$src/assets/img/back.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 }
 
 .container {
-    background-image: url("$src/assets/img/back.jpg");
-    background-position: fixed;
+	overflow: hidden;
+	display: grid;
 
-    height: 100vh;
-  
-    display: grid;
-  
-    grid-template-rows: 8rem 1fr;
-    grid-template-columns:
-      [full-start] minmax(6rem, 1fr) [center-start] repeat(
-        9,
-        [col-start] minmax(min-content, 17rem) [col-end]
-      )
-      [center-end] minmax(6rem, 1fr) [full-end];
-  
-    @include respond(phone) {
-      grid-template-columns:
-        [full-start] 1fr [center-start] repeat(9, [col-start] minmax(min-content, 14rem) [col-end])
-        [center-end] 1fr [full-end];
-    }
-  }
+	grid-template-rows: 8rem 1fr;
+	grid-template-columns:
+		[full-start] minmax(6rem, 1fr) [center-start] repeat(
+			9,
+			[col-start] minmax(min-content, 17rem) [col-end]
+		)
+		[center-end] minmax(6rem, 1fr) [full-end];
+
+	@include respond(phone) {
+		grid-template-columns:
+			[full-start] 1fr [center-start] repeat(9, [col-start] minmax(min-content, 14rem) [col-end])
+			[center-end] 1fr [full-end];
+	}
+}

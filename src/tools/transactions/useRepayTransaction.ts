@@ -11,12 +11,12 @@ import {
 	type AccountMeta
 } from '@solana/web3.js';
 import { get } from 'svelte/store';
-import { useBorrow } from '../instructions/useBorrow';
 import { useCreateStatement } from '../instructions/useCreateStatement';
+import { useRepay } from '../instructions/useRepay';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 import { useCreateStatementProgramAddress } from '../web3/useCreateStatementProgramAddress';
 
-export async function useBorrowTransaction(
+export async function useRepayTransaction(
 	connection: Connection,
 	vaultSupport: IVaultSupport,
 	amount: number
@@ -75,7 +75,7 @@ export async function useBorrowTransaction(
 
 		if (userAccountBase) {
 			tx.add(
-				await useBorrow(
+				await useRepay(
 					program,
 					vaultSupport.id,
 					{
@@ -92,6 +92,6 @@ export async function useBorrowTransaction(
 			);
 
 			return await useSignAndSendTransaction(connection, walletCopy, tx);
-		} else throw Error('User token account not exists')
-	} else throw Error('Incomplete protocol state')
+		} else throw Error('User token account not exists');
+	} else throw Error('Incomplete protocol state');
 }

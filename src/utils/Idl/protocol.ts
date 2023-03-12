@@ -150,6 +150,10 @@ export type Protocol = {
         {
           "name": "skipInit",
           "type": "bool"
+        },
+        {
+          "name": "maxUpdateInterval",
+          "type": "u32"
         }
       ]
     },
@@ -363,6 +367,74 @@ export type Protocol = {
     },
     {
       "name": "deposit",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "strategy",
+          "type": "u8"
+        },
+        {
+          "name": "quantity",
+          "type": "u64"
+        },
+        {
+          "name": "base",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
       "accounts": [
         {
           "name": "state",
@@ -745,31 +817,6 @@ export type Protocol = {
           "name": "signer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -840,10 +887,6 @@ export type Protocol = {
         {
           "name": "vault",
           "type": "u8"
-        },
-        {
-          "name": "long",
-          "type": "bool"
         }
       ]
     }
@@ -1690,7 +1733,7 @@ export type Protocol = {
             "docs": [
               "If true, the oracle will force use the spread instead of the spot price."
             ],
-            "type": "u8"
+            "type": "bool"
           },
           {
             "name": "spreadLimit",
@@ -2219,7 +2262,7 @@ export type Protocol = {
       }
     },
     {
-      "name": "TradeResult",
+      "name": "ValueChange",
       "type": {
         "kind": "enum",
         "variants": [
@@ -2465,6 +2508,16 @@ export type Protocol = {
       "code": 6040,
       "name": "ServiceAlreadyExists",
       "msg": "Given service was enabled before"
+    },
+    {
+      "code": 6041,
+      "name": "UserNotCollateralized",
+      "msg": "Withdraw amount is not permitted due to reached limit"
+    },
+    {
+      "code": 6042,
+      "name": "PositionAlreadyExists",
+      "msg": "position already exists, close it to open new one"
     }
   ]
 };
@@ -2621,6 +2674,10 @@ export const IDL: Protocol = {
         {
           "name": "skipInit",
           "type": "bool"
+        },
+        {
+          "name": "maxUpdateInterval",
+          "type": "u32"
         }
       ]
     },
@@ -2834,6 +2891,74 @@ export const IDL: Protocol = {
     },
     {
       "name": "deposit",
+      "accounts": [
+        {
+          "name": "state",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vaults",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "statement",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "signer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "accountQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveBase",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveQuote",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "vault",
+          "type": "u8"
+        },
+        {
+          "name": "strategy",
+          "type": "u8"
+        },
+        {
+          "name": "quantity",
+          "type": "u64"
+        },
+        {
+          "name": "base",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
       "accounts": [
         {
           "name": "state",
@@ -3216,31 +3341,6 @@ export const IDL: Protocol = {
           "name": "signer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "accountQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveBase",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserveQuote",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -3311,10 +3411,6 @@ export const IDL: Protocol = {
         {
           "name": "vault",
           "type": "u8"
-        },
-        {
-          "name": "long",
-          "type": "bool"
         }
       ]
     }
@@ -4161,7 +4257,7 @@ export const IDL: Protocol = {
             "docs": [
               "If true, the oracle will force use the spread instead of the spot price."
             ],
-            "type": "u8"
+            "type": "bool"
           },
           {
             "name": "spreadLimit",
@@ -4690,7 +4786,7 @@ export const IDL: Protocol = {
       }
     },
     {
-      "name": "TradeResult",
+      "name": "ValueChange",
       "type": {
         "kind": "enum",
         "variants": [
@@ -4936,6 +5032,16 @@ export const IDL: Protocol = {
       "code": 6040,
       "name": "ServiceAlreadyExists",
       "msg": "Given service was enabled before"
+    },
+    {
+      "code": 6041,
+      "name": "UserNotCollateralized",
+      "msg": "Withdraw amount is not permitted due to reached limit"
+    },
+    {
+      "code": 6042,
+      "name": "PositionAlreadyExists",
+      "msg": "position already exists, close it to open new one"
     }
   ]
 };

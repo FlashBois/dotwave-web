@@ -21,7 +21,8 @@
 	};
 </script>
 
-<div>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div on:click>
 	<svg viewBox="0 0 100 100">
 		<path d="M50,5A45 45 0 1 1 49.9999 5" />
 		<path d={progressPath()} />
@@ -51,5 +52,6 @@
 		height: 100%;
 		position: relative;
 		width: 100%;
+		cursor: pointer;
 	}
 </style>

@@ -8,7 +8,7 @@ export interface ITradeInfo {
 }
 
 export interface Position {
-	leverage: number;
+	leverage: Decimal;
 	size: Decimal;
 	side: Side;
 	openPrice: Decimal;

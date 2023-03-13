@@ -5,7 +5,7 @@ import { userStore } from '$src/stores/userStore';
 import { walletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { PublicKey, Transaction, type Connection } from '@solana/web3.js';
+import { ComputeBudgetProgram, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
@@ -34,7 +34,11 @@ export async function useChangePosition(
 
 	if (!user.statementAddress) throw new Error('Statement not loaded');
 
-	const tx = new Transaction();
+	const tx = new Transaction().add(
+		ComputeBudgetProgram.setComputeUnitLimit({
+			units: 1000000
+		})
+	);
 
 	console.log(user.statementAddress, program.programId.toBase58());
 
@@ -50,14 +54,33 @@ export async function useChangePosition(
 	if (!(await connection.getAccountInfo(user.statementAddress)))
 		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
-	const remainingAccounts = [support.baseOracle, support.quoteOracle].map((pubkey) => {
-		return { isSigner: false, isWritable: false, pubkey };
-	});
+	tx.add(
+		ComputeBudgetProgram.setComputeUnitLimit({
+			units: 1000000
+		})
+	);
+
+	const remainingAccounts = (user.statement?.vaults_to_refresh(support.id) ?? [])
+		.reduce(
+			(acc: PublicKey[], v: number) =>
+				acc.concat(
+					protocolState.vaultsSupport[v].baseOracle,
+					protocolState.vaultsSupport[v].quoteOracle
+				),
+			[]
+		)
+		.map((pubkey: PublicKey) => {
+			return {
+				isSigner: false,
+				isWritable: false,
+				pubkey
+			};
+		});
 
 	if (position)
 		tx.add(
 			await program.methods
-				.closePosition(support.id, position.side === 'long' ? true : false)
+				.closePosition(support.id)
 				.accounts({
 					state: protocolState.stateAddress,
 					vaults: protocolState.vaultsAddress,
@@ -80,17 +103,12 @@ export async function useChangePosition(
 				state: protocolState.stateAddress,
 				vaults: protocolState.vaultsAddress,
 				statement: user.statementAddress,
-				signer: wallet.publicKey,
-				accountBase,
-				accountQuote,
-				reserveBase: new PublicKey(protocolState.vaultsAccounts.base_reserve(support.id)),
-				reserveQuote: new PublicKey(protocolState.vaultsAccounts.quote_reserve(support.id)),
-				tokenProgram: TOKEN_PROGRAM_ID
+				signer: wallet.publicKey
 			})
 			.remainingAccounts(remainingAccounts)
 			.instruction()
 	);
 
-	const signature = await useSignAndSendTransaction(connection, wallet, tx);
+	const signature = await useSignAndSendTransaction(connection, wallet, tx, undefined, true);
 	console.log('Opened position', tx, signature);
 }

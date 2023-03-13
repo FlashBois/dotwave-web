@@ -263,27 +263,27 @@ export class LpPositionInfo {
     * @returns {bigint}
     */
     get position_value() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_position_value(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set position_value(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_position_value(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get deposited_base_quantity() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_lppositioninfo_deposited_base_quantity(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set deposited_base_quantity(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_lppositioninfo_deposited_base_quantity(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -603,79 +603,79 @@ export class StrategyInfo {
     * @returns {bigint}
     */
     get balance_base() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_balance_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_base(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_balance_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get balance_quote() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_balance_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set balance_quote(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_balance_quote(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked_base() {
-        const ret = wasm.__wbg_get_lppositioninfo_deposited_quote_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_locked_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked_base(arg0) {
-        wasm.__wbg_set_lppositioninfo_deposited_quote_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_locked_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked_quote() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_base_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_locked_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked_quote(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_base_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_locked_quote(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get utilization_base() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_quote_quantity(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_utilization_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set utilization_base(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_utilization_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get utilization_quote() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_utilization_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set utilization_quote(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_utilization_quote(this.ptr, arg0);
     }
 }
 /**
@@ -730,92 +730,105 @@ export class TradingPositionInfo {
     * @returns {bigint}
     */
     get size() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_size(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set size(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_size(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get size_value() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_size_value(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set size_value(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_size_value(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get locked() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_locked(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set locked(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_locked(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get open_price() {
-        const ret = wasm.__wbg_get_lppositioninfo_deposited_quote_quantity(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_open_price(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set open_price(arg0) {
-        wasm.__wbg_set_lppositioninfo_deposited_quote_quantity(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_open_price(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get open_value() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_base_quantity(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_open_value(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set open_value(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_base_quantity(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_open_value(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get pnl() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_quote_quantity(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_pnl(this.ptr);
         return ret;
     }
     /**
     * @param {bigint} arg0
     */
     set pnl(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_pnl(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get pnl_value() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_pnl_value(this.ptr);
         return ret;
     }
     /**
     * @param {bigint} arg0
     */
     set pnl_value(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_pnl_value(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get fees() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_base(this.ptr);
+        const ret = wasm.__wbg_get_tradingpositioninfo_fees(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set fees(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_base(this.ptr, arg0);
+        wasm.__wbg_set_tradingpositioninfo_fees(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -1254,46 +1267,6 @@ export class VaultsAccount {
     }
     /**
     * @param {number} vault
-    * @param {number} strategy
-    * @returns {bigint}
-    */
-    utilization_base(vault, strategy) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_utilization_base(retptr, this.ptr, vault, strategy);
-            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            var r3 = getInt32Memory0()[retptr / 4 + 3];
-            if (r3) {
-                throw takeObject(r2);
-            }
-            return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault
-    * @param {number} strategy
-    * @returns {bigint}
-    */
-    utilization_quote(vault, strategy) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_utilization_quote(retptr, this.ptr, vault, strategy);
-            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            var r3 = getInt32Memory0()[retptr / 4 + 3];
-            if (r3) {
-                throw takeObject(r2);
-            }
-            return BigInt.asUintN(64, r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @param {number} vault
     * @param {bigint} amount
     * @param {boolean} from_base
     * @param {boolean} by_amount_out
@@ -1368,7 +1341,7 @@ export class VaultsAccount {
     * @returns {number}
     */
     vaults_len() {
-        const ret = wasm.statementaccount_positions_len(this.ptr);
+        const ret = wasm.vaultsaccount_vaults_len(this.ptr);
         return ret;
     }
     /**
@@ -1664,6 +1637,25 @@ export class VaultsAccount {
     * @param {number} index
     * @returns {bigint}
     */
+    utilization_lend(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_utilization_lend(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
+    * @returns {bigint}
+    */
     max_utilization(index) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
@@ -1681,13 +1673,13 @@ export class VaultsAccount {
     }
     /**
     * @param {number} index
-    * @param {number} timestamp
+    * @param {number} duration_in_secs
     * @returns {bigint}
     */
-    lending_apy(index, timestamp) {
+    lending_apy(index, duration_in_secs) {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, timestamp);
+            wasm.vaultsaccount_lending_apy(retptr, this.ptr, index, duration_in_secs);
             var r0 = getBigInt64Memory0()[retptr / 8 + 0];
             var r2 = getInt32Memory0()[retptr / 4 + 2];
             var r3 = getInt32Memory0()[retptr / 4 + 3];
@@ -1909,27 +1901,27 @@ export class WithdrawAmounts {
     * @returns {bigint}
     */
     get base() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_withdrawamounts_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set base(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_withdrawamounts_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get quote() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_withdrawamounts_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set quote(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_withdrawamounts_quote(this.ptr, arg0);
     }
 }
 

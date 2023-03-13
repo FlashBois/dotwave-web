@@ -104,7 +104,7 @@ async function autoConnect() {
 		if (adapter?.publicKey) {
 			createUserStore(adapter.publicKey);
 			await loadUserStoreAccounts();
-			await loadStrategies()
+			await loadStrategies();
 		}
 		walletStore.setConnecting(false);
 	}
@@ -136,7 +136,7 @@ async function connect(): Promise<void> {
 		if (adapter?.publicKey) {
 			createUserStore(adapter.publicKey);
 			await loadUserStoreAccounts();
-			await loadStrategies()
+			await loadStrategies();
 		}
 		walletStore.setConnecting(false);
 	}
@@ -280,7 +280,7 @@ async function disconnect(): Promise<void> {
 		clearUserStore();
 		walletStore.resetWallet();
 		walletStore.setDisconnecting(false);
-		await loadStrategies()
+		await loadStrategies();
 	}
 }
 

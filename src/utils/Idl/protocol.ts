@@ -1218,6 +1218,18 @@ export type Protocol = {
       }
     },
     {
+      "name": "PreciseApy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "val",
+            "type": "u128"
+          }
+        ]
+      }
+    },
+    {
       "name": "Lend",
       "type": {
         "kind": "struct",
@@ -1917,23 +1929,6 @@ export type Protocol = {
       }
     },
     {
-      "name": "TestStruct",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "array": [
-                "i32",
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "Vault",
       "type": {
         "kind": "struct",
@@ -2518,6 +2513,11 @@ export type Protocol = {
       "code": 6042,
       "name": "PositionAlreadyExists",
       "msg": "position already exists, close it to open new one"
+    },
+    {
+      "code": 6043,
+      "name": "ZeroAmountInput",
+      "msg": "input amount cannot be zero"
     }
   ]
 };
@@ -3742,6 +3742,18 @@ export const IDL: Protocol = {
       }
     },
     {
+      "name": "PreciseApy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "val",
+            "type": "u128"
+          }
+        ]
+      }
+    },
+    {
       "name": "Lend",
       "type": {
         "kind": "struct",
@@ -4441,23 +4453,6 @@ export const IDL: Protocol = {
       }
     },
     {
-      "name": "TestStruct",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "arr",
-            "type": {
-              "array": [
-                "i32",
-                10
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "Vault",
       "type": {
         "kind": "struct",
@@ -5042,6 +5037,11 @@ export const IDL: Protocol = {
       "code": 6042,
       "name": "PositionAlreadyExists",
       "msg": "position already exists, close it to open new one"
+    },
+    {
+      "code": 6043,
+      "name": "ZeroAmountInput",
+      "msg": "input amount cannot be zero"
     }
   ]
 };

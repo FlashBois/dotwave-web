@@ -431,6 +431,11 @@ export class VaultsAccount {
   max_utilization(index: number): bigint;
 /**
 * @param {number} index
+* @returns {bigint}
+*/
+  current_fee(index: number): bigint;
+/**
+* @param {number} index
 * @param {number} duration_in_secs
 * @returns {bigint}
 */

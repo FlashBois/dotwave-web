@@ -1673,6 +1673,25 @@ export class VaultsAccount {
     }
     /**
     * @param {number} index
+    * @returns {bigint}
+    */
+    current_fee(index) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.vaultsaccount_current_fee(retptr, this.ptr, index);
+            var r0 = getBigInt64Memory0()[retptr / 8 + 0];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            var r3 = getInt32Memory0()[retptr / 4 + 3];
+            if (r3) {
+                throw takeObject(r2);
+            }
+            return BigInt.asUintN(64, r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
+    * @param {number} index
     * @param {number} duration_in_secs
     * @returns {bigint}
     */

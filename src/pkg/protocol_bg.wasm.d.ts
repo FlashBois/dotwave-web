@@ -137,6 +137,7 @@ export function vaultsaccount_borrow_limit(a: number, b: number, c: number): voi
 export function vaultsaccount_available_lend(a: number, b: number, c: number): void;
 export function vaultsaccount_utilization_lend(a: number, b: number, c: number): void;
 export function vaultsaccount_max_utilization(a: number, b: number, c: number): void;
+export function vaultsaccount_current_fee(a: number, b: number, c: number): void;
 export function vaultsaccount_lending_apy(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_max_leverage(a: number, b: number, c: number): void;
 export function vaultsaccount_trading_open_fee(a: number, b: number, c: number): void;

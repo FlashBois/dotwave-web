@@ -10,6 +10,7 @@
 		PhantomWalletAdapter,
 		TrustWalletAdapter
 	} from '@solana/wallet-adapter-wallets';
+	import Logo from '$src/assets/img/logo.png'
 
 	import WalletProvider from '$components/Wallet/WalletProvider.svelte';
 	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
@@ -41,8 +42,8 @@
 		<header class="header">
 			<nav class="nav">
 				<div class="logo-box">
-					<!-- <a href="/" class="logo-box__link"><img src="" alt="protocol-logo" class="logo-box__logo" /></a> -->
-					<h1 style="color: white;font-size: 40px;">LOGO</h1>
+					<a href="/" class="logo-box__link"><img src={Logo} alt="protocol-logo" class="logo-box__logo" /></a>
+					<!-- <h1 style="color: white;font-size: 40px;">LOGO</h1> -->
 				</div>
 
 				<ul class="nav__list">

@@ -15,16 +15,18 @@
 	import { useSwap } from '$src/tools/instructions/useSwap';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
-	import { loadProtocolState } from '$src/stores/protocolStateStore';
+	import { loadProtocolState, type ITokenInfo } from '$src/stores/protocolStateStore';
+
+	export let fromToken: ITokenInfo
+	export let toToken: ITokenInfo
 
 	$: ({ wallet } = $walletStore);
-	$: ({ data } = $page);
 
 	$: {
-		if (data) {
+		if (fromToken && toToken) {
 			swapStore.set({
-				from: data.from,
-				to: data.to,
+				from: fromToken!,
+				to: toToken!,
 				slippagePercentage: 0.5,
 				tokenList: {
 					visible: false,
@@ -106,8 +108,8 @@
 		{ from: { amount: Decimal }; to: { amount: Decimal } }
 	>([userStore, page], ([$userStore, $page], set) => {
 		if ($userStore.accounts) {
-			const from = $userStore.accounts.find((e) => e.mint.toString() == $page.data.from.address);
-			const to = $userStore.accounts.find((e) => e.mint.toString() == $page.data.to.address);
+			const from = $userStore.accounts.find((e) => e.mint.toString() == fromToken.address);
+			const to = $userStore.accounts.find((e) => e.mint.toString() == toToken.address);
 
 			set({
 				from: {
@@ -122,7 +124,7 @@
 	$: ({ from, to } = $userData);
 
 	function replaceTokens() {
-		goto(`${data.to.symbol}_${data.from.symbol}`);
+		goto(`${toToken.symbol}_${fromToken.symbol}`);
 	}
 
 	function displayTokenList(type: TokenListType) {
@@ -163,15 +165,15 @@
 					>Balance: {#if !wallet}
 						--
 					{:else}
-						{from.amount.div(new Decimal(10).pow(data.from.decimals))}
+						{from.amount.div(new Decimal(10).pow(fromToken.decimals))}
 					{/if}</span
 				>
 			</div>
 			<div class="exchange__input">
 				<Input bind:value={$fromValue} />
 				<button on:click={() => displayTokenList(TokenListType.FROM)} class="exchange__select">
-					<img src={data.from.logoURI} alt={data.from.symbol} />
-					<p>{data.from.symbol}</p>
+					<img src={fromToken.logoURI} alt={fromToken.symbol} />
+					<p>{fromToken.symbol}</p>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"
@@ -208,15 +210,15 @@
 					>Balance: {#if !wallet}
 						--
 					{:else}
-						{to.amount.div(new Decimal(10).pow(data.to.decimals))}
+						{to.amount.div(new Decimal(10).pow(toToken.decimals))}
 					{/if}</span
 				>
 			</div>
 			<div class="exchange__input">
 				<ReadonlyInput value={$simulation.out} />
 				<button on:click={() => displayTokenList(TokenListType.TO)} class="exchange__select">
-					<img src={data.to.logoURI} alt={data.to.symbol} />
-					<p>{data.to.symbol}</p>
+					<img src={toToken.logoURI} alt={toToken.symbol} />
+					<p>{toToken.symbol}</p>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="16"

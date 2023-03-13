@@ -7,6 +7,7 @@
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import {
 		getDecimalFromFraction,
+		getDecimalFromPrice,
 		getDecimalFromValue
 	} from '$src/tools/decimal/getDecimalFromBigInt';
 	import { pricesStore } from '$src/stores/oracleStore';
@@ -47,7 +48,7 @@
 					side: positionInfo.long ? 'long' : 'short',
 					size: new Decimal(positionInfo.size.toString()).div(10 ** support.baseTokenInfo.decimals),
 					leverage: getDecimalFromValue(positionInfo.size_value).div(collateral),
-					openPrice: new Decimal(4.543534)
+					openPrice: getDecimalFromPrice(positionInfo.open_price)
 			  } as Position)
 			: undefined;
 

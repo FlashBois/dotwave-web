@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type Decimal from 'decimal.js';
+	import Decimal from 'decimal.js';
 	import type { ITradeInfo, Position } from './types';
 
 	export let price: Decimal | undefined;
@@ -26,8 +26,15 @@
 			{:else}
 				<li>Position: -</li>
 			{/if}
+
 			<li>
-				Leverage: <b>{position?.leverage === undefined ? '-' : position.leverage + 'x'}</b>
+				Leverage: <b>
+					{#if position?.leverage.lt(new Decimal(0.1))}
+						&lt; 0.1x
+					{:else}
+						{position?.leverage === undefined ? '-' : position.leverage.toPrecision(2) + 'x'}
+					{/if}
+				</b>
 			</li>
 		</ul>
 	</div>

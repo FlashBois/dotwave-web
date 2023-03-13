@@ -34,7 +34,7 @@ export async function useChangePosition(
 
 	if (!user.statementAddress) throw new Error('Statement not loaded');
 
-	const tx = new Transaction().add(		
+	const tx = new Transaction().add(
 		ComputeBudgetProgram.setComputeUnitLimit({
 			units: 1000000
 		})
@@ -54,14 +54,33 @@ export async function useChangePosition(
 	if (!(await connection.getAccountInfo(user.statementAddress)))
 		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
-	const remainingAccounts = [support.baseOracle, support.quoteOracle].map((pubkey) => {
-		return { isSigner: false, isWritable: false, pubkey };
-	});
+	tx.add(
+		ComputeBudgetProgram.setComputeUnitLimit({
+			units: 1000000
+		})
+	);
+
+	const remainingAccounts = (user.statement?.vaults_to_refresh(support.id) ?? [])
+		.reduce(
+			(acc: PublicKey[], v: number) =>
+				acc.concat(
+					protocolState.vaultsSupport[v].baseOracle,
+					protocolState.vaultsSupport[v].quoteOracle
+				),
+			[]
+		)
+		.map((pubkey: PublicKey) => {
+			return {
+				isSigner: false,
+				isWritable: false,
+				pubkey
+			};
+		});
 
 	if (position)
 		tx.add(
 			await program.methods
-				.closePosition(support.id, position.side === 'long' ? true : false)
+				.closePosition(support.id)
 				.accounts({
 					state: protocolState.stateAddress,
 					vaults: protocolState.vaultsAddress,
@@ -77,8 +96,6 @@ export async function useChangePosition(
 				.instruction()
 		);
 
-	
-
 	tx.add(
 		await program.methods
 			.openPosition(support.id, new BN(parsed), side === 'long' ? true : false)
@@ -86,12 +103,7 @@ export async function useChangePosition(
 				state: protocolState.stateAddress,
 				vaults: protocolState.vaultsAddress,
 				statement: user.statementAddress,
-				signer: wallet.publicKey,
-				accountBase,
-				accountQuote,
-				reserveBase: new PublicKey(protocolState.vaultsAccounts.base_reserve(support.id)),
-				reserveQuote: new PublicKey(protocolState.vaultsAccounts.quote_reserve(support.id)),
-				tokenProgram: TOKEN_PROGRAM_ID
+				signer: wallet.publicKey
 			})
 			.remainingAccounts(remainingAccounts)
 			.instruction()

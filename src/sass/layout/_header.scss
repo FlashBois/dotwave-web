@@ -1,6 +1,7 @@
 .header {
     font-size: 1.4rem;
     background-color: transparent;
+    backdrop-filter: blur(5px);
 
     grid-column: full-start / full-end;
     grid-row: 1;
@@ -16,7 +17,12 @@
         align-items: center;
 
         .logo-box {
-            padding: 0 6rem 0 3rem;
+            padding: 0 4rem;
+            img {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+            }
         }
 
         &__list {

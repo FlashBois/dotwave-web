@@ -79,6 +79,8 @@
 	}
 </script>
 
+<svelte:head><title>Borrow - {baseTokenInfo.symbol}</title></svelte:head>
+
 <div class="borrow-page">
 	<div class="borrow-repay-section">
 		<div class="borrow-header-section">

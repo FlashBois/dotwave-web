@@ -8,6 +8,8 @@
 	});
 </script>
 
+<svelte:head><title>Strategy</title></svelte:head>
+
 <div class="strategy-page">
 	<div class="filters-section" />
 	<div class="strategy-table-section">

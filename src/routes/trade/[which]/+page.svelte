@@ -12,6 +12,8 @@
 	$: if (!selected) console.log('!selected', $page.params?.which);
 </script>
 
+<svelte:head><title>Trade</title></svelte:head>
+
 <div class="swap-page">
 	{#if $protocolStateStore}
 		<div class="exchange-section">

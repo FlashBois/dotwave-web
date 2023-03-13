@@ -9,7 +9,7 @@ import { userStore } from './userStore';
 import { web3Store } from './web3Store';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('AiGz15UrwCR6bpSLUhjPNXWQ84FmJ9q2y2ka7XzaZZFH');
+export const PROGRAM_ID = new PublicKey('FzWGgiYeh9SKCtNFczUecMgmGwuX5qQUewcZ3NLRjTd4');
 
 export interface ITokenInfo {
 	address: string;
@@ -121,30 +121,28 @@ export async function loadProtocolState(): Promise<void> {
 
 export async function onChangeProtocolState(): Promise<void> {
 	const { connection } = get(web3Store);
-	const { vaultsAddress, vaultsAccounts } = get(protocolStateStore)
-	const { statement, statementAddress } = get(userStore)
+	const { vaultsAddress, vaultsAccounts } = get(protocolStateStore);
+	const { statement, statementAddress } = get(userStore);
 
-	if(statement && vaultsAccounts && statementAddress) {
+	if (statement && vaultsAccounts && statementAddress) {
 		const id1 = connection.onAccountChange(
 			vaultsAddress,
 			async (info) => {
 				console.log('Vaults', info.data);
 
-				protocolStateStore.update(store => {
-					if(store.vaultsAccounts)
-						store.vaultsAccounts.reload(info.data)
-				
-					return store
-				})
+				protocolStateStore.update((store) => {
+					if (store.vaultsAccounts) store.vaultsAccounts.reload(info.data);
+
+					return store;
+				});
 
 				await connection.removeAccountChangeListener(id1);
 			},
 			'recent'
 		);
-	
+
 		delay(async () => {
 			await connection.removeAccountChangeListener(id1);
 		}, 15000);
 	}
-
 }

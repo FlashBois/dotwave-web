@@ -1,9 +1,9 @@
 import Decimal from 'decimal.js';
 
 export const getDecimalFromBigintWithDecimal = (value: bigint, decimal = 1) => {
-	if(decimal == 1) return new Decimal(value.toString())
-	else return new Decimal(value.toString()).div(10 ** decimal)
-}
+	if (decimal == 1) return new Decimal(value.toString());
+	else return new Decimal(value.toString()).div(10 ** decimal);
+};
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const getDecimalFromBigint = (value: BigInt) => {

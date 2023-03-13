@@ -7,11 +7,13 @@
     grid-template-columns: 1fr;
     grid-template-rows: 1px 1fr;
     padding: 5rem;
-    border-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
     overflow-y: hidden;
-    margin-top: 5rem;
-
+    margin-top: 10rem;
+    
     @include background-blur;
+    border-bottom: none;
 
     .filters-section {
         grid-row: 1;

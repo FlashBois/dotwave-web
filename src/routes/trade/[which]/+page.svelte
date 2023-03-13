@@ -16,14 +16,15 @@
 
 <div class="swap-page">
 	{#if $protocolStateStore}
-		<div class="exchange-section">
+		<div class="trade-section">
 			<Trade support={selected} />
 		</div>
 	{/if}
 </div>
 
 <style lang="scss">
-	.exchange-section {
-		width: 75rem;
+	.trade-section {
+		width: 80rem;
+		height: 48rem;
 	}
 </style>

@@ -9,6 +9,11 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
+	import {
+		createNotification,
+		updateNotification
+	} from '$components/Notification/notificationsStore';
+
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
 	$: buttonMessage = { message: 'Borrow', disabled: true };
@@ -25,7 +30,15 @@
 
 	async function onBorrowClick() {
 		const signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
-		await connection.confirmTransaction(signature, 'confirmed');
+		const notificationId = createNotification({
+			text: 'Borrow',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err) updateNotification(notificationId, { text: 'Borrow', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Borrow', type: 'success', removeAfter: 3000 });
+
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		borrowInputValue = 0;

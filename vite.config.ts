@@ -26,5 +26,8 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: ['@syntect/wasm']
+	},
+	build: {
+		target: 'esnext'
 	}
 });

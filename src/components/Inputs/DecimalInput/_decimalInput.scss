@@ -15,4 +15,9 @@
         caret-color: var(--color-primary-white);
         color: var(--color-primary-white);
     }
+
+	&:disabled {
+		background: 1px solid #019d9aa1;
+		color: gray;
+    }
 }

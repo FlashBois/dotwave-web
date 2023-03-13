@@ -1,9 +1,28 @@
 <script lang="ts">
-	import TokenList from '$components/TokenList/TokenList.svelte'
+	import TokenList from '$components/TokenList/TokenList.svelte';
 	import Exchange from '$components/Exchange/Exchange.svelte';
 	import { swapStore, TokenListType } from '$src/stores/swapStore';
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
+	import { protocolStateStore, type ITokenInfo } from '$src/stores/protocolStateStore';
 	import { goto } from '$app/navigation';
+	import { derived } from 'svelte/store';
+	import { page } from '$app/stores';
+	import { getTokenList } from '$src/tools/getTokenList';
+
+	$: ({ params } = $page);
+
+	$: swapRoute = derived<[typeof page], {fromToken: ITokenInfo; toToken: ITokenInfo;}>([page], ([$page], set) => {
+		if ($page.params) {
+			const data = getTokenList();
+
+			const fromToken = data.find((e) => e.symbol == params.from);
+			const toToken = data.find((e) => e.symbol == params.to);
+
+			if (fromToken && toToken) {
+				set({fromToken, toToken});
+			} else goto('RAY');
+		}
+	});
+	$: ({ fromToken, toToken } = $swapRoute);
 
 	function onCloseTokenList() {
 		swapStore.update((e) => {
@@ -22,18 +41,18 @@
 	}
 </script>
 
-<div class="swap-page">
-	{#if $protocolStateStore.ready}
-		<div class="exchange-section">
-			<Exchange />
-		</div>
+<svelte:head><title>Swap - {fromToken.symbol}/{toToken.symbol}</title></svelte:head>
 
-		<TokenList
-			on:onTokenClick={(e) => onTokenClick(e.detail)}
-			on:onClose={() => onCloseTokenList()}
-			visible={$swapStore.tokenList.visible}
-			vaultsSupport={$protocolStateStore.vaultsSupport}
-			withQuote={true}
-		/>
-	{/if}
+<div class="swap-page">
+	<div class="exchange-section">
+		<Exchange {fromToken} {toToken}/>
+	</div>
+
+	<TokenList
+		on:onTokenClick={(e) => onTokenClick(e.detail)}
+		on:onClose={() => onCloseTokenList()}
+		visible={$swapStore.tokenList.visible}
+		vaultsSupport={$protocolStateStore.vaultsSupport}
+		withQuote={true}
+	/>
 </div>

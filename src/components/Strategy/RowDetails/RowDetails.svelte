@@ -2,7 +2,7 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import { loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
+	import { clearStrategyStore, loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
 	import { derived } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
@@ -11,6 +11,8 @@
 	import { web3Store } from '$src/stores/web3Store';
 	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
 	import { useWithdrawTransaction } from '$src/tools/transactions/useWithdrawTransaction';
+	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import { onDestroy } from 'svelte';
 
 	export let row: IStrategyTable;
 
@@ -47,8 +49,10 @@
 
 	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
 		depositButtonMessage = { message: 'Deposit', disabled: true };
-	else if (baseDepositValue > baseAmount.toNumber() || quoteDepositValue > quoteAmount.toNumber())
-		depositButtonMessage = { message: 'Insufficient funds', disabled: true };
+	else if (baseDepositValue > baseAmount.toNumber())
+		depositButtonMessage = { message: `Insufficient funds (${row.tokenBase.symbol})`, disabled: true };
+	else if (quoteDepositValue > quoteAmount.toNumber())
+		depositButtonMessage = { message: `Insufficient funds (${row.tokenQuote.symbol})`, disabled: true };
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
 		depositButtonMessage = { message: '', disabled: false };
 
@@ -66,7 +70,15 @@
 			strategyId,
 			baseDepositValue
 		);
-		await connection.confirmTransaction(signature, 'confirmed');
+		const notificationId = createNotification({
+			text: 'Deposit',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err) updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
+
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		await loadStrategies();
@@ -80,7 +92,15 @@
 			strategyId,
 			baseWithdrawValue
 		);
-		await connection.confirmTransaction(signature, 'confirmed');
+		const notificationId = createNotification({
+			text: 'Withdraw',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err) updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Withdraw', type: 'success', removeAfter: 3000 });
+
 		await loadProtocolState();
 		await loadUserStoreAccounts();
 		await loadStrategies();

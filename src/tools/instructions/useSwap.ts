@@ -5,7 +5,7 @@ import { userStore } from '$src/stores/userStore';
 import type { WalletStore } from '$src/stores/walletStore';
 import { BN } from '@project-serum/anchor';
 import { createAssociatedTokenAccountInstruction, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { PublicKey, Transaction, TransactionInstruction, type Connection } from '@solana/web3.js';
+import { ComputeBudgetProgram, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
 import { findVault } from '../findVault';
@@ -59,6 +59,12 @@ export async function useSwap(
 
 	const tx = new Transaction();
 
+	tx.add(
+		ComputeBudgetProgram.setComputeUnitLimit({
+			units: 1000000
+		})
+	);
+
 	if ((await connection.getAccountInfo(accountTo)) === null) {
 		tx.add(
 			createAssociatedTokenAccountInstruction(
@@ -96,12 +102,12 @@ export async function useSwap(
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index))
+						pubkey: new PublicKey(vaultsAccounts.oracle_base(foundFrom.index))
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index))
+						pubkey: new PublicKey(vaultsAccounts.oracle_quote(foundFrom.index))
 					}
 				])
 				.instruction()
@@ -146,4 +152,5 @@ export async function useSwap(
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx);
 	console.log('Swapped', tx, signature);
+	return signature
 }

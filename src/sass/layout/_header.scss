@@ -1,6 +1,6 @@
 .header {
     font-size: 1.4rem;
-    background-color: transparent;
+    background-color: rgba(rgba(0, 0, 0), 0.3);
 
     grid-column: full-start / full-end;
     grid-row: 1;
@@ -11,12 +11,17 @@
 
     .nav {
         font-size: 1.4rem;
+        font-weight: bold;
 
         display: flex;
         align-items: center;
 
         .logo-box {
-            padding: 0 6rem 0 3rem;
+            padding: 0 4rem;
+            img {
+                width: 45px;
+                height: 45px;
+            }
         }
 
         &__list {

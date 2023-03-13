@@ -8,22 +8,8 @@ export function vaultsaccount_get_price(a: number, b: number, c: number): void;
 export function vaultsaccount_get_confidence(a: number, b: number, c: number): void;
 export function vaultsaccount_get_price_quote(a: number, b: number, c: number): void;
 export function vaultsaccount_get_confidence_quote(a: number, b: number, c: number): void;
-export function vaultsaccount_update_oracle(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number
-): void;
-export function vaultsaccount_update_quote_oracle(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number
-): void;
+export function vaultsaccount_update_oracle(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function vaultsaccount_update_quote_oracle(a: number, b: number, c: number, d: number, e: number, f: number): void;
 export function __wbg_stateaccount_free(a: number): void;
 export function stateaccount_load(a: number): number;
 export function stateaccount_get_bump(a: number): number;
@@ -60,30 +46,27 @@ export function __wbg_get_tradingpositioninfo_vault_id(a: number): number;
 export function __wbg_set_tradingpositioninfo_vault_id(a: number, b: number): void;
 export function __wbg_get_tradingpositioninfo_long(a: number): number;
 export function __wbg_set_tradingpositioninfo_long(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_size(a: number): number;
+export function __wbg_set_tradingpositioninfo_size(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_size_value(a: number): number;
+export function __wbg_set_tradingpositioninfo_size_value(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_locked(a: number): number;
+export function __wbg_set_tradingpositioninfo_locked(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_open_price(a: number): number;
+export function __wbg_set_tradingpositioninfo_open_price(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_open_value(a: number): number;
+export function __wbg_set_tradingpositioninfo_open_value(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_pnl(a: number): number;
+export function __wbg_set_tradingpositioninfo_pnl(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_pnl_value(a: number): number;
+export function __wbg_set_tradingpositioninfo_pnl_value(a: number, b: number): void;
+export function __wbg_get_tradingpositioninfo_fees(a: number): number;
+export function __wbg_set_tradingpositioninfo_fees(a: number, b: number): void;
 export function __wbg_get_tradingpositioninfo_fees_value(a: number): number;
 export function __wbg_set_tradingpositioninfo_fees_value(a: number, b: number): void;
-export function vaultsaccount_get_borrow_position_info(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number
-): void;
-export function vaultsaccount_get_lp_position_info(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number
-): void;
-export function vaultsaccount_get_trading_position_info(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number
-): void;
+export function vaultsaccount_get_borrow_position_info(a: number, b: number, c: number, d: number, e: number): void;
+export function vaultsaccount_get_lp_position_info(a: number, b: number, c: number, d: number, e: number, f: number): void;
+export function vaultsaccount_get_trading_position_info(a: number, b: number, c: number, d: number, e: number): void;
 export function vaultsaccount_max_borrow_for(a: number, b: number, c: number, d: number): void;
 export function statementaccount_load(a: number): number;
 export function statementaccount_reload(a: number, b: number): void;
@@ -101,6 +84,18 @@ export function __wbg_get_strategyinfo_has_swap(a: number): number;
 export function __wbg_set_strategyinfo_has_swap(a: number, b: number): void;
 export function __wbg_get_strategyinfo_has_trade(a: number): number;
 export function __wbg_set_strategyinfo_has_trade(a: number, b: number): void;
+export function __wbg_get_strategyinfo_balance_base(a: number): number;
+export function __wbg_set_strategyinfo_balance_base(a: number, b: number): void;
+export function __wbg_get_strategyinfo_balance_quote(a: number): number;
+export function __wbg_set_strategyinfo_balance_quote(a: number, b: number): void;
+export function __wbg_get_strategyinfo_locked_base(a: number): number;
+export function __wbg_set_strategyinfo_locked_base(a: number, b: number): void;
+export function __wbg_get_strategyinfo_locked_quote(a: number): number;
+export function __wbg_set_strategyinfo_locked_quote(a: number, b: number): void;
+export function __wbg_get_strategyinfo_utilization_base(a: number): number;
+export function __wbg_set_strategyinfo_utilization_base(a: number, b: number): void;
+export function __wbg_get_strategyinfo_utilization_quote(a: number): number;
+export function __wbg_set_strategyinfo_utilization_quote(a: number, b: number): void;
 export function vaultsaccount_strategy_info(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_count_strategies(a: number, b: number, c: number): void;
 export function vaultsaccount_does_lend(a: number, b: number, c: number, d: number): void;
@@ -110,15 +105,7 @@ export function vaultsaccount_balance_base(a: number, b: number, c: number, d: n
 export function vaultsaccount_balance_quote(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lock_base(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_lock_quote(a: number, b: number, c: number, d: number): void;
-export function vaultsaccount_swap(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number,
-	g: number
-): void;
+export function vaultsaccount_swap(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function vaultsaccount_liquidity(a: number, b: number, c: number, d: number): void;
 export function __wbg_vaultsaccount_free(a: number): void;
 export function __wbg_vaultskeyswithid_free(a: number): void;
@@ -156,62 +143,12 @@ export function vaultsaccount_trading_open_fee(a: number, b: number, c: number):
 export function vaultsaccount_trading_fee(a: number, b: number, c: number, d: number): void;
 export function vaultsaccount_refresh_lend_fees(a: number, b: number, c: number): void;
 export function __wbg_withdrawamounts_free(a: number): void;
-export function vaultsaccount_withdraw(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number,
-	g: number
-): void;
-export function vaultsaccount_deposit(
-	a: number,
-	b: number,
-	c: number,
-	d: number,
-	e: number,
-	f: number,
-	g: number
-): void;
-export function price_denominator(): number;
-export function fraction_denominator(): number;
-export function vaultsaccount_size(): number;
-export function __wbg_set_tradingpositioninfo_locked(a: number, b: number): void;
-export function __wbg_set_tradingpositioninfo_size(a: number, b: number): void;
-export function __wbg_get_tradingpositioninfo_size(a: number): number;
-export function __wbg_set_withdrawamounts_quote(a: number, b: number): void;
-export function __wbg_set_withdrawamounts_base(a: number, b: number): void;
 export function __wbg_get_withdrawamounts_base(a: number): number;
-export function __wbg_set_tradingpositioninfo_fees(a: number, b: number): void;
-export function __wbg_set_tradingpositioninfo_pnl_value(a: number, b: number): void;
-export function __wbg_set_tradingpositioninfo_pnl(a: number, b: number): void;
-export function __wbg_set_tradingpositioninfo_open_value(a: number, b: number): void;
-export function __wbg_set_tradingpositioninfo_open_price(a: number, b: number): void;
-export function __wbg_set_lppositioninfo_deposited_base_quantity(a: number, b: number): void;
-export function __wbg_set_lppositioninfo_position_value(a: number, b: number): void;
-export function __wbg_get_lppositioninfo_position_value(a: number): number;
-export function __wbg_set_strategyinfo_utilization_quote(a: number, b: number): void;
-export function __wbg_set_strategyinfo_utilization_base(a: number, b: number): void;
-export function __wbg_set_strategyinfo_locked_quote(a: number, b: number): void;
-export function __wbg_set_strategyinfo_locked_base(a: number, b: number): void;
-export function __wbg_set_strategyinfo_balance_quote(a: number, b: number): void;
-export function __wbg_set_strategyinfo_balance_base(a: number, b: number): void;
-export function __wbg_get_strategyinfo_balance_base(a: number): number;
+export function __wbg_set_withdrawamounts_base(a: number, b: number): void;
 export function __wbg_get_withdrawamounts_quote(a: number): number;
-export function __wbg_get_strategyinfo_balance_quote(a: number): number;
-export function __wbg_get_strategyinfo_utilization_quote(a: number): number;
-export function __wbg_get_strategyinfo_utilization_base(a: number): number;
-export function __wbg_get_strategyinfo_locked_quote(a: number): number;
-export function __wbg_get_strategyinfo_locked_base(a: number): number;
-export function __wbg_get_lppositioninfo_deposited_base_quantity(a: number): number;
-export function __wbg_get_tradingpositioninfo_fees(a: number): number;
-export function __wbg_get_tradingpositioninfo_pnl_value(a: number): number;
-export function __wbg_get_tradingpositioninfo_pnl(a: number): number;
-export function __wbg_get_tradingpositioninfo_open_value(a: number): number;
-export function __wbg_get_tradingpositioninfo_open_price(a: number): number;
-export function __wbg_get_tradingpositioninfo_locked(a: number): number;
-export function vaultsaccount_vaults_len(a: number): number;
+export function __wbg_set_withdrawamounts_quote(a: number, b: number): void;
+export function vaultsaccount_withdraw(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
+export function vaultsaccount_deposit(a: number, b: number, c: number, d: number, e: number, f: number, g: number): void;
 export function __wbindgen_add_to_stack_pointer(a: number): number;
 export function __wbindgen_free(a: number, b: number): void;
 export function __wbindgen_malloc(a: number): number;

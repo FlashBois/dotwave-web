@@ -166,8 +166,10 @@ export async function loadStrategies(): Promise<void> {
 							decimals: quoteTokenInfo.decimals
 						},
 						deposit: [depositToken, depositStable],
-						dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60), 6),
-						APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60 * 365), 6),
+						// dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60), 6),
+						// APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60 * 365), 6),
+						dailyAPY: 0,
+						APY: 0,
 						provided: [providedToken, providedStable],
 						utilizationToken: getDecimalFromBigint(strategyInfo.utilization_base)
 							.div(10 ** 6)

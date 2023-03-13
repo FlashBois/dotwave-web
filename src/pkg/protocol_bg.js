@@ -668,167 +668,14 @@ export class StrategyInfo {
     * @returns {bigint}
     */
     get utilization_quote() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
+        const ret = wasm.__wbg_get_strategyinfo_utilization_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set utilization_quote(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
-    }
-}
-/**
-*/
-export class TradingPositionInfo {
-
-    static __wrap(ptr) {
-        const obj = Object.create(TradingPositionInfo.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_tradingpositioninfo_free(ptr);
-    }
-    /**
-    * @returns {number}
-    */
-    get vault_id() {
-        const ret = wasm.__wbg_get_tradingpositioninfo_vault_id(this.ptr);
-        return ret;
-    }
-    /**
-    * @param {number} arg0
-    */
-    set vault_id(arg0) {
-        wasm.__wbg_set_tradingpositioninfo_vault_id(this.ptr, arg0);
-    }
-    /**
-    * @returns {boolean}
-    */
-    get long() {
-        const ret = wasm.__wbg_get_tradingpositioninfo_long(this.ptr);
-        return ret !== 0;
-    }
-    /**
-    * @param {boolean} arg0
-    */
-    set long(arg0) {
-        wasm.__wbg_set_tradingpositioninfo_long(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get size() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set size(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get locked() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set locked(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get open_price() {
-        const ret = wasm.__wbg_get_lppositioninfo_deposited_quote_quantity(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set open_price(arg0) {
-        wasm.__wbg_set_lppositioninfo_deposited_quote_quantity(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get open_value() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_base_quantity(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set open_value(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_base_quantity(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get pnl() {
-        const ret = wasm.__wbg_get_lppositioninfo_earned_quote_quantity(this.ptr);
-        return ret;
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set pnl(arg0) {
-        wasm.__wbg_set_lppositioninfo_earned_quote_quantity(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get pnl_value() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_quote(this.ptr);
-        return ret;
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set pnl_value(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get fees() {
-        const ret = wasm.__wbg_get_lppositioninfo_max_withdraw_base(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set fees(arg0) {
-        wasm.__wbg_set_lppositioninfo_max_withdraw_base(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
-    get fees_value() {
-        const ret = wasm.__wbg_get_tradingpositioninfo_fees_value(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set fees_value(arg0) {
-        wasm.__wbg_set_tradingpositioninfo_fees_value(this.ptr, arg0);
+        wasm.__wbg_set_strategyinfo_utilization_quote(this.ptr, arg0);
     }
 }
 /**
@@ -895,19 +742,6 @@ export class TradingPositionInfo {
     /**
     * @returns {bigint}
     */
-    get locked() {
-        const ret = wasm.__wbg_get_tradingpositioninfo_locked(this.ptr);
-        return BigInt.asUintN(64, ret);
-    }
-    /**
-    * @param {bigint} arg0
-    */
-    set locked(arg0) {
-        wasm.__wbg_set_tradingpositioninfo_locked(this.ptr, arg0);
-    }
-    /**
-    * @returns {bigint}
-    */
     get size_value() {
         const ret = wasm.__wbg_get_tradingpositioninfo_size_value(this.ptr);
         return BigInt.asUintN(64, ret);
@@ -917,6 +751,19 @@ export class TradingPositionInfo {
     */
     set size_value(arg0) {
         wasm.__wbg_set_tradingpositioninfo_size_value(this.ptr, arg0);
+    }
+    /**
+    * @returns {bigint}
+    */
+    get locked() {
+        const ret = wasm.__wbg_get_tradingpositioninfo_locked(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+    * @param {bigint} arg0
+    */
+    set locked(arg0) {
+        wasm.__wbg_set_tradingpositioninfo_locked(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
@@ -2054,27 +1901,27 @@ export class WithdrawAmounts {
     * @returns {bigint}
     */
     get base() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_borrowed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_withdrawamounts_base(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set base(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_borrowed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_withdrawamounts_base(this.ptr, arg0);
     }
     /**
     * @returns {bigint}
     */
     get quote() {
-        const ret = wasm.__wbg_get_borrowpositioninfo_owed_quantity(this.ptr);
+        const ret = wasm.__wbg_get_withdrawamounts_quote(this.ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
     * @param {bigint} arg0
     */
     set quote(arg0) {
-        wasm.__wbg_set_borrowpositioninfo_owed_quantity(this.ptr, arg0);
+        wasm.__wbg_set_withdrawamounts_quote(this.ptr, arg0);
     }
 }
 

@@ -49,8 +49,10 @@
 
 	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
 		depositButtonMessage = { message: 'Deposit', disabled: true };
-	else if (baseDepositValue > baseAmount.toNumber() || quoteDepositValue > quoteAmount.toNumber())
-		depositButtonMessage = { message: 'Insufficient funds', disabled: true };
+	else if (baseDepositValue > baseAmount.toNumber())
+		depositButtonMessage = { message: `Insufficient funds (${row.tokenBase.symbol})`, disabled: true };
+	else if (quoteDepositValue > quoteAmount.toNumber())
+		depositButtonMessage = { message: `Insufficient funds (${row.tokenQuote.symbol})`, disabled: true };
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
 		depositButtonMessage = { message: '', disabled: false };
 

@@ -214,7 +214,7 @@
 					{/if}</span
 				>
 			</div>
-			<div class="exchange__input">
+			<div class="exchange__input exchange__input--readonly">
 				<ReadonlyInput value={$simulation.out} />
 				<button on:click={() => displayTokenList(TokenListType.TO)} class="exchange__select">
 					<img src={toToken.logoURI} alt={toToken.symbol} />

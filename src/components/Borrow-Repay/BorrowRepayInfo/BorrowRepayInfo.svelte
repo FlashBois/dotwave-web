@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PrograssBar from '$components/ProgressBar/PrograssBar.svelte';
+	// import PrograssBar from '$components/ProgressBar/PrograssBar.svelte';
 	import type { ITokenInfo } from '$src/stores/protocolStateStore';
 	import type Decimal from 'decimal.js';
 
@@ -8,6 +8,9 @@
 	export let owedQuantity: Decimal | undefined;
 	export let borrowedQuantity: Decimal | undefined;
 	export let utilization: Decimal | undefined;
+	export let borrowFee: Decimal | undefined
+	export let maxUtilization: Decimal | undefined;
+	export let price: Decimal | undefined
 </script>
 
 <div class="borrow-repay-info">
@@ -30,15 +33,16 @@
 		</button>
 	</div>
 	<div class="borrow-repay-info__stats">
-		<p>{baseTokenInfo.symbol} price: <span>23.145</span></p>
+		<p>{baseTokenInfo.symbol} price: <span>{price?.toFixed(2) ?? '-'}</span></p>
+		<p>Fee: <span>{borrowFee?.toNumber() ?? '-'} %</span></p>
 		<p>User max borrow: <span>{maxBorrowAmount?.toNumber() ?? '-'}</span></p>
 		<p>User borrowed: <span>{borrowedQuantity?.toNumber() ?? '-'}</span></p>
 		<p>User owed: <span>{owedQuantity?.toNumber() ?? '-'}</span></p>
 		<p>
 			User fee: <span>{borrowedQuantity && owedQuantity ? owedQuantity.sub(borrowedQuantity).toNumber() : '-'}</span>
 		</p>
-		<p>Utilization: <span>{utilization?.toNumber() ?? '0'}%</span></p>
+		<p>Utilization: <span>{utilization?.toPrecision(3) ?? '-'}%</span></p>
 		<!-- <p>Utilization: <span><PrograssBar percent={20} /> 20%</span></p> -->
-		<p>Max utilization: <span>80%</span></p>
+		<p>Max utilization: <span>{maxUtilization?.toPrecision(3) ?? '-'} %</span></p>
 	</div>
 </div>

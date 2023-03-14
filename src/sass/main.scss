@@ -32,10 +32,13 @@
 
 @import '../components/Sortable/sortable';
 
+@import '../components/Trade/tradeInfo';
+
 // PAGES
 @import '../routes/strategy/strategy';
 @import '../routes/borrow/[token]/borrow';
 @import '../routes/swap/[from]_[to]/swap';
+@import '../routes/trade/[which]/trade';
 
 // LAYOUT
 @import 'layout/header';

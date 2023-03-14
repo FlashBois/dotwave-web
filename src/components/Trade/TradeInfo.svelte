@@ -1,74 +1,55 @@
 <script lang="ts">
+	import type { ITokenInfo } from '$src/stores/protocolStateStore';
 	import Decimal from 'decimal.js';
-	import type { ITradeInfo, Position } from './types';
+	import type { Position } from './types';
 
+	export let baseTokenInfo: ITokenInfo | undefined;
 	export let price: Decimal | undefined;
 	export let maxLeverage: Decimal | undefined;
 	export let collateral: Decimal | undefined;
 	export let position: Position | undefined;
-
-	let size: string;
 </script>
 
-<div class="both-infos">
-	<div class="info">
-		<ul>
-			<li>Price: <b>{price?.toPrecision(6) ?? '-'}</b></li>
-			<li>Max Leverage: <b>{maxLeverage?.toPrecision(2) ?? '-'}</b></li>
-		</ul>
+<div class="trade-info">
+	<div class="trade-info__stats">
+			<p>Price: <span>{price?.toPrecision(6) ?? '-'}</span></p>
+			<p>Max Leverage: <span>{maxLeverage?.toPrecision(2) ?? '-'}</span></p>
 	</div>
-	<div class="info">
-		<ul>
-			<li>Collateral: <b>{collateral?.toPrecision(6) ?? '0'}$</b></li>
-			<li>Open price: <b>{position?.openPrice.toPrecision(6) ?? '-'}</b></li>
+
+	<button on:click class="trade-info__select">
+		<img src={baseTokenInfo?.logoURI} alt={baseTokenInfo?.symbol ?? 'Select token'} />
+		<p>{baseTokenInfo?.symbol}</p>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="16"
+			height="16"
+			fill="currentColor"
+			class="bi bi-caret-down-fill"
+			viewBox="0 0 16 16"
+		>
+			<path
+				d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
+			/>
+		</svg>
+	</button>
+
+	<div class="trade-info__stats">
+			<p>Collateral: <span>{collateral?.toPrecision(6) ?? '0'}$</span></p>
+			<p>Open price: <span>{position?.openPrice.toPrecision(6) ?? '-'}</span></p>
 			{#if position != undefined}
-				<li>Open position: <b>{position.size} {position.side}</b></li>
+				<p>Open position: <span>{position.size} {position.side}</span></p>
 			{:else}
-				<li>Position: -</li>
+				<p>Position: <span>-</span></p>
 			{/if}
 
-			<li>
-				Leverage: <b>
+			<p>
+				Leverage: <span>
 					{#if position?.leverage.lt(new Decimal(0.1))}
 						&lt; 0.1x
 					{:else}
 						{position?.leverage === undefined ? '-' : position.leverage.toPrecision(2) + 'x'}
 					{/if}
-				</b>
-			</li>
-		</ul>
+				</span>
+			</p>
 	</div>
 </div>
-
-<style lang="scss">
-	.both-infos {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		width: 80%;
-
-		.info {
-			background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-			font-size: 1.7rem;
-			width: 45%;
-			height: 100%;
-			border-radius: 20px;
-			padding: 2rem;
-			border: 2px solid var(--color-grey-dark-2);
-
-			ul {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-				gap: 0.8rem;
-
-				li {
-					font-size: 1.3rem;
-					color: var(--color-primary-white);
-				}
-			}
-		}
-	}
-</style>

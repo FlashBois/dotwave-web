@@ -3,7 +3,7 @@
 	import Decimal from 'decimal.js';
 	import type { Position, Side } from './types';
 
-	export let pnl: number = 0;
+	export let pnl: number = 1;
 
 	let long: number | undefined = undefined;
 	let short: number | undefined = undefined;
@@ -31,9 +31,6 @@
 		}
 		console.log(long, short, side);
 	}
-
-	let baseWithdrawValue;
-	let quoteWithdrawValue;
 
 	function pnlClick() {
 		side = undefined;
@@ -75,7 +72,9 @@
 <style lang="scss">
 	.inputs {
 		position: relative;
-		width: 65%;
+		width: 60%;
+		height: 10%;
+		margin-bottom: 2rem;
 
 		display: flex;
 		flex-direction: row;

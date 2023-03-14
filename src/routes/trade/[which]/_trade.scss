@@ -1,0 +1,38 @@
+.trade-page {
+    height: 80vh;
+	width: 100%;
+
+	grid-column: center-start / center-end;
+	grid-row: 2;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+    .trade-page-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .trade-section {
+		@include background-blur;
+		width: 850px;
+		height: 380px;
+		border-radius: 20px;
+
+		display: grid;
+		grid-template-rows: 1fr 0.5fr;
+        
+        .trade-info-section {
+			grid-row: 1;
+
+            height: 100%;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+}

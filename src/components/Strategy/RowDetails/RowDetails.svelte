@@ -12,7 +12,6 @@
 	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
 	import { useWithdrawTransaction } from '$src/tools/transactions/useWithdrawTransaction';
 	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
-	import { onDestroy } from 'svelte';
 
 	export let row: IStrategyTable;
 

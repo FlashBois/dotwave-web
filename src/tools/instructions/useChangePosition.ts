@@ -34,7 +34,9 @@ export async function useChangePosition(
 
 	if (!user.statementAddress) throw new Error('Statement not loaded');
 
-	const tx = new Transaction().add(
+	const tx = new Transaction()
+
+	tx.add(
 		ComputeBudgetProgram.setComputeUnitLimit({
 			units: 1000000
 		})
@@ -54,11 +56,6 @@ export async function useChangePosition(
 	if (!(await connection.getAccountInfo(user.statementAddress)))
 		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
-	tx.add(
-		ComputeBudgetProgram.setComputeUnitLimit({
-			units: 1000000
-		})
-	);
 
 	const remainingAccounts = (user.statement?.vaults_to_refresh(support.id) ?? [])
 		.reduce(

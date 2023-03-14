@@ -10,15 +10,16 @@
 	let timeout: NodeJS.Timeout;
 	let timeout2: NodeJS.Timeout;
 
-	$: ({ id, removeAfter, text } = notification);
+	$: ({ id, removeAfter, text, signature } = notification);
 
 	$: if (removeAfter) {
 		timeout = setTimeout(removeNotificationHandler, removeAfter);
+		clearTimeout(timeout2)
 	}
 
 	onMount(() => {
 		timeout2 = setTimeout(() => {
-			updateNotification(id, { text, removeAfter: 3000, type: 'unknown' });
+			updateNotification(id, { text, removeAfter: 3000, type: 'unknown', signature });
 		}, 15000);
 	});
 

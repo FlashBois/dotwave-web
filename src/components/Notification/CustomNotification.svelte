@@ -77,7 +77,7 @@
 			</div>
 			<div class="notification-content__context">
 				<Loader />
-				<NotificationLink signature={notification.signature} />
+				Transaction: {notification.text}
 			</div>
 		</div>
 	{/if}

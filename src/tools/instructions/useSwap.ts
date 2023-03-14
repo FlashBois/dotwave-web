@@ -78,6 +78,7 @@ export async function useSwap(
 		);
 	}
 
+
 	if (!double) {
 		tx.add(
 			await program.methods
@@ -102,12 +103,12 @@ export async function useSwap(
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.oracle_base(foundFrom.index))
+						pubkey: vaultsSupport[foundFrom.index].baseOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.oracle_quote(foundFrom.index))
+						pubkey: vaultsSupport[foundFrom.index].quoteOracle
 					}
 				])
 				.instruction()
@@ -138,12 +139,22 @@ export async function useSwap(
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index))
+						pubkey: vaultsSupport[foundFrom.index].baseOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index))
+						pubkey: vaultsSupport[foundFrom.index].quoteOracle
+					},
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: vaultsSupport[foundTo.index].baseOracle
+					},
+					{
+						isSigner: false,
+						isWritable: false,
+						pubkey: vaultsSupport[foundTo.index].quoteOracle
 					}
 				])
 				.instruction()

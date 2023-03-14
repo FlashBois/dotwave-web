@@ -92,7 +92,7 @@ export async function useChangePosition(
 				.instruction()
 		);
 
-	if (amount)
+	if (amount.gt(0))
 		tx.add(
 			await program.methods
 				.openPosition(support.id, new BN(parsed), side === 'long' ? true : false)

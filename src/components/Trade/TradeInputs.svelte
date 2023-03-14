@@ -99,6 +99,7 @@
 		}
 
 		.strategy-row-details__input-center {
+			user-select: none;
 			display: flex;
 			justify-content: center;
 			cursor: pointer;
@@ -107,6 +108,7 @@
 			font-weight: bold;
 			padding: 0 2rem;
 			transition: all 0.7s ease-in-out;
+			margin: 1rem 0;
 		}
 
 		.pnl {
@@ -124,9 +126,9 @@
 			color: var(--color-primary-green);
 		}
 
-		.profit {
+		.profit-button {
 			&:hover {
-				background-color: rgba(1, 157, 154, 0.1);
+				background-color: rgba(1, 157, 154, 0.2);
 			}
 		}
 
@@ -134,7 +136,7 @@
 			color: var(--color-primary-red);
 		}
 
-		.loss {
+		.loss-button {
 			&:hover {
 				background-color: rgba(176, 30, 98, 0.3)
 			}

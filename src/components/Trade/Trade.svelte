@@ -4,8 +4,9 @@
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
 	import TradeInputs from '$components/Trade/TradeInputs.svelte';
 	import TradeInfo from './TradeInfo.svelte';
-	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+	import { loadProtocolState, protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import {
+		getDecimalFromBigintWithDecimals,
 		getDecimalFromFraction,
 		getDecimalFromPrice,
 		getDecimalFromValue
@@ -18,10 +19,15 @@
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 	import { createEventDispatcher } from 'svelte';
+	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import { web3Store } from '$src/stores/web3Store';
+	import { loadStrategies } from '$src/stores/strategyStore';
 
 	const dispatch = createEventDispatcher()
 
 	export let support: IVaultSupport | undefined;
+
+	$: ({ connection } = $web3Store);
 
 	$: vaults = $protocolStateStore?.vaultsAccounts;
 	$: price = support ? $pricesStore?.get(support.baseOracle.toBase58()) : undefined;
@@ -51,7 +57,8 @@
 					size: new Decimal(positionInfo.size.toString()).div(10 ** support.baseTokenInfo.decimals),
 					leverage: getDecimalFromValue(positionInfo.size_value).div(collateral),
 					openPrice: getDecimalFromPrice(positionInfo.open_price),
-					pnl: getDecimalFromValue(positionInfo.pnl_value)
+					pnl: getDecimalFromValue(positionInfo.pnl_value),
+					openFee: getDecimalFromBigintWithDecimals(positionInfo.fees, support.baseTokenInfo.decimals)
 			  } as Position)
 			: undefined;
 
@@ -85,8 +92,25 @@
 
 	async function trade() {
 		if (size && side && support) {
-			await useChangePosition($anchorStore.connection, size, side, support, position);
+			const signature = await useChangePosition($anchorStore.connection, size, side, support, position);
+			
+			if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Trade',
+				type: 'loading',
+				signature
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Trade', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, { text: 'Trade', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
 			await loadUserStoreAccounts();
+			await loadStrategies()
+		}
 		} else console.log("couldn't trade");
 	}
 

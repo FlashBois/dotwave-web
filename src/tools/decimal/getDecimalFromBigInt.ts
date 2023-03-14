@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-export const getDecimalFromBigintWithDecimal = (value: bigint, decimal = 1) => {
+export const getDecimalFromBigintWithDecimals = (value: bigint, decimal = 1) => {
 	if (decimal == 1) return new Decimal(value.toString());
 	else return new Decimal(value.toString()).div(10 ** decimal);
 };

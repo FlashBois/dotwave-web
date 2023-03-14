@@ -19,11 +19,12 @@
     .trade-section {
 		@include background-blur;
 		width: 850px;
-		height: 380px;
+		height: 340px;
 		border-radius: 20px;
 
 		display: grid;
 		grid-template-rows: 1fr 0.5fr;
+		padding-top: 1.5rem;
         
         .trade-info-section {
 			grid-row: 1;

@@ -4,7 +4,7 @@
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import { pricesStore } from '$src/stores/oracleStore';
 	import { userStore } from '$src/stores/userStore';
-	import { getDecimalFromBigintWithDecimal } from '$src/tools/decimal/getDecimalFromBigInt';
+	import { getDecimalFromBigintWithDecimals } from '$src/tools/decimal/getDecimalFromBigInt';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 	import { derived, get } from 'svelte/store';
 
@@ -41,7 +41,7 @@
 
 	$: maxBorrowAmount =
 		vaultsAccounts && statement
-			? getDecimalFromBigintWithDecimal(
+			? getDecimalFromBigintWithDecimals(
 					vaultsAccounts.max_borrow_for(id, statement.remaining_permitted_debt()),
 					6
 			  )
@@ -53,16 +53,16 @@
 			: undefined;
 
 	$: owedQuantity = userBorrowInfo
-		? getDecimalFromBigintWithDecimal(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
+		? getDecimalFromBigintWithDecimals(userBorrowInfo.owed_quantity, baseTokenInfo.decimals)
 		: undefined;
 
 	$: borrowedQuantity = userBorrowInfo
-		? getDecimalFromBigintWithDecimal(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
+		? getDecimalFromBigintWithDecimals(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
 		: undefined;
 
-	$: utilization = vaultsAccounts ? getDecimalFromBigintWithDecimal(vaultsAccounts.utilization_lend(id), 4) : undefined
-	$: borrowFee = vaultsAccounts ? getDecimalFromBigintWithDecimal(vaultsAccounts.current_fee(id), 4) : undefined
-	$: maxUtilization = vaultsAccounts ?  getDecimalFromBigintWithDecimal(vaultsAccounts.max_utilization(id), 4) : undefined
+	$: utilization = vaultsAccounts ? getDecimalFromBigintWithDecimals(vaultsAccounts.utilization_lend(id), 4) : undefined
+	$: borrowFee = vaultsAccounts ? getDecimalFromBigintWithDecimals(vaultsAccounts.current_fee(id), 4) : undefined
+	$: maxUtilization = vaultsAccounts ?  getDecimalFromBigintWithDecimals(vaultsAccounts.max_utilization(id), 4) : undefined
 
 	$: pricesStore.fetch([baseOracle])
 	$: price = $pricesStore?.get(baseOracle.toBase58())

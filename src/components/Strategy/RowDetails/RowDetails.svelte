@@ -2,11 +2,7 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import {
-		clearStrategyStore,
-		loadStrategies,
-		type IStrategyTable
-	} from '$src/stores/strategyStore';
+	import { loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
 	import { derived } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
@@ -96,21 +92,25 @@
 			strategyId,
 			baseDepositValue
 		);
-		const notificationId = createNotification({
-			text: 'Deposit',
-			type: 'loading'
-		});
-		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err)
-			updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
-		else
-			updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
+		if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Deposit',
+				type: 'loading',
+				signature
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		await loadProtocolState();
-		await loadUserStoreAccounts();
-		await loadStrategies();
-		clearInputs();
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
+			await loadUserStoreAccounts();
+			await loadStrategies();
+			clearInputs();
+		}
 	}
 
 	async function onWithdrawClick(vaultId: number, strategyId: number) {
@@ -120,21 +120,29 @@
 			strategyId,
 			baseWithdrawValue
 		);
-		const notificationId = createNotification({
-			text: 'Withdraw',
-			type: 'loading'
-		});
-		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err)
-			updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
-		else
-			updateNotification(notificationId, { text: 'Withdraw', type: 'success', removeAfter: 3000 });
+		if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Withdraw',
+				type: 'loading',
+				signature
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		await loadProtocolState();
-		await loadUserStoreAccounts();
-		await loadStrategies();
-		clearInputs();
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, {
+					text: 'Withdraw',
+					type: 'success',
+					removeAfter: 3000
+				});
+
+			await loadProtocolState();
+			await loadUserStoreAccounts();
+			await loadStrategies();
+			clearInputs();
+		}
 	}
 
 	function onBaseDepositChange() {
@@ -204,23 +212,24 @@
 <div class="strategy-row-details" class:delay-animation={row.withDetails}>
 	<div class="strategy-row-details__info-box">
 		<div class="strategy-row-details__info">
-			<div class="strategy-row-details__info__col">
-				<p>
-					Profit {row.tokenBase.symbol}: {profit_base?.toFixed(6) ?? 0}
+			<p>
+				Profit {row.tokenBase.symbol}:
+				<span
+					>{profit_base?.toFixed(6) ?? 0}
 					/ {base_profit_percents?.toFixed(2) ?? 0.0}%
-				</p>
-				<p>
-					Profit {row.tokenQuote.symbol}: {profit_quote?.toFixed(6) ?? 0}
-					/ {quote_profit_percents?.toFixed(2) ?? 0.0}%
-				</p>
-				<p>Withdraw limit {row.tokenBase.symbol}: {row.max_withdraw_base}</p>
-				<p>Withdraw limit {row.tokenQuote.symbol}: {row.max_withdraw_quote}</p>
-				<p>Withdraw limit value: {row.max_withdraw_value.toFixed(2)}$</p>
-				<p>Healthy withdraw value: {row.permitted_withdraw.toFixed(2)}$</p>
-			</div>
-			<div class="strategy-row-details__info__col">
-				<span class="strategy-row-details__switch" />
-			</div>
+				</span>
+			</p>
+			<p>
+				Profit {row.tokenQuote.symbol}:
+				<span
+					>{profit_quote?.toFixed(6) ?? 0}
+					/ {quote_profit_percents?.toFixed(2) ?? 0.0}%</span
+				>
+			</p>
+			<p>Withdraw limit {row.tokenBase.symbol}: <span>{row.max_withdraw_base}</span></p>
+			<p>Withdraw limit {row.tokenQuote.symbol}: <span>{row.max_withdraw_quote}</span></p>
+			<p>Withdraw limit value: <span>{row.max_withdraw_value.toFixed(2)}$</span></p>
+			<p>Healthy withdraw value: <span>{row.permitted_withdraw.toFixed(2)}$</span></p>
 		</div>
 	</div>
 	<div class="strategy-row-details__operations">

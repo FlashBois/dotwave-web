@@ -46,6 +46,9 @@ export class LpPositionInfo {
   max_withdraw_quote: bigint;
 /**
 */
+  max_withdraw_value: bigint;
+/**
+*/
   position_value: bigint;
 /**
 */

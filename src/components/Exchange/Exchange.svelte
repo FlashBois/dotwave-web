@@ -14,11 +14,14 @@
 	import { swapOutput } from '$src/tools/swapOutput';
 	import { useSwap } from '$src/tools/instructions/useSwap';
 	import { anchorStore } from '$src/stores/anchorStore';
-	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import {
+		createNotification,
+		updateNotification
+	} from '$components/Notification/notificationsStore';
 	import { loadProtocolState, type ITokenInfo } from '$src/stores/protocolStateStore';
 
-	export let fromToken: ITokenInfo
-	export let toToken: ITokenInfo
+	export let fromToken: ITokenInfo;
+	export let toToken: ITokenInfo;
 
 	$: ({ wallet } = $walletStore);
 
@@ -46,7 +49,12 @@
 	const fromValue = writable(0);
 	const simulation = derived<typeof fromValue, ISimulationData>(fromValue, ($fromValue, set) => {
 		try {
-			const out = swapOutput($fromValue);
+			let out = 0;
+			if ($fromValue != 0) {
+				const swapOut = swapOutput($fromValue);
+				if (swapOut) out = swapOut;
+			}
+
 			set({
 				in: $fromValue,
 				out: Number(out),
@@ -141,18 +149,22 @@
 		const connection = get(anchorStore).connection;
 		const to = get(simulation);
 		const signature = await useSwap(connection, gotWalletStore, to.in, to.out);
-		const notificationId = createNotification({
-			text: 'Swap',
-			type: 'loading'
-		});
-		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err) updateNotification(notificationId, { text: 'Swap', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Swap', type: 'success', removeAfter: 3000 });
+		if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Swap',
+				type: 'loading'
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		await loadProtocolState();
-		await loadUserStoreAccounts();
-		fromValue.set(0)
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Swap', type: 'failed', removeAfter: 3000 });
+			else updateNotification(notificationId, { text: 'Swap', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
+			await loadUserStoreAccounts();
+			fromValue.set(0);
+		}
 	}
 </script>
 

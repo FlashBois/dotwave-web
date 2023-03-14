@@ -29,19 +29,24 @@
 	else if (borrowInputValue > 0) buttonMessage = { message: '', disabled: false };
 
 	async function onBorrowClick() {
-		const signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
-		const notificationId = createNotification({
-			text: 'Borrow',
-			type: 'loading'
-		});
-		const tx = await connection.confirmTransaction(signature, 'confirmed');
+		let signature = await useBorrowTransaction(connection, vaultSupport, borrowInputValue);
 
-		if (tx.value.err) updateNotification(notificationId, { text: 'Borrow', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Borrow', type: 'success', removeAfter: 3000 });
+		if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Borrow',
+				type: 'loading'
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		await loadProtocolState();
-		await loadUserStoreAccounts();
-		borrowInputValue = 0;
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Borrow', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, { text: 'Borrow', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
+			await loadUserStoreAccounts();
+			borrowInputValue = 0;
+		}
 	}
 </script>
 

@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
     onMount(() => {
-        goto("/swap/USDC_RAY")
+        goto("/swap/SOL_USDC")
     })
 </script>
 

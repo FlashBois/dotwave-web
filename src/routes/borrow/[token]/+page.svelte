@@ -56,6 +56,8 @@
 		? getDecimalFromBigintWithDecimal(userBorrowInfo.borrowed_quantity, baseTokenInfo.decimals)
 		: undefined;
 
+	$: utilization = vaultsAccounts ? getDecimalFromBigintWithDecimal(vaultsAccounts.utilization_lend(id), 4) : undefined
+
 	$: userData = derived<[typeof userStore], { baseAmount: Decimal }>(
 		[userStore],
 		([$userStore], set) => {
@@ -93,7 +95,7 @@
 		{/if}
 
 		<div class="borrow-info-section">
-			<BorrowRepayInfo {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} on:click={() => borrowListVisible = true} />
+			<BorrowRepayInfo {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} {utilization} on:click={() => borrowListVisible = true} />
 		</div>
 	</div>
 

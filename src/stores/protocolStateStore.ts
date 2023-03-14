@@ -9,7 +9,7 @@ import { userStore } from './userStore';
 import { web3Store } from './web3Store';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('FzWGgiYeh9SKCtNFczUecMgmGwuX5qQUewcZ3NLRjTd4');
+export const PROGRAM_ID = new PublicKey('HBDdU5BAb4RnFXZMoqqF5QSdnUoFuji5gWb6PBQEL3gA');
 
 export interface ITokenInfo {
 	address: string;

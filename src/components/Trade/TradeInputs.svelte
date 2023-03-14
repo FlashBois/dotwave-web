@@ -34,6 +34,12 @@
 
 	let baseWithdrawValue;
 	let quoteWithdrawValue;
+
+	function pnlClick() {
+		side = undefined;
+		long = undefined;
+		short = undefined;
+	}
 </script>
 
 <div class="inputs">
@@ -53,8 +59,9 @@
 			bind:value={long}
 			placeholder={position?.side == 'long' && side != 'short' ? position.size.toString() : '0'}
 		/>
-		<div class="strategy-row-details__input-center">
-			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">Settle</span>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={pnlClick} class="strategy-row-details__input-center">
+			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? 'Settle'}</span>
 		</div>
 		<DecimalInput
 			bind:value={short}

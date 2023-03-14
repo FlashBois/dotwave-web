@@ -56,7 +56,6 @@ export async function useChangePosition(
 	if (!(await connection.getAccountInfo(user.statementAddress)))
 		tx.add(await useCreateStatement(program, { payer: wallet.publicKey }));
 
-
 	const remainingAccounts = (user.statement?.vaults_to_refresh(support.id) ?? [])
 		.reduce(
 			(acc: PublicKey[], v: number) =>
@@ -93,18 +92,19 @@ export async function useChangePosition(
 				.instruction()
 		);
 
-	tx.add(
-		await program.methods
-			.openPosition(support.id, new BN(parsed), side === 'long' ? true : false)
-			.accounts({
-				state: protocolState.stateAddress,
-				vaults: protocolState.vaultsAddress,
-				statement: user.statementAddress,
-				signer: wallet.publicKey
-			})
-			.remainingAccounts(remainingAccounts)
-			.instruction()
-	);
+	if (amount)
+		tx.add(
+			await program.methods
+				.openPosition(support.id, new BN(parsed), side === 'long' ? true : false)
+				.accounts({
+					state: protocolState.stateAddress,
+					vaults: protocolState.vaultsAddress,
+					statement: user.statementAddress,
+					signer: wallet.publicKey
+				})
+				.remainingAccounts(remainingAccounts)
+				.instruction()
+		);
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, undefined, true);
 	console.log('Opened position', tx, signature);

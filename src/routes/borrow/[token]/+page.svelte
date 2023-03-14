@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+	import { pricesStore } from '$src/stores/oracleStore';
 	import { userStore } from '$src/stores/userStore';
 	import { getDecimalFromBigintWithDecimal } from '$src/tools/decimal/getDecimalFromBigInt';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
@@ -12,6 +13,7 @@
 	import Repay from '$components/Borrow-Repay/Repay/Repay.svelte';
 	import TokenList from '$components/TokenList/TokenList.svelte';
 	import Decimal from 'decimal.js';
+	// import { validateAccounts } from '@project-serum/anchor';
 
 	$: ({ params } = $page);
 	$: ({ statement, statementBuffer } = $userStore);
@@ -33,7 +35,9 @@
 			} else goto('RAY');
 		}
 	});
-	$: ({ id, baseTokenInfo } = $vaultSupport);
+
+	$: ({ id, baseTokenInfo, baseOracle } = $vaultSupport);
+
 
 	$: maxBorrowAmount =
 		vaultsAccounts && statement
@@ -57,6 +61,12 @@
 		: undefined;
 
 	$: utilization = vaultsAccounts ? getDecimalFromBigintWithDecimal(vaultsAccounts.utilization_lend(id), 4) : undefined
+	$: borrowFee = vaultsAccounts ? getDecimalFromBigintWithDecimal(vaultsAccounts.current_fee(id), 4) : undefined
+	$: maxUtilization = vaultsAccounts ?  getDecimalFromBigintWithDecimal(vaultsAccounts.max_utilization(id), 4) : undefined
+
+	$: pricesStore.fetch([baseOracle])
+	$: price = $pricesStore?.get(baseOracle.toBase58())
+
 
 	$: userData = derived<[typeof userStore], { baseAmount: Decimal }>(
 		[userStore],
@@ -95,7 +105,7 @@
 		{/if}
 
 		<div class="borrow-info-section">
-			<BorrowRepayInfo {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} {utilization} on:click={() => borrowListVisible = true} />
+			<BorrowRepayInfo {maxUtilization} {baseTokenInfo} {maxBorrowAmount} {owedQuantity} {borrowedQuantity} {utilization} {borrowFee} {price} on:click={() => borrowListVisible = true} />
 		</div>
 	</div>
 

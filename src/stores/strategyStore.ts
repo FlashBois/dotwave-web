@@ -46,6 +46,8 @@ export interface IStrategyTable {
 	earned_quote_quantity: number;
 	max_withdraw_base: number;
 	max_withdraw_quote: number;
+	max_withdraw_value: number;
+	permitted_withdraw: number;
 	position_value: number;
 	withDetails: boolean;
 }
@@ -57,7 +59,7 @@ export const strategyStore = writable<IStrategyStore>({
 
 export async function loadStrategies(): Promise<void> {
 	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
-	const { statementBuffer } = get(userStore);
+	const { statementBuffer, statement } = get(userStore);
 	const { strategyTable } = get(strategyStore);
 
 	const extractStrategy: IStrategyTable[] = [];
@@ -90,7 +92,9 @@ export async function loadStrategies(): Promise<void> {
 				let earned_quote_quantity = 0;
 				let max_withdraw_base = 0;
 				let max_withdraw_quote = 0;
+				let max_withdraw_value = 0;
 				let position_value = 0;
+
 
 				if (vaultsAccounts && statementBuffer) {
 					const lpPositionInfo = vaultsAccounts.get_lp_position_info(
@@ -127,7 +131,11 @@ export async function loadStrategies(): Promise<void> {
 						);
 						position_value = getNumberFromBigInt(
 							lpPositionInfo.position_value,
-							quoteTokenInfo?.decimals
+							9
+						);
+						max_withdraw_value = getNumberFromBigInt(
+							lpPositionInfo.max_withdraw_value,
+							9
 						);
 					}
 				}
@@ -183,6 +191,8 @@ export async function loadStrategies(): Promise<void> {
 						earned_quote_quantity,
 						max_withdraw_base,
 						max_withdraw_quote,
+						max_withdraw_value,
+						permitted_withdraw: statement ? getNumberFromBigInt(statement.permitted_withdraw(strategyInfo.collateral_ratio), 9) : 0,
 						position_value,
 						withDetails: wasWithDetails
 					});

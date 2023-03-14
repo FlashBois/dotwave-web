@@ -71,8 +71,8 @@
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
 		depositButtonMessage = { message: '', disabled: false };
 
-	$: permitted_debt = $userStore.statement
-		? getNumberFromBigInt($userStore.statement.remaining_permitted_debt(), 9)
+	$: permitted_withdraw = $userStore.statement
+		? getNumberFromBigInt($userStore.statement.permitted_withdraw(), 9)
 		: 0;
 
 	$: if (baseWithdrawValue == 0 || quoteWithdrawValue == 0)
@@ -81,7 +81,7 @@
 		withdrawButtonMessage = { message: 'Max withdraw exceeded', disabled: true };
 	else if (
 		(row.max_withdraw_base == baseWithdrawValue || row.max_withdraw_quote == quoteWithdrawValue) &&
-		row.max_withdraw_value > permitted_debt
+		row.max_withdraw_value > permitted_withdraw
 	)
 		withdrawButtonMessage = { message: 'Max value exceeded', disabled: true };
 	else if (baseWithdrawValue > 0 && quoteWithdrawValue > 0)
@@ -214,16 +214,16 @@
 			<div class="strategy-row-details__info__col">
 				<p>
 					Profit {row.tokenBase.symbol}: {profit_base?.toFixed(6) ?? 0}
-					/ {base_profit_percents?.toFixed(1) ?? 0}%
+					/ {base_profit_percents?.toFixed(2) ?? 0.0}%
 				</p>
 				<p>
 					Profit {row.tokenQuote.symbol}: {profit_quote?.toFixed(6) ?? 0}
-					/ {quote_profit_percents?.toFixed(3) ?? 0}%
+					/ {quote_profit_percents?.toFixed(2) ?? 0.0}%
 				</p>
 				<p>Withdraw limit {row.tokenBase.symbol}: {row.max_withdraw_base}</p>
 				<p>Withdraw limit {row.tokenQuote.symbol}: {row.max_withdraw_quote}</p>
 				<p>Withdraw limit value: {row.max_withdraw_value.toFixed(2)}$</p>
-				<p>Healthy withdraw value: {permitted_debt.toFixed(2)}$</p>
+				<p>Healthy withdraw value: {permitted_withdraw.toFixed(2)}$</p>
 			</div>
 			<div class="strategy-row-details__info__col">
 				<span class="strategy-row-details__switch" />

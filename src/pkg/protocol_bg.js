@@ -550,6 +550,13 @@ export class StatementAccount {
         const ret = wasm.statementaccount_remaining_permitted_debt(this.ptr);
         return BigInt.asUintN(64, ret);
     }
+    /**
+    * @returns {bigint}
+    */
+    permitted_withdraw() {
+        const ret = wasm.statementaccount_permitted_withdraw(this.ptr);
+        return BigInt.asUintN(64, ret);
+    }
 }
 /**
 */

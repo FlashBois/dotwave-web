@@ -57,6 +57,7 @@ export function statementaccount_refresh(a: number, b: number, c: number): void;
 export function statementaccount_positions_len(a: number): number;
 export function statementaccount_owner(a: number, b: number): void;
 export function statementaccount_remaining_permitted_debt(a: number): number;
+export function statementaccount_permitted_withdraw(a: number): number;
 export function __wbg_strategyinfo_free(a: number): void;
 export function __wbg_get_strategyinfo_has_lend(a: number): number;
 export function __wbg_set_strategyinfo_has_lend(a: number, b: number): void;

@@ -117,6 +117,10 @@ export class StatementAccount {
 * @returns {bigint}
 */
   remaining_permitted_debt(): bigint;
+/**
+* @returns {bigint}
+*/
+  permitted_withdraw(): bigint;
 }
 /**
 */

@@ -24,7 +24,7 @@
 		if (timer > 0) timer--;
 		else {
 			timer = 60;
-			await onRefresh()
+			await onRefresh();
 		}
 	}, 1000);
 
@@ -134,15 +134,15 @@
 	}
 
 	async function onRefresh() {
-		timer = 60
-		await loadStrategies()
-		await loadUserStoreAccounts()
-		await loadStrategies()
+		timer = 60;
+		await loadStrategies();
+		await loadUserStoreAccounts();
+		await loadStrategies();
 	}
 
-	onDestroy(()=> {
-		clearInterval(interval)
-	})
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 </script>
 
 <div class="strategy-table">
@@ -162,7 +162,7 @@
 			</div>
 		{/each}
 		<div class="strategy-table__header-item--arrow">
-			<CircleProgressBar max={60} value={timer} on:click={onRefresh}/>
+			<CircleProgressBar max={60} value={timer} on:click={onRefresh} />
 		</div>
 	</div>
 	{#each $filteredStrategies as row, i}
@@ -196,11 +196,11 @@
 				<div class="strategy-table__row-item--cell">
 					{#if $walletStore.publicKey}
 						<span
-							><p>{row.deposit[0]}</p>
+							><p>{row.earned_base_quantity}</p>
 							<img src={row.tokenBase.logoURI} alt="logo" /></span
 						>
 						<span
-							><p>{row.deposit[1]}</p>
+							><p>{row.earned_quote_quantity}</p>
 							<img src={row.tokenQuote.logoURI} alt="logo" /></span
 						>
 					{:else}

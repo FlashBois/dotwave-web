@@ -46,6 +46,9 @@ export class LpPositionInfo {
   max_withdraw_quote: bigint;
 /**
 */
+  max_withdraw_value: bigint;
+/**
+*/
   position_value: bigint;
 /**
 */
@@ -114,6 +117,11 @@ export class StatementAccount {
 * @returns {bigint}
 */
   remaining_permitted_debt(): bigint;
+/**
+* @param {number} collateral_ratio
+* @returns {bigint}
+*/
+  permitted_withdraw(collateral_ratio: number): bigint;
 }
 /**
 */
@@ -125,6 +133,9 @@ export class StrategyInfo {
 /**
 */
   balance_quote: bigint;
+/**
+*/
+  collateral_ratio: number;
 /**
 */
   has_lend: boolean;

@@ -2,15 +2,14 @@ import { protocolStateStore } from '$src/stores/protocolStateStore';
 import { swapStore } from '$src/stores/swapStore';
 import { PublicKey } from '@solana/web3.js';
 import Decimal from 'decimal.js';
-import { result } from 'lodash';
 import { get } from 'svelte/store';
 import { findVault } from './findVault';
 
 export const swapOutput = (input: number) => {
-	const { vaultsSupport, vaultsAccounts, ready } = get(protocolStateStore);
+	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
 	const { from, to } = get(swapStore);
 
-	if (!from || !to || !ready || !vaultsSupport || !vaultsAccounts) {
+	if (!from || !to || !vaultsSupport || !vaultsAccounts) {
 		return;
 	}
 

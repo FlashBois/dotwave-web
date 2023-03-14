@@ -1,4 +1,6 @@
-import { protocolStateStore } from '$src/stores/protocolStateStore';
+import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+import { loadProtocolState, protocolStateStore } from '$src/stores/protocolStateStore';
+import { loadUserStoreAccounts } from '$src/stores/userStore';
 import type { WalletStore } from '$src/stores/walletStore';
 import {
 	createAssociatedTokenAccountInstruction,
@@ -63,4 +65,19 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);
 	console.log('Minted tokens', tx, signature);
+	
+	if (signature != 'signing error') {
+		const notificationId = createNotification({
+			text: 'Faucet',
+			type: 'loading'
+		});
+		const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+		if (tx.value.err)
+			updateNotification(notificationId, { text: 'Faucet', type: 'failed', removeAfter: 3000 });
+		else updateNotification(notificationId, { text: 'Faucet', type: 'success', removeAfter: 3000 });
+
+		await loadProtocolState();
+		await loadUserStoreAccounts();
+	}
 }

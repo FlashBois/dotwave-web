@@ -8,7 +8,10 @@
 
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
-	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import {
+		createNotification,
+		updateNotification
+	} from '$components/Notification/notificationsStore';
 
 	$: ({ connection } = $web3Store);
 	$: ({ publicKey } = $walletStore);
@@ -28,18 +31,23 @@
 
 	async function onRepayClick() {
 		const signature = await useRepayTransaction(connection, vaultSupport, repayInputValue);
-		const notificationId = createNotification({
-			text: 'Repay',
-			type: 'loading'
-		});
-		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err) updateNotification(notificationId, { text: 'Repay', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Repay', type: 'success', removeAfter: 3000 });
+		if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Repay',
+				type: 'loading'
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		await loadProtocolState();
-		await loadUserStoreAccounts();
-		repayInputValue = 0;
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Repay', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, { text: 'Repay', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
+			await loadUserStoreAccounts();
+			repayInputValue = 0;
+		}
 	}
 </script>
 

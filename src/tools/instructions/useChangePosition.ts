@@ -34,7 +34,9 @@ export async function useChangePosition(
 
 	if (!user.statementAddress) throw new Error('Statement not loaded');
 
-	const tx = new Transaction().add(
+	const tx = new Transaction()
+
+	tx.add(
 		ComputeBudgetProgram.setComputeUnitLimit({
 			units: 1000000
 		})

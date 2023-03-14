@@ -27,6 +27,9 @@ export interface IVaultSupport {
 	quoteTokenInfo: ITokenInfo;
 	baseOracle: PublicKey;
 	quoteOracle: PublicKey;
+	hasLend: boolean,
+	hasSwap: boolean,
+	hasTrade: boolean
 }
 
 export interface IProtocolStateStore {
@@ -100,6 +103,9 @@ export async function loadProtocolState(): Promise<void> {
 							name: quoteTokenInfo.name,
 							symbol: quoteTokenInfo.symbol
 						},
+						hasLend: vaultsAccounts.has_lending(item.index),
+						hasSwap: vaultsAccounts.has_swap(item.index),
+						hasTrade: vaultsAccounts.has_trading(item.index),
 						id: item.index,
 						baseOracle: new PublicKey(vaultsAccounts.oracle_base(item.index)),
 						quoteOracle: new PublicKey(vaultsAccounts.oracle_quote(item.index))

@@ -2,7 +2,11 @@
 	import GradientButton from '$components/Buttons/GradientButton/GradientButton.svelte';
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 
-	import { clearStrategyStore, loadStrategies, type IStrategyTable } from '$src/stores/strategyStore';
+	import {
+		clearStrategyStore,
+		loadStrategies,
+		type IStrategyTable
+	} from '$src/stores/strategyStore';
 	import { derived } from 'svelte/store';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import Decimal from 'decimal.js';
@@ -11,8 +15,13 @@
 	import { web3Store } from '$src/stores/web3Store';
 	import { useDepositTransaction } from '$src/tools/transactions/useDepositTransaction';
 	import { useWithdrawTransaction } from '$src/tools/transactions/useWithdrawTransaction';
-	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import {
+		createNotification,
+		updateNotification
+	} from '$components/Notification/notificationsStore';
 	import { onDestroy } from 'svelte';
+	import { getNumberFromBigInt } from '$src/tools/getNumberFromBigInt';
+	import { base } from '$app/paths';
 
 	export let row: IStrategyTable;
 
@@ -50,18 +59,42 @@
 	$: if (baseDepositValue == 0 || quoteDepositValue == 0)
 		depositButtonMessage = { message: 'Deposit', disabled: true };
 	else if (baseDepositValue > baseAmount.toNumber())
-		depositButtonMessage = { message: `Insufficient funds (${row.tokenBase.symbol})`, disabled: true };
+		depositButtonMessage = {
+			message: `Insufficient funds (${row.tokenBase.symbol})`,
+			disabled: true
+		};
 	else if (quoteDepositValue > quoteAmount.toNumber())
-		depositButtonMessage = { message: `Insufficient funds (${row.tokenQuote.symbol})`, disabled: true };
+		depositButtonMessage = {
+			message: `Insufficient funds (${row.tokenQuote.symbol})`,
+			disabled: true
+		};
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
 		depositButtonMessage = { message: '', disabled: false };
+
+	$: permitted_debt = $userStore.statement
+		? getNumberFromBigInt($userStore.statement.remaining_permitted_debt(), 9)
+		: 0;
 
 	$: if (baseWithdrawValue == 0 || quoteWithdrawValue == 0)
 		withdrawButtonMessage = { message: 'Withdraw', disabled: true };
 	else if (baseWithdrawValue > row.max_withdraw_base || quoteWithdrawValue > row.max_withdraw_quote)
 		withdrawButtonMessage = { message: 'Max withdraw exceeded', disabled: true };
+	else if (
+		(row.max_withdraw_base == baseWithdrawValue || row.max_withdraw_quote == quoteWithdrawValue) &&
+		row.max_withdraw_value > permitted_debt
+	)
+		withdrawButtonMessage = { message: 'Max value exceeded', disabled: true };
 	else if (baseWithdrawValue > 0 && quoteWithdrawValue > 0)
 		withdrawButtonMessage = { message: '', disabled: false };
+
+	// else
+
+	$: profit_base = row.deposit[0] > 0 ? row.earned_base_quantity - row.deposit[0] : undefined;
+	$: profit_quote = row.deposit[1] > 0 ? row.earned_quote_quantity - row.deposit[1] : undefined;
+	$: base_profit_percents =
+		row.deposit[0] > 0 && profit_base ? (profit_base / row.deposit[0]) * 100 : undefined;
+	$: quote_profit_percents =
+		row.deposit[1] > 0 && profit_quote ? (profit_quote / row.deposit[1]) * 100 : undefined;
 
 	async function onDepositClick(vaultId: number, strategyId: number) {
 		const signature = await useDepositTransaction(
@@ -76,8 +109,10 @@
 		});
 		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err) updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
+		if (tx.value.err)
+			updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
+		else
+			updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
 
 		await loadProtocolState();
 		await loadUserStoreAccounts();
@@ -98,8 +133,10 @@
 		});
 		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-		if (tx.value.err) updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Withdraw', type: 'success', removeAfter: 3000 });
+		if (tx.value.err)
+			updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
+		else
+			updateNotification(notificationId, { text: 'Withdraw', type: 'success', removeAfter: 3000 });
 
 		await loadProtocolState();
 		await loadUserStoreAccounts();
@@ -175,12 +212,18 @@
 	<div class="strategy-row-details__info-box">
 		<div class="strategy-row-details__info">
 			<div class="strategy-row-details__info__col">
-				<p>{row.tokenBase.symbol} deposited: 0</p>
-				<p>{row.tokenQuote.symbol} deposited: 0</p>
-				<p>{row.tokenBase.symbol} locked: 0</p>
-				<p>{row.tokenQuote.symbol} locked: 0</p>
-				<p>Max {row.tokenBase.symbol} withdraw: 0</p>
-				<p>Max {row.tokenQuote.symbol} withdraw: 0</p>
+				<p>
+					Profit {row.tokenBase.symbol}: {profit_base?.toFixed(6) ?? 0}
+					/ {base_profit_percents?.toFixed(1) ?? 0}%
+				</p>
+				<p>
+					Profit {row.tokenQuote.symbol}: {profit_quote?.toFixed(6) ?? 0}
+					/ {quote_profit_percents?.toFixed(3) ?? 0}%
+				</p>
+				<p>Withdraw limit {row.tokenBase.symbol}: {row.max_withdraw_base}</p>
+				<p>Withdraw limit {row.tokenQuote.symbol}: {row.max_withdraw_quote}</p>
+				<p>Withdraw limit value: {row.max_withdraw_value.toFixed(2)}$</p>
+				<p>Healthy withdraw value: {permitted_debt.toFixed(2)}$</p>
 			</div>
 			<div class="strategy-row-details__info__col">
 				<span class="strategy-row-details__switch" />

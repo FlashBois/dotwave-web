@@ -3,7 +3,7 @@
 	import Decimal from 'decimal.js';
 	import type { Position, Side } from './types';
 
-	export let pnl: number = 1;
+	export let pnl: number = 0;
 
 	let long: number | undefined = undefined;
 	let short: number | undefined = undefined;
@@ -37,6 +37,8 @@
 		long = undefined;
 		short = undefined;
 	}
+
+	$: displaySettle = false;
 </script>
 
 <div class="inputs">
@@ -57,8 +59,16 @@
 			placeholder={position?.side == 'long' && side != 'short' ? position.size.toString() : '0'}
 		/>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div on:click={pnlClick} class="strategy-row-details__input-center">
-			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? 'Settle'}</span>
+		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+		<div
+			on:click={pnlClick}
+			class="strategy-row-details__input-center {pnl > 0 ? 'profit-button' : ''} {pnl < 0 ? 'loss-button' : ''}"
+			on:mouseover={() => (displaySettle = true)}
+			on:mouseout={() => (displaySettle = false)}
+		>
+			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}"
+				>{!displaySettle ? (pnl != 0 ? pnl.toFixed(6) : 'Settle') : 'Settle'}</span
+			>
 		</div>
 		<DecimalInput
 			bind:value={short}
@@ -89,7 +99,14 @@
 		}
 
 		.strategy-row-details__input-center {
+			display: flex;
+			justify-content: center;
 			cursor: pointer;
+			width: 45rem;
+			overflow: hidden;
+			font-weight: bold;
+			padding: 0 2rem;
+			transition: all 0.7s ease-in-out;
 		}
 
 		.pnl {
@@ -107,8 +124,20 @@
 			color: var(--color-primary-green);
 		}
 
+		.profit {
+			&:hover {
+				background-color: rgba(1, 157, 154, 0.1);
+			}
+		}
+
 		.loss {
 			color: var(--color-primary-red);
+		}
+
+		.loss {
+			&:hover {
+				background-color: rgba(176, 30, 98, 0.3)
+			}
 		}
 	}
 </style>

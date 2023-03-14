@@ -101,7 +101,7 @@
 	</div>
 	<div class="trade-container">
 		<div class="trade">
-			<TradeInputs bind:size bind:side {position}/>
+			<TradeInputs bind:size bind:side {position} pnl={position?.pnl.toNumber()}/>
 		</div>
 	</div>
 </div>

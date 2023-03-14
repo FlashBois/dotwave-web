@@ -62,7 +62,7 @@ export async function createProtocolState(): Promise<void> {
 }
 
 export async function loadProtocolState(): Promise<void> {
-	const connection = new Connection(clusterApiUrl('devnet'));
+	const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 	const { vaultsAddress } = get(protocolStateStore);
 
 	if (vaultsAddress) {

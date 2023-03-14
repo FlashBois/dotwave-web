@@ -12,6 +12,8 @@ export interface Position {
 	size: Decimal;
 	side: Side;
 	openPrice: Decimal;
+	pnl: Decimal
+	openFee: Decimal
 }
 
 export type Side = 'long' | 'short';

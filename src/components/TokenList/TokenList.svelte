@@ -12,6 +12,9 @@
 	export let vaultsSupport: IVaultSupport[];
 	export let visible: boolean;
 	export let withQuote: boolean = true;
+	export let hasTrade: boolean = false;
+	export let hasSwap: boolean = false;
+	export let hasLend: boolean = false;
 	let filteredTokenList: ITokenInfo[] = [];
 	let fuse: Fuse<ITokenInfo>;
 	let backdrop: HTMLDivElement;
@@ -19,7 +22,7 @@
 	const dispatch = createEventDispatcher();
 
 	onMount(() => {
-		filteredTokenList = getUniqTokensFromVaultsSupport(vaultsSupport, withQuote);
+		filteredTokenList = getUniqTokensFromVaultsSupport(vaultsSupport, withQuote, hasTrade, hasSwap, hasLend);
 		fuse = new Fuse(filteredTokenList, {
 			includeScore: true,
 			keys: ['symbol'],
@@ -32,7 +35,7 @@
 	function onSearchChange({ value }: { value: string }) {
 		const result = fuse.search(value);
 		if (value == '') {
-			filteredTokenList = getUniqTokensFromVaultsSupport(vaultsSupport, withQuote);
+			filteredTokenList = getUniqTokensFromVaultsSupport(vaultsSupport, withQuote, hasTrade, hasSwap, hasLend);
 		} else {
 			filteredTokenList = result.map((e) => {
 				return {

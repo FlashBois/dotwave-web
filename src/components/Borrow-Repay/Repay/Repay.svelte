@@ -36,7 +36,8 @@
 		if (signature != 'signing error') {
 			const notificationId = createNotification({
 				text: 'Repay',
-				type: 'loading'
+				type: 'loading',
+				signature
 			});
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 

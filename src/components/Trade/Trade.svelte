@@ -4,8 +4,9 @@
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
 	import TradeInputs from '$components/Trade/TradeInputs.svelte';
 	import TradeInfo from './TradeInfo.svelte';
-	import { protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+	import { loadProtocolState, protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
 	import {
+		getDecimalFromBigintWithDecimals,
 		getDecimalFromFraction,
 		getDecimalFromPrice,
 		getDecimalFromValue
@@ -13,18 +14,25 @@
 	import { pricesStore } from '$src/stores/oracleStore';
 	import type { Position, Side } from './types';
 	import Decimal from 'decimal.js';
-	import TokenList from '$components/TokenList/TokenList.svelte';
-	import { goto } from '$app/navigation';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import { useChangePosition } from '$src/tools/instructions/useChangePosition';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
+	import { createEventDispatcher } from 'svelte';
+	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import { web3Store } from '$src/stores/web3Store';
+	import { loadStrategies } from '$src/stores/strategyStore';
+
+	const dispatch = createEventDispatcher()
 
 	export let support: IVaultSupport | undefined;
+
+	$: ({ connection } = $web3Store);
 
 	$: vaults = $protocolStateStore?.vaultsAccounts;
 	$: price = support ? $pricesStore?.get(support.baseOracle.toBase58()) : undefined;
 	$: support ? pricesStore.fetch([support.baseOracle]) : undefined;
+	$: baseTokenInfo = support ? support.baseTokenInfo : undefined;
 
 	$: positionInfo =
 		$userStore.statementBuffer && support
@@ -48,7 +56,9 @@
 					side: positionInfo.long ? 'long' : 'short',
 					size: new Decimal(positionInfo.size.toString()).div(10 ** support.baseTokenInfo.decimals),
 					leverage: getDecimalFromValue(positionInfo.size_value).div(collateral),
-					openPrice: getDecimalFromPrice(positionInfo.open_price)
+					openPrice: getDecimalFromPrice(positionInfo.open_price),
+					pnl: getDecimalFromValue(positionInfo.pnl_value),
+					openFee: getDecimalFromBigintWithDecimals(positionInfo.fees, support.baseTokenInfo.decimals)
 			  } as Position)
 			: undefined;
 
@@ -82,68 +92,48 @@
 
 	async function trade() {
 		if (size && side && support) {
-			await useChangePosition($anchorStore.connection, size, side, support, position);
+			const signature = await useChangePosition($anchorStore.connection, size, side, support, position);
+			
+			if (signature != 'signing error') {
+			const notificationId = createNotification({
+				text: 'Trade',
+				type: 'loading',
+				signature
+			});
+			const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+			if (tx.value.err)
+				updateNotification(notificationId, { text: 'Trade', type: 'failed', removeAfter: 3000 });
+			else
+				updateNotification(notificationId, { text: 'Trade', type: 'success', removeAfter: 3000 });
+
+			await loadProtocolState();
 			await loadUserStoreAccounts();
+			await loadStrategies()
+		}
 		} else console.log("couldn't trade");
 	}
 
-	let visibleTokenList = false;
-	function onCloseTokenList() {
-		visibleTokenList = false;
-	}
-	function onTokenClick(token: CustomEvent) {
-		goto(`${token}`);
-		visibleTokenList = false;
+	function onShowTokenList() {
+		dispatch('onShowTokenList')
 	}
 </script>
 
-<div class="trade-container">
-	<div class="trade">
-		<button
-			on:click={() => {
-				visibleTokenList = true;
-			}}
-			class="trade__select"
-		>
-			<img
-				src={support?.baseTokenInfo.logoURI}
-				alt={support?.baseTokenInfo.symbol ?? 'Select token'}
-			/>
-			<p>{support?.baseTokenInfo.symbol}</p>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="16"
-				height="16"
-				fill="currentColor"
-				class="bi bi-caret-down-fill"
-				viewBox="0 0 16 16"
-			>
-				<path
-					d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"
-				/>
-			</svg>
-		</button>
-
-		<TradeInfo {price} {maxLeverage} {collateral} {position} />
-		<TradeInputs bind:size bind:side {position} />
+<div class="trade-section">
+	<div class="trade-info-section">
+		<TradeInfo {baseTokenInfo} {price} {maxLeverage} {collateral} {position} on:click={onShowTokenList} />
 	</div>
-
-	<div class="trade__button">
-		{#if !$walletStore.wallet}
-			<WalletMultiButton />
-		{:else}
-			<AnimateButton on:onClick={trade}>{message}</AnimateButton>
-		{/if}
+	<div class="trade-container">
+		<div class="trade">
+			<TradeInputs bind:size bind:side {position} pnl={position?.pnl.toNumber()}/>
+		</div>
 	</div>
+</div>
 
-	{#if $protocolStateStore.vaultsSupport}
-		<TokenList
-			on:onTokenClick={(e) => onTokenClick(e.detail)}
-			on:onClose={() => onCloseTokenList()}
-			vaultsSupport={$protocolStateStore.vaultsSupport}
-			visible={visibleTokenList}
-			on:click={onTokenClick}
-			withQuote={false}
-		/>
+<div class="trade__button">
+	{#if !$walletStore.wallet}
+		<WalletMultiButton />
+	{:else}
+		<AnimateButton on:onClick={trade}>{message}</AnimateButton>
 	{/if}
 </div>

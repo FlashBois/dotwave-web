@@ -1,23 +1,24 @@
 import { writable } from 'svelte/store';
 import { v4 as uuidv4 } from 'uuid';
-import { cloneDeep } from 'lodash';
 
 export interface INotification {
 	id: string;
 	text: string;
-	type: 'loading' | 'success' | 'failed';
+	type: 'loading' | 'success' | 'failed' | 'unknown';
+	signature: string,
 	removeAfter?: number;
 }
 
 export interface ICreateNotification {
 	text: string;
-	type: 'loading' | 'success' | 'failed';
+	type: 'loading' | 'success' | 'failed' | 'unknown';
+	signature: string,
 	removeAfter?: number;
 }
 
 export interface IUpdateNotification {
 	text?: string;
-	type?: 'loading' | 'success' | 'failed';
+	type?: 'loading' | 'success' | 'failed' | 'unknown';
 	removeAfter?: number;
 }
 

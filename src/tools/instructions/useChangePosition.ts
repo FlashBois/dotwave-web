@@ -108,4 +108,5 @@ export async function useChangePosition(
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, undefined, true);
 	console.log('Opened position', tx, signature);
+	return signature
 }

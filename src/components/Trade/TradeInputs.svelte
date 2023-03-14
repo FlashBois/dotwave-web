@@ -32,14 +32,13 @@
 		console.log(long, short, side);
 	}
 
-	let baseWithdrawValue;
-	let quoteWithdrawValue;
-
 	function pnlClick() {
 		side = undefined;
 		long = undefined;
 		short = undefined;
 	}
+
+	$: displaySettle = false;
 </script>
 
 <div class="inputs">
@@ -60,8 +59,16 @@
 			placeholder={position?.side == 'long' && side != 'short' ? position.size.toString() : '0'}
 		/>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div on:click={pnlClick} class="strategy-row-details__input-center">
-			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}">{pnl ?? 'Settle'}</span>
+		<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+		<div
+			on:click={pnlClick}
+			class="strategy-row-details__input-center {pnl > 0 ? 'profit-button' : ''} {pnl < 0 ? 'loss-button' : ''}"
+			on:mouseover={() => (displaySettle = true)}
+			on:mouseout={() => (displaySettle = false)}
+		>
+			<span class="{pnl > 0 ? 'profit' : ''} {pnl < 0 ? 'loss' : ''}"
+				>{!displaySettle ? (pnl != 0 ? pnl.toFixed(6) : 'Settle') : 'Settle'}</span
+			>
 		</div>
 		<DecimalInput
 			bind:value={short}
@@ -75,7 +82,9 @@
 <style lang="scss">
 	.inputs {
 		position: relative;
-		width: 65%;
+		width: 60%;
+		height: 10%;
+		margin-bottom: 2rem;
 
 		display: flex;
 		flex-direction: row;
@@ -90,7 +99,16 @@
 		}
 
 		.strategy-row-details__input-center {
+			user-select: none;
+			display: flex;
+			justify-content: center;
 			cursor: pointer;
+			width: 45rem;
+			overflow: hidden;
+			font-weight: bold;
+			padding: 0 2rem;
+			transition: all 0.7s ease-in-out;
+			margin: 1rem 0;
 		}
 
 		.pnl {
@@ -108,8 +126,20 @@
 			color: var(--color-primary-green);
 		}
 
+		.profit-button {
+			&:hover {
+				background-color: rgba(1, 157, 154, 0.2);
+			}
+		}
+
 		.loss {
 			color: var(--color-primary-red);
+		}
+
+		.loss-button {
+			&:hover {
+				background-color: rgba(176, 30, 98, 0.3)
+			}
 		}
 	}
 </style>

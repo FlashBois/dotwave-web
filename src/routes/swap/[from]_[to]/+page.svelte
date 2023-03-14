@@ -19,7 +19,7 @@
 
 			if (fromToken && toToken) {
 				set({fromToken, toToken});
-			} else goto('RAY');
+			} else goto('SOL_USDC');
 		}
 	});
 	$: ({ fromToken, toToken } = $swapRoute);

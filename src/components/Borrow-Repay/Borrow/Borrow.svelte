@@ -24,7 +24,8 @@
 	let borrowInputValue: number;
 
 	$: if (borrowInputValue == 0) buttonMessage = { message: 'Borrow', disabled: true };
-	else if (maxBorrowAmount && borrowInputValue > maxBorrowAmount.toNumber())
+	else if(borrowInputValue > 0 && !maxBorrowAmount) buttonMessage = { message: 'No open strategy position', disabled: true };
+ 	else if (maxBorrowAmount && borrowInputValue > maxBorrowAmount.toNumber())
 		buttonMessage = { message: 'Max borrow exceeded', disabled: true };
 	else if (borrowInputValue > 0) buttonMessage = { message: '', disabled: false };
 

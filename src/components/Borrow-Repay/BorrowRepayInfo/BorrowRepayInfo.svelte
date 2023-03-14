@@ -7,6 +7,7 @@
 	export let maxBorrowAmount: Decimal | undefined;
 	export let owedQuantity: Decimal | undefined;
 	export let borrowedQuantity: Decimal | undefined;
+	export let utilization: Decimal | undefined;
 </script>
 
 <div class="borrow-repay-info">
@@ -36,7 +37,7 @@
 		<p>
 			User fee: <span>{borrowedQuantity && owedQuantity ? owedQuantity.sub(borrowedQuantity).toNumber() : '-'}</span>
 		</p>
-		<p>Utilization: <span>20%</span></p>
+		<p>Utilization: <span>{utilization?.toNumber() ?? '0'}%</span></p>
 		<!-- <p>Utilization: <span><PrograssBar percent={20} /> 20%</span></p> -->
 		<p>Max utilization: <span>80%</span></p>
 	</div>

@@ -25,6 +25,7 @@
 
 	$: if (repayInputValue == 0 && maxRepayAmount)
 		buttonMessage = { message: 'Repay', disabled: true };
+	else if(repayInputValue > 0 && !maxRepayAmount) buttonMessage = { message: 'No open position', disabled: true };
 	else if (baseAmount && repayInputValue > baseAmount.toNumber() && maxRepayAmount)
 		buttonMessage = { message: 'Insufficient funds', disabled: true };
 	else if (repayInputValue > 0 && maxRepayAmount) buttonMessage = { message: '', disabled: false };
@@ -63,7 +64,7 @@
 				</span>
 			</div>
 			<div class="repay__input">
-				<DecimalInput bind:value={repayInputValue} disabled={!maxRepayAmount ? true : false} />
+				<DecimalInput bind:value={repayInputValue} />
 				<img src={vaultSupport.baseTokenInfo.logoURI} alt={vaultSupport.baseTokenInfo.symbol} />
 			</div>
 			<div class="repay__button-box">

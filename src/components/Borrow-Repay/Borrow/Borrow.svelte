@@ -41,9 +41,9 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Borrow', type: 'failed', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Borrow', type: 'failed', removeAfter: 3000, signature });
 			else
-				updateNotification(notificationId, { text: 'Borrow', type: 'success', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Borrow', type: 'success', removeAfter: 3000, signature });
 
 			await loadProtocolState();
 			await loadUserStoreAccounts();

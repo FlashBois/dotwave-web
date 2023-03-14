@@ -159,8 +159,8 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Swap', type: 'failed', removeAfter: 3000 });
-			else updateNotification(notificationId, { text: 'Swap', type: 'success', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Swap', type: 'failed', removeAfter: 3000, signature });
+			else updateNotification(notificationId, { text: 'Swap', type: 'success', removeAfter: 3000, signature });
 
 			await loadProtocolState();
 			await loadUserStoreAccounts();

@@ -42,9 +42,9 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Repay', type: 'failed', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Repay', type: 'failed', removeAfter: 3000, signature });
 			else
-				updateNotification(notificationId, { text: 'Repay', type: 'success', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Repay', type: 'success', removeAfter: 3000, signature });
 
 			await loadProtocolState();
 			await loadUserStoreAccounts();

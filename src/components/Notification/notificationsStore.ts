@@ -19,6 +19,7 @@ export interface ICreateNotification {
 export interface IUpdateNotification {
 	text?: string;
 	type?: 'loading' | 'success' | 'failed' | 'unknown';
+	signature: string;
 	removeAfter?: number;
 }
 

@@ -102,9 +102,9 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000, signature });
 			else
-				updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000, signature });
 
 			await loadProtocolState();
 			await loadUserStoreAccounts();
@@ -130,12 +130,13 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000 });
+				updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000, signature });
 			else
 				updateNotification(notificationId, {
 					text: 'Withdraw',
 					type: 'success',
-					removeAfter: 3000
+					removeAfter: 3000,
+					signature
 				});
 
 			await loadProtocolState();

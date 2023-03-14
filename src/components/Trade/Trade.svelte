@@ -4,7 +4,11 @@
 	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
 	import TradeInputs from '$components/Trade/TradeInputs.svelte';
 	import TradeInfo from './TradeInfo.svelte';
-	import { loadProtocolState, protocolStateStore, type IVaultSupport } from '$src/stores/protocolStateStore';
+	import {
+		loadProtocolState,
+		protocolStateStore,
+		type IVaultSupport
+	} from '$src/stores/protocolStateStore';
 	import {
 		getDecimalFromBigintWithDecimals,
 		getDecimalFromFraction,
@@ -19,11 +23,14 @@
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 	import { createEventDispatcher } from 'svelte';
-	import { createNotification, updateNotification } from '$components/Notification/notificationsStore';
+	import {
+		createNotification,
+		updateNotification
+	} from '$components/Notification/notificationsStore';
 	import { web3Store } from '$src/stores/web3Store';
 	import { loadStrategies } from '$src/stores/strategyStore';
 
-	const dispatch = createEventDispatcher()
+	const dispatch = createEventDispatcher();
 
 	export let support: IVaultSupport | undefined;
 
@@ -58,7 +65,10 @@
 					leverage: getDecimalFromValue(positionInfo.size_value).div(collateral),
 					openPrice: getDecimalFromPrice(positionInfo.open_price),
 					pnl: getDecimalFromValue(positionInfo.pnl_value),
-					openFee: getDecimalFromBigintWithDecimals(positionInfo.fees, support.baseTokenInfo.decimals)
+					openFee: getDecimalFromBigintWithDecimals(
+						positionInfo.fees,
+						support.baseTokenInfo.decimals
+					)
 			  } as Position)
 			: undefined;
 
@@ -92,40 +102,63 @@
 
 	async function trade() {
 		if (size && side && support) {
-			const signature = await useChangePosition($anchorStore.connection, size, side, support, position);
-			
+			const signature = await useChangePosition(
+				$anchorStore.connection,
+				size,
+				side,
+				support,
+				position
+			);
+
 			if (signature != 'signing error') {
-			const notificationId = createNotification({
-				text: 'Trade',
-				type: 'loading',
-				signature
-			});
-			const tx = await connection.confirmTransaction(signature, 'confirmed');
+				const notificationId = createNotification({
+					text: 'Trade',
+					type: 'loading',
+					signature
+				});
+				const tx = await connection.confirmTransaction(signature, 'confirmed');
 
-			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Trade', type: 'failed', removeAfter: 3000 });
-			else
-				updateNotification(notificationId, { text: 'Trade', type: 'success', removeAfter: 3000 });
+				if (tx.value.err)
+					updateNotification(notificationId, {
+						text: 'Trade',
+						type: 'failed',
+						removeAfter: 3000,
+						signature
+					});
+				else
+					updateNotification(notificationId, {
+						text: 'Trade',
+						type: 'success',
+						removeAfter: 3000,
+						signature
+					});
 
-			await loadProtocolState();
-			await loadUserStoreAccounts();
-			await loadStrategies()
-		}
+				await loadProtocolState();
+				await loadUserStoreAccounts();
+				await loadStrategies();
+			}
 		} else console.log("couldn't trade");
 	}
 
 	function onShowTokenList() {
-		dispatch('onShowTokenList')
+		dispatch('onShowTokenList');
 	}
 </script>
 
 <div class="trade-section">
 	<div class="trade-info-section">
-		<TradeInfo {baseTokenInfo} {price} {maxLeverage} {collateral} {position} on:click={onShowTokenList} />
+		<TradeInfo
+			{baseTokenInfo}
+			{price}
+			{maxLeverage}
+			{collateral}
+			{position}
+			on:click={onShowTokenList}
+		/>
 	</div>
 	<div class="trade-container">
 		<div class="trade">
-			<TradeInputs bind:size bind:side {position} pnl={position?.pnl.toNumber()}/>
+			<TradeInputs bind:size bind:side {position} pnl={position?.pnl.toNumber()} />
 		</div>
 	</div>
 </div>

@@ -71,17 +71,13 @@
 	else if (baseDepositValue > 0 && quoteDepositValue > 0)
 		depositButtonMessage = { message: '', disabled: false };
 
-	$: permitted_withdraw = $userStore.statement
-		? getNumberFromBigInt($userStore.statement.permitted_withdraw(), 9)
-		: 0;
-
 	$: if (baseWithdrawValue == 0 || quoteWithdrawValue == 0)
 		withdrawButtonMessage = { message: 'Withdraw', disabled: true };
 	else if (baseWithdrawValue > row.max_withdraw_base || quoteWithdrawValue > row.max_withdraw_quote)
 		withdrawButtonMessage = { message: 'Max withdraw exceeded', disabled: true };
 	else if (
 		(row.max_withdraw_base == baseWithdrawValue || row.max_withdraw_quote == quoteWithdrawValue) &&
-		row.max_withdraw_value > permitted_withdraw
+		row.max_withdraw_value > row.permitted_withdraw
 	)
 		withdrawButtonMessage = { message: 'Max value exceeded', disabled: true };
 	else if (baseWithdrawValue > 0 && quoteWithdrawValue > 0)
@@ -223,7 +219,7 @@
 				<p>Withdraw limit {row.tokenBase.symbol}: {row.max_withdraw_base}</p>
 				<p>Withdraw limit {row.tokenQuote.symbol}: {row.max_withdraw_quote}</p>
 				<p>Withdraw limit value: {row.max_withdraw_value.toFixed(2)}$</p>
-				<p>Healthy withdraw value: {permitted_withdraw.toFixed(2)}$</p>
+				<p>Healthy withdraw value: {row.permitted_withdraw.toFixed(2)}$</p>
 			</div>
 			<div class="strategy-row-details__info__col">
 				<span class="strategy-row-details__switch" />

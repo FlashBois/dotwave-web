@@ -47,6 +47,7 @@ export interface IStrategyTable {
 	max_withdraw_base: number;
 	max_withdraw_quote: number;
 	max_withdraw_value: number;
+	permitted_withdraw: number;
 	position_value: number;
 	withDetails: boolean;
 }
@@ -58,7 +59,7 @@ export const strategyStore = writable<IStrategyStore>({
 
 export async function loadStrategies(): Promise<void> {
 	const { vaultsSupport, vaultsAccounts } = get(protocolStateStore);
-	const { statementBuffer } = get(userStore);
+	const { statementBuffer, statement } = get(userStore);
 	const { strategyTable } = get(strategyStore);
 
 	const extractStrategy: IStrategyTable[] = [];
@@ -191,6 +192,7 @@ export async function loadStrategies(): Promise<void> {
 						max_withdraw_base,
 						max_withdraw_quote,
 						max_withdraw_value,
+						permitted_withdraw: statement ? getNumberFromBigInt(statement.permitted_withdraw(strategyInfo.collateral_ratio), 9) : 0,
 						position_value,
 						withDetails: wasWithDetails
 					});

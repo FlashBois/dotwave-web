@@ -551,10 +551,11 @@ export class StatementAccount {
         return BigInt.asUintN(64, ret);
     }
     /**
+    * @param {number} collateral_ratio
     * @returns {bigint}
     */
-    permitted_withdraw() {
-        const ret = wasm.statementaccount_permitted_withdraw(this.ptr);
+    permitted_withdraw(collateral_ratio) {
+        const ret = wasm.statementaccount_permitted_withdraw(this.ptr, collateral_ratio);
         return BigInt.asUintN(64, ret);
     }
 }
@@ -696,6 +697,19 @@ export class StrategyInfo {
     */
     set utilization_quote(arg0) {
         wasm.__wbg_set_lppositioninfo_max_withdraw_quote(this.ptr, arg0);
+    }
+    /**
+    * @returns {number}
+    */
+    get collateral_ratio() {
+        const ret = wasm.__wbg_get_strategyinfo_collateral_ratio(this.ptr);
+        return ret >>> 0;
+    }
+    /**
+    * @param {number} arg0
+    */
+    set collateral_ratio(arg0) {
+        wasm.__wbg_set_strategyinfo_collateral_ratio(this.ptr, arg0);
     }
 }
 /**

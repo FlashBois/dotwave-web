@@ -18,6 +18,7 @@
 	import AnchorConnectionProvider from '$components/AnchorConnectionProvider/AnchorConnectionProvider.svelte';
 	import Notifications from '$components/Notification/Notifications.svelte';
 	import Notification from '$components/Notification/CustomNotification.svelte';
+	import ImageLoader from '$components/Image/ImageLoader.svelte';
 
 	const localStorageKey = 'walletAdapter';
 	const network = clusterApiUrl('devnet');
@@ -42,7 +43,7 @@
 		<header class="header">
 			<nav class="nav">
 				<div class="logo-box">
-					<a href="/swap/SOL_USDC" class="logo-box__link"><img src={Logo} alt="protocol-logo" class="logo-box__logo" /></a>
+					<a href="/swap/SOL_USDC" class="logo-box__link"><ImageLoader src={Logo} alt="protocol-logo" class="logo-box__logo" /></a>
 					<!-- <h1 style="color: white;font-size: 40px;">LOGO</h1> -->
 				</div>
 

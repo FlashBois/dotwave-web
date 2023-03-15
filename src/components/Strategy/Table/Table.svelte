@@ -42,7 +42,7 @@
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'deposit'
+			nameExt: 'earned_quote_quantity'
 		},
 		{
 			name: 'Daily APY',
@@ -56,14 +56,14 @@
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'dailyAPY'
+			nameExt: 'APY'
 		},
 		{
 			name: 'Provided',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'provided'
+			nameExt: 'providedQuote'
 		},
 		{
 			name: 'Utilization token',
@@ -211,11 +211,11 @@
 				<div class="strategy-table__row-item--cell">{row.APY}%</div>
 				<div class="strategy-table__row-item--cell">
 					<span
-						><p>{row.provided[0]}</p>
+						><p>{row.providedBase}</p>
 						<img src={row.tokenBase.logoURI} alt="logo" /></span
 					>
 					<span
-						><p>{row.provided[1]}</p>
+						><p>{row.providedQuote}</p>
 						<img src={row.tokenQuote.logoURI} alt="logo" /></span
 					>
 				</div>

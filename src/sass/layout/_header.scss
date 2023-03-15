@@ -1,6 +1,5 @@
 .header {
     font-size: 1.4rem;
-    background-color: rgba(rgba(0, 0, 0), 0.3);
 
     grid-column: full-start / full-end;
     grid-row: 1;
@@ -18,9 +17,10 @@
 
         .logo-box {
             padding: 0 4rem;
+            width: 150px;
             img {
-                width: 45px;
-                height: 45px;
+                width: 55px;
+                height: 55px;
             }
         }
 

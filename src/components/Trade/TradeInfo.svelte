@@ -8,14 +8,14 @@
 	export let maxLeverage: Decimal | undefined;
 	export let collateral: Decimal | undefined;
 	export let position: Position | undefined;
+	export let openFee: Decimal | undefined;
 </script>
 
 <div class="trade-info">
 	<div class="trade-info__stats">
-			<p>Price: <span>{price?.toPrecision(6) ?? '-'}</span></p>
+			<p>Price: <span>{price?.toPrecision(6) ?? '-'} $</span></p>
 			<p>Max Leverage: <span>{maxLeverage?.toPrecision(2) ?? '-'}</span></p>
-			<p>Open fee: <span>{position?.openFee.toPrecision(2) ?? '- '}%</span></p>
-			<p>Pnl: <span>{position?.pnl.toPrecision(6) ?? '- '}$</span></p>
+			<p>Open fee: <span>{openFee ?? '-'} %</span></p>
 	</div>
 
 	<button on:click class="trade-info__select">
@@ -36,7 +36,7 @@
 	</button>
 
 	<div class="trade-info__stats">
-			<p>Collateral: <span>{collateral?.toPrecision(6) ?? '-'}$</span></p>
+			<p>Collateral: <span>{collateral?.toPrecision(6) ?? '-'} $</span></p>
 			<p>Open price: <span>{position?.openPrice.toPrecision(6) ?? '-'}</span></p>
 			{#if position != undefined}
 				<p>Open position: <span>{position.size} {position.side}</span></p>

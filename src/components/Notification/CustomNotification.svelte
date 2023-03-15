@@ -127,9 +127,4 @@
 			}
 		}
 	}
-	.notification-content p {
-		font-size: 14px;
-		color: #a1a1a1;
-		margin: 2px 0 0;
-	}
 </style>

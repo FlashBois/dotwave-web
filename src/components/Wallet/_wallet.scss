@@ -18,9 +18,10 @@
 
 .wallet-adapter-button-trigger {
 	background: linear-gradient(135deg, rgba(1, 157, 154, 0.5), rgba(176, 30, 157, 0.5));
+	overflow: hidden;
 	backdrop-filter: blur(15px);
 	-webkit-backdrop-filter: blur(15px);
-	border-radius: 20px;
+	border-radius: 50px;
 	border: 1px solid rgba(255, 255, 255, 0.18);
 	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 

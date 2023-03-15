@@ -22,13 +22,14 @@
 	import { useChangePosition } from '$src/tools/instructions/useChangePosition';
 	import { anchorStore } from '$src/stores/anchorStore';
 	import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import {
 		createNotification,
 		updateNotification
 	} from '$components/Notification/notificationsStore';
 	import { web3Store } from '$src/stores/web3Store';
 	import { loadStrategies } from '$src/stores/strategyStore';
+	import { derived } from 'svelte/store';
 
 	const dispatch = createEventDispatcher();
 
@@ -40,6 +41,33 @@
 	$: price = support ? $pricesStore?.get(support.baseOracle.toBase58()) : undefined;
 	$: support ? pricesStore.fetch([support.baseOracle]) : undefined;
 	$: baseTokenInfo = support ? support.baseTokenInfo : undefined;
+
+	$: pnl = derived<[typeof pricesStore], number>([pricesStore], ([$pricesStore], set) => {
+		if (support) {
+			const priceOrcale = $pricesStore?.get(support.baseOracle.toBase58());
+
+			if (vaults && priceOrcale) {
+				vaults.update_oracle(
+					support.id,
+					BigInt(priceOrcale.mul(1e9).floor().toString()),
+					BigInt(0),
+					getCurrentUnixTime()
+				);
+
+				if (support && $userStore.statementBuffer) {
+					const positionInfo = vaults.get_trading_position_info(
+						support.id,
+						$userStore.statementBuffer,
+						getCurrentUnixTime()
+					);
+
+					if(positionInfo)
+						set(getDecimalFromValue(positionInfo.pnl_value).toNumber());
+				}
+			}
+		} else set(0)
+		
+	});
 
 	$: positionInfo =
 		$userStore.statementBuffer && support
@@ -71,6 +99,8 @@
 					)
 			  } as Position)
 			: undefined;
+
+	$: openFee = vaults && support ? getDecimalFromFraction(vaults.trading_open_fee(support.id)) : undefined
 
 	$: {
 		console.log('positionInfo', positionInfo);
@@ -136,6 +166,48 @@
 				await loadProtocolState();
 				await loadUserStoreAccounts();
 				await loadStrategies();
+				size = new Decimal(0)
+			}
+		} else console.log("couldn't trade");
+	}
+
+	async function onSettle() {
+		if (position && support) {
+			const signature = await useChangePosition(
+				$anchorStore.connection,
+				new Decimal(0),
+				'long',
+				support,
+				position
+			);
+
+			if (signature != 'signing error') {
+				const notificationId = createNotification({
+					text: 'Trade',
+					type: 'loading',
+					signature
+				});
+				const tx = await connection.confirmTransaction(signature, 'confirmed');
+
+				if (tx.value.err)
+					updateNotification(notificationId, {
+						text: 'Trade',
+						type: 'failed',
+						removeAfter: 3000,
+						signature
+					});
+				else
+					updateNotification(notificationId, {
+						text: 'Trade',
+						type: 'success',
+						removeAfter: 3000,
+						signature
+					});
+
+				await loadProtocolState();
+				await loadUserStoreAccounts();
+				await loadStrategies();
+				size = new Decimal(0)
 			}
 		} else console.log("couldn't trade");
 	}
@@ -153,12 +225,13 @@
 			{maxLeverage}
 			{collateral}
 			{position}
+			{openFee}
 			on:click={onShowTokenList}
 		/>
 	</div>
 	<div class="trade-container">
 		<div class="trade">
-			<TradeInputs bind:size bind:side {position} pnl={position?.pnl.toNumber()} />
+			<TradeInputs bind:size bind:side {position} pnlOrcale={$pnl} on:onSettle={onSettle}/>
 		</div>
 	</div>
 </div>

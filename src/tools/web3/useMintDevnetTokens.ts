@@ -60,7 +60,7 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 		.forEach((instruction) => tx.add(instruction));
 
 	accountAddresses.forEach((address, i) => {
-		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e13));
+		tx.add(createMintToInstruction(tokens[i], address, minter.publicKey, 1e9));
 	});
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);
@@ -69,13 +69,14 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 	if (signature != 'signing error') {
 		const notificationId = createNotification({
 			text: 'Faucet',
-			type: 'loading'
+			type: 'loading',
+			signature
 		});
 		const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 		if (tx.value.err)
-			updateNotification(notificationId, { text: 'Faucet', type: 'failed', removeAfter: 3000 });
-		else updateNotification(notificationId, { text: 'Faucet', type: 'success', removeAfter: 3000 });
+			updateNotification(notificationId, { text: 'Faucet', type: 'failed', removeAfter: 3000, signature });
+		else updateNotification(notificationId, { text: 'Faucet', type: 'success', removeAfter: 3000, signature });
 
 		await loadProtocolState();
 		await loadUserStoreAccounts();

@@ -1,15 +1,20 @@
 <script lang="ts">
 	import DecimalInput from '$components/Inputs/DecimalInput/DecimalInput.svelte';
 	import Decimal from 'decimal.js';
+	import { createEventDispatcher } from 'svelte';
 	import type { Position, Side } from './types';
 
-	export let pnl: number = 0;
+	const dispatch = createEventDispatcher()
 
 	let long: number | undefined = undefined;
 	let short: number | undefined = undefined;
+
+	export let pnlOrcale: number = 0;
 	export let side: Side | undefined;
 	export let size: Decimal | undefined;
 	export let position: Position | undefined;
+
+	$: pnl = position ? pnlOrcale : 0
 
 	$: if (side == 'long') {
 		size = long ? new Decimal(long) : undefined;
@@ -36,22 +41,14 @@
 		side = undefined;
 		long = undefined;
 		short = undefined;
+
+		dispatch('onSettle')
 	}
 
 	$: displaySettle = false;
 </script>
 
 <div class="inputs">
-	<!-- <div class="input-box">
-		<span> Short </span>
-
-		<DecimalInput placeholder="0" bind:value={short} />
-	</div> -->
-
-	<!-- <div class="input-box">
-		<span> Long </span>
-		<DecimalInput bind:value={long} />
-	</div> -->
 	<div class="strategy-row-details__input-container .pnl-box">
 		<span>LONG</span>
 		<DecimalInput
@@ -109,17 +106,6 @@
 			padding: 0 2rem;
 			transition: all 0.7s ease-in-out;
 			margin: 1rem 0;
-		}
-
-		.pnl {
-			border: 1px solid var(--color-primary-green);
-			border-radius: 10px;
-			backdrop-filter: blur(50px);
-
-			padding: 1rem;
-			font-size: 1.7rem;
-			color: var(--color-primary-white);
-			border: 1px solid var(--color-primary-green);
 		}
 
 		.profit {

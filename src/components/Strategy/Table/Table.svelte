@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { ISortable, useAdvancedSorting } from '$src/tools/useAdvancedSorting';
 	import { derived } from 'svelte/store';
-	import { cloneDeep } from 'lodash';
-	import { tweened } from 'svelte/motion';
+	import clone from 'rfdc'
 
 	import { loadStrategies, strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
 	import { walletStore } from '$src/stores/walletStore';
@@ -85,12 +84,14 @@
 		[strategyStore],
 		([$strategyStore], set) => {
 			const { sort, strategyTable } = $strategyStore;
-			const strategyTableCopy = cloneDeep(strategyTable);
-			let result: IStrategyTable[] = [];
-			if (sort) result = useAdvancedSorting(strategyTableCopy, sort.property, sort.type);
-			else result = strategyTableCopy;
+			if(strategyTable){
+				const strategyTableCopy = clone({proto: true})(strategyTable);
+				let result: IStrategyTable[] = [];
+				if (sort) result = useAdvancedSorting(strategyTableCopy, sort.property, sort.type);
+				else result = strategyTableCopy;
 
-			set(result);
+				set(result);
+			}
 		}
 	);
 

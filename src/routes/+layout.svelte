@@ -44,7 +44,6 @@
 			<nav class="nav">
 				<div class="logo-box">
 					<a href="/swap/SOL_USDC" class="logo-box__link"><ImageLoader src={Logo} alt="protocol-logo" class="logo-box__logo" /></a>
-					<!-- <h1 style="color: white;font-size: 40px;">LOGO</h1> -->
 				</div>
 
 				<ul class="nav__list">

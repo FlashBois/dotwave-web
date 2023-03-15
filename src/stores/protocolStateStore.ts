@@ -4,9 +4,9 @@ import * as anchor from '@project-serum/anchor';
 import { get } from 'svelte/store';
 import { StateAccount, VaultsAccount } from '$src/pkg';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
-import { delay } from 'lodash';
 import { userStore } from './userStore';
 import { web3Store } from './web3Store';
+import { delay } from 'lodash';
 
 const STATE_SEED = 'state';
 export const PROGRAM_ID = new PublicKey('HBDdU5BAb4RnFXZMoqqF5QSdnUoFuji5gWb6PBQEL3gA');

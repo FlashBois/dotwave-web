@@ -48,7 +48,7 @@
     
             &:hover,
             &:active {
-                transform: rotate(5deg) scale(1.3);
+                color: var(--color-primary-green);
             }
         }
     }

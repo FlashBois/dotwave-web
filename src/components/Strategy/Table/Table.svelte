@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { ISortable, useAdvancedSorting } from '$src/tools/useAdvancedSorting';
 	import { derived } from 'svelte/store';
-	import { cloneDeep } from 'lodash';
-	import { tweened } from 'svelte/motion';
+	import clone from 'rfdc'
 
 	import { loadStrategies, strategyStore, type IStrategyTable } from '$src/stores/strategyStore';
 	import { walletStore } from '$src/stores/walletStore';
@@ -42,7 +41,7 @@
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: true,
-			nameExt: 'deposit'
+			nameExt: 'earned_quote_quantity'
 		},
 		{
 			name: 'Daily APY',
@@ -56,14 +55,14 @@
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'dailyAPY'
+			nameExt: 'APY'
 		},
 		{
 			name: 'Provided',
 			sortingType: ISortable.NONE,
 			isSorted: false,
 			needWallet: false,
-			nameExt: 'provided'
+			nameExt: 'providedQuote'
 		},
 		{
 			name: 'Utilization token',
@@ -85,12 +84,14 @@
 		[strategyStore],
 		([$strategyStore], set) => {
 			const { sort, strategyTable } = $strategyStore;
-			const strategyTableCopy = cloneDeep(strategyTable);
-			let result: IStrategyTable[] = [];
-			if (sort) result = useAdvancedSorting(strategyTableCopy, sort.property, sort.type);
-			else result = strategyTableCopy;
+			if(strategyTable){
+				const strategyTableCopy = clone({proto: true})(strategyTable);
+				let result: IStrategyTable[] = [];
+				if (sort) result = useAdvancedSorting(strategyTableCopy, sort.property, sort.type);
+				else result = strategyTableCopy;
 
-			set(result);
+				set(result);
+			}
 		}
 	);
 
@@ -211,11 +212,11 @@
 				<div class="strategy-table__row-item--cell">{row.APY}%</div>
 				<div class="strategy-table__row-item--cell">
 					<span
-						><p>{row.provided[0]}</p>
+						><p>{row.providedBase}</p>
 						<img src={row.tokenBase.logoURI} alt="logo" /></span
 					>
 					<span
-						><p>{row.provided[1]}</p>
+						><p>{row.providedQuote}</p>
 						<img src={row.tokenQuote.logoURI} alt="logo" /></span
 					>
 				</div>

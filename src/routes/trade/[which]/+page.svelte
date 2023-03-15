@@ -12,8 +12,6 @@
 			$protocolStateStore.vaultsAccounts?.has_trading(s.id)
 	);
 
-	$: if (!selected) console.log('!selected', $page.params?.which);
-
 	let visibleTokenList = false;
 	function onCloseTokenList() {
 		visibleTokenList = false;

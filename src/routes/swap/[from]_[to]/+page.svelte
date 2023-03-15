@@ -10,18 +10,21 @@
 
 	$: ({ params } = $page);
 
-	$: swapRoute = derived<[typeof page], {fromToken: ITokenInfo; toToken: ITokenInfo;}>([page], ([$page], set) => {
-		if ($page.params) {
-			const data = getTokenList();
+	$: swapRoute = derived<[typeof page], { fromToken: ITokenInfo; toToken: ITokenInfo }>(
+		[page],
+		([$page], set) => {
+			if ($page.params) {
+				const data = getTokenList();
 
-			const fromToken = data.find((e) => e.symbol == params.from);
-			const toToken = data.find((e) => e.symbol == params.to);
+				const fromToken = data.find((e) => e.symbol == params.from);
+				const toToken = data.find((e) => e.symbol == params.to);
 
-			if (fromToken && toToken) {
-				set({fromToken, toToken});
-			} else goto('SOL_USDC');
+				if (fromToken && toToken) {
+					set({ fromToken, toToken });
+				} else goto('SOL_USDC');
+			}
 		}
-	});
+	);
 	$: ({ fromToken, toToken } = $swapRoute);
 
 	function onCloseTokenList() {
@@ -45,14 +48,16 @@
 
 <div class="swap-page">
 	<div class="exchange-section">
-		<Exchange {fromToken} {toToken}/>
+		<Exchange {fromToken} {toToken} />
 	</div>
 
-	<TokenList
-		on:onTokenClick={(e) => onTokenClick(e.detail)}
-		on:onClose={() => onCloseTokenList()}
-		visible={$swapStore.tokenList.visible}
-		vaultsSupport={$protocolStateStore.vaultsSupport}
-		withQuote={true}
-	/>
+	{#if $swapStore}
+		<TokenList
+			on:onTokenClick={(e) => onTokenClick(e.detail)}
+			on:onClose={() => onCloseTokenList()}
+			visible={$swapStore.tokenList.visible}
+			vaultsSupport={$protocolStateStore.vaultsSupport}
+			withQuote={true}
+		/>
+	{/if}
 </div>

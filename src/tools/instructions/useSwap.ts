@@ -162,6 +162,5 @@ export async function useSwap(
 	}
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx);
-	console.log('Swapped', tx, signature);
 	return signature
 }

@@ -22,8 +22,6 @@
     onMount(async () => {
 	    const cos = (await axios.get('https://web-api.pyth.network/history?symbol=Crypto.BTC/USD&range=1D&cluster=mainnet-beta')).data as IPythHistory[]
 
-      console.log(cos)
-
       let ctx = canvasElement.getContext('2d') as CanvasRenderingContext2D;
   
       let data = cos.map(e => {

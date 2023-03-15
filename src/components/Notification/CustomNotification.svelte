@@ -95,7 +95,7 @@
 		color: #ffffff9d;
 		border-radius: 6px;
 		backdrop-filter: blur(200px);
-		-webkit-backdrop-filter: blur(50px);
+		-webkit-backdrop-filter: blur(200px);
 		border: 1px solid rgba(34, 31, 31, 0.18);
 		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 	}
@@ -126,10 +126,5 @@
 				margin-left: 0.5rem;
 			}
 		}
-	}
-	.notification-content p {
-		font-size: 14px;
-		color: #a1a1a1;
-		margin: 2px 0 0;
 	}
 </style>

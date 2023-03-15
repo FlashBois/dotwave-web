@@ -39,7 +39,8 @@ export interface IStrategyTable {
 	deposit: [number, number];
 	dailyAPY: number;
 	APY: number;
-	provided: [number, number];
+	providedBase: number,
+	providedQuote: number,
 	utilizationToken: number;
 	utilizationStable: number;
 	earned_base_quantity: number;
@@ -176,7 +177,8 @@ export async function loadStrategies(): Promise<void> {
 						deposit: [depositToken, depositStable],
 						dailyAPY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60), 4),
 						APY: getNumberFromBigInt(vaultsAccounts.lending_apy(vault.id, 24 * 60 * 60 * 365), 4),
-						provided: [providedToken, providedStable],
+						providedBase: providedToken,
+						providedQuote: providedStable,
 						utilizationToken: getDecimalFromBigint(strategyInfo.utilization_base)
 							.div(10 ** 6)
 							.mul(100)

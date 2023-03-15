@@ -89,26 +89,3 @@ export function clearUserStore() {
 		};
 	});
 }
-
-		// connection.onAccountChange(address, async () => {
-		// 	console.log('User - update')
-		// 	const { accounts } = await getWalletTokenAccounts({
-		// 		connection,
-		// 		owner: address
-		// 	});
-
-		// 	const statementAccountInfo = (await connection.getAccountInfo(statementAddress))?.data
-
-		// 	if(statementAccountInfo){
-		// 		statement = StatementAccount.load(statementAccountInfo)
-		// 		statementBuffer = statementAccountInfo
-		// 		statement.refresh(vaultsAccounts.buffer())
-		// 	}
-
-		// 	userStore.update((store) => {
-		// 		return {
-		// 			...store,
-		// 			accounts
-		// 		};
-		// 	});
-		// }, 'confirmed')

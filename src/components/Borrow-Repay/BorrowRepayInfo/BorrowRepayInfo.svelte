@@ -33,7 +33,7 @@
 		</button>
 	</div>
 	<div class="borrow-repay-info__stats">
-		<p>{baseTokenInfo.symbol} price: <span>{price?.toFixed(2) ?? '-'}</span></p>
+		<p>{baseTokenInfo.symbol} price: <span>{price?.toPrecision(4) ?? '-'}</span></p>
 		<p>Fee: <span>{borrowFee?.toNumber() ?? '-'} %</span></p>
 		<p>User max borrow: <span>{maxBorrowAmount?.toNumber() ?? '-'}</span></p>
 		<p>User borrowed: <span>{borrowedQuantity?.toNumber() ?? '-'}</span></p>

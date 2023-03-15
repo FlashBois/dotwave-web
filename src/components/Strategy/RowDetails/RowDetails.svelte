@@ -102,9 +102,19 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Deposit', type: 'failed', removeAfter: 3000, signature });
+				updateNotification(notificationId, {
+					text: 'Deposit',
+					type: 'failed',
+					removeAfter: 3000,
+					signature
+				});
 			else
-				updateNotification(notificationId, { text: 'Deposit', type: 'success', removeAfter: 3000, signature });
+				updateNotification(notificationId, {
+					text: 'Deposit',
+					type: 'success',
+					removeAfter: 3000,
+					signature
+				});
 
 			await loadProtocolState();
 			await loadUserStoreAccounts();
@@ -130,7 +140,12 @@
 			const tx = await connection.confirmTransaction(signature, 'confirmed');
 
 			if (tx.value.err)
-				updateNotification(notificationId, { text: 'Withdraw', type: 'failed', removeAfter: 3000, signature });
+				updateNotification(notificationId, {
+					text: 'Withdraw',
+					type: 'failed',
+					removeAfter: 3000,
+					signature
+				});
 			else
 				updateNotification(notificationId, {
 					text: 'Withdraw',
@@ -147,59 +162,71 @@
 	}
 
 	function onBaseDepositChange() {
-		quoteDepositValue =
-			Number(
-				$protocolStateStore.vaultsAccounts?.deposit(
-					row.vaultId,
-					row.strategyId,
-					BigInt(baseDepositValue * 10 ** row.tokenBase.decimals),
-					true,
-					Math.floor(Date.now() / 1000)
-				)
-			) /
-			10 ** row.tokenQuote.decimals;
+		if (baseDepositValue != 0) {
+			quoteDepositValue =
+				Number(
+					$protocolStateStore.vaultsAccounts?.deposit(
+						row.vaultId,
+						row.strategyId,
+						BigInt(baseDepositValue * 10 ** row.tokenBase.decimals),
+						true,
+						Math.floor(Date.now() / 1000)
+					)
+				) /
+				10 ** row.tokenQuote.decimals;
+		} else quoteDepositValue = 0;
 	}
 
 	function onQuoteDepositChange() {
-		baseDepositValue =
-			Number(
-				$protocolStateStore.vaultsAccounts?.deposit(
-					row.vaultId,
-					row.strategyId,
-					BigInt(quoteDepositValue * 10 ** row.tokenQuote.decimals),
-					false,
-					Math.floor(Date.now() / 1000)
-				)
-			) /
-			10 ** row.tokenBase.decimals;
+		if (quoteDepositValue != 0) {
+			baseDepositValue =
+				Number(
+					$protocolStateStore.vaultsAccounts?.deposit(
+						row.vaultId,
+						row.strategyId,
+						BigInt(quoteDepositValue * 10 ** row.tokenQuote.decimals),
+						false,
+						Math.floor(Date.now() / 1000)
+					)
+				) /
+				10 ** row.tokenBase.decimals;
+		} else baseDepositValue = 0;
 	}
 
 	function onBaseWithdrawChange() {
-		quoteWithdrawValue =
-			Number(
-				$protocolStateStore.vaultsAccounts?.withdraw(
-					row.vaultId,
-					row.strategyId,
-					BigInt(baseWithdrawValue * 10 ** row.tokenBase.decimals),
-					true,
-					$userStore.statementBuffer!
-				).quote
-			) /
-			10 ** row.tokenQuote.decimals;
+		try {
+			if (baseWithdrawValue != 0) {
+				quoteWithdrawValue =
+					Number(
+						$protocolStateStore.vaultsAccounts?.withdraw(
+							row.vaultId,
+							row.strategyId,
+							BigInt(baseWithdrawValue * 10 ** row.tokenBase.decimals),
+							true,
+							$userStore.statementBuffer!
+						).quote
+					) /
+					10 ** row.tokenQuote.decimals;
+			} else quoteWithdrawValue = 0;
+		} catch {}
 	}
 
 	function onQuoteWithdrawChange() {
-		baseWithdrawValue =
-			Number(
-				$protocolStateStore.vaultsAccounts?.withdraw(
-					row.vaultId,
-					row.strategyId,
-					BigInt(quoteWithdrawValue * 10 ** row.tokenQuote.decimals),
-					false,
-					$userStore.statementBuffer!
-				).base
-			) /
-			10 ** row.tokenBase.decimals;
+		try {
+			if (quoteWithdrawValue != 0) {
+				baseWithdrawValue =
+					Number(
+						$protocolStateStore.vaultsAccounts?.withdraw(
+							row.vaultId,
+							row.strategyId,
+							BigInt(quoteWithdrawValue * 10 ** row.tokenQuote.decimals),
+							false,
+							$userStore.statementBuffer!
+						).base
+					) /
+					10 ** row.tokenBase.decimals;
+			} else baseWithdrawValue = 0;
+		} catch {}
 	}
 
 	function clearInputs() {

@@ -36,7 +36,7 @@
 	</button>
 
 	<div class="trade-info__stats">
-			<p>Collateral: <span>{collateral?.toPrecision(6) ?? '-'} $</span></p>
+			<p>Collateral: <span>{collateral?.toPrecision(6) ?? '-'}</span></p>
 			<p>Open price: <span>{position?.openPrice.toPrecision(6) ?? '-'}</span></p>
 			{#if position != undefined}
 				<p>Open position: <span>{position.size} {position.side}</span></p>

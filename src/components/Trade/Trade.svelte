@@ -102,14 +102,6 @@
 
 	$: openFee = vaults && support ? getDecimalFromFraction(vaults.trading_open_fee(support.id)) : undefined
 
-	$: {
-		console.log('positionInfo', positionInfo);
-		console.log('statement', $userStore.statement);
-		console.log('support', support);
-		console.log('position', position);
-		console.log('should', positionInfo && support && collateral);
-	}
-
 	let side: Side | undefined = undefined;
 	let size: Decimal | undefined = undefined;
 	let message = '';

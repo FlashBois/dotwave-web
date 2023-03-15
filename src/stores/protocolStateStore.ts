@@ -134,8 +134,6 @@ export async function onChangeProtocolState(): Promise<void> {
 		const id1 = connection.onAccountChange(
 			vaultsAddress,
 			async (info) => {
-				console.log('Vaults', info.data);
-
 				protocolStateStore.update((store) => {
 					if (store.vaultsAccounts) store.vaultsAccounts.reload(info.data);
 

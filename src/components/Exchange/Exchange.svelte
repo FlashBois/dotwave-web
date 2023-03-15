@@ -101,7 +101,6 @@
 					}
 			}
 
-			console.log(error.message);
 			set({
 				in: $fromValue,
 				out: 0,

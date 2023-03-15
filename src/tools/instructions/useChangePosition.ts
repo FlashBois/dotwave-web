@@ -42,8 +42,6 @@ export async function useChangePosition(
 		})
 	);
 
-	console.log(user.statementAddress, program.programId.toBase58());
-
 	const accountBase = await getAssociatedTokenAddress(support.baseTokenAddress, wallet.publicKey);
 	const accountQuote = await getAssociatedTokenAddress(support.quoteTokenAddress, wallet.publicKey);
 	if (!accountBase || !accountQuote) throw new Error("Couldn't find token account");
@@ -107,6 +105,5 @@ export async function useChangePosition(
 		);
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, undefined, true);
-	console.log('Opened position', tx, signature);
 	return signature
 }

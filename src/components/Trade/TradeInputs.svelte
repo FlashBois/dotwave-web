@@ -34,7 +34,6 @@
 		} else if (!long && !short) {
 			side = undefined;
 		}
-		console.log(long, short, side);
 	}
 
 	function pnlClick() {

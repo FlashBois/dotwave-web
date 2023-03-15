@@ -40,8 +40,6 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 		tokens.push(new PublicKey(vaults.base_token(i)));
 	}
 
-	console.log('Minting tokens', tokens);
-
 	const accountAddresses = await Promise.all(
 		tokens.map((token) => getAssociatedTokenAddress(token, walletAddress))
 	);
@@ -64,7 +62,6 @@ export async function useMintDevnetTokens(connection: Connection, wallet: Wallet
 	});
 
 	const signature = await useSignAndSendTransaction(connection, wallet, tx, [minter]);
-	console.log('Minted tokens', tx, signature);
 	
 	if (signature != 'signing error') {
 		const notificationId = createNotification({

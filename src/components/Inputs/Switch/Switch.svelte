@@ -2,7 +2,7 @@
 	let checked: boolean;
 
 	function onCheckboxChange(event: Event) {
-		console.log(event.target)
+
 	}
 </script>
 

@@ -9,7 +9,7 @@ import { web3Store } from './web3Store';
 import { delay } from 'lodash';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('HBDdU5BAb4RnFXZMoqqF5QSdnUoFuji5gWb6PBQEL3gA');
+export const PROGRAM_ID = new PublicKey('9BwQGEFjsVGHdLi4nZYpz4pJg8sVkeKFWkEQ8Kt2p4zi');
 
 export interface ITokenInfo {
 	address: string;
@@ -27,9 +27,9 @@ export interface IVaultSupport {
 	quoteTokenInfo: ITokenInfo;
 	baseOracle: PublicKey;
 	quoteOracle: PublicKey;
-	hasLend: boolean,
-	hasSwap: boolean,
-	hasTrade: boolean
+	hasLend: boolean;
+	hasSwap: boolean;
+	hasTrade: boolean;
 }
 
 export interface IProtocolStateStore {

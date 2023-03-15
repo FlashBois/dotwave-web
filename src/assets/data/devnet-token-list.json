@@ -1,6 +1,6 @@
 [
 	{
-		"address": "6v662XDZ5jXCzDDbCdDEXDfK6Eie4p62tJhB16Qd8SKP",
+		"address": "2w5eCrEfoptYf1e3fGiT8YcktMNxBMBXcqck51ShVtWy",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "Wrapped SOL",
@@ -10,7 +10,7 @@
 		"tags": ["old-registry"]
 	},
 	{
-		"address": "Apf2XeQxqzfrgiqwyqmqtYvCvvbCH3F3oy13Q4byuuwr",
+		"address": "7UmFmPXrRtHVHz7LjwEN7S2W2tVDtDDnymKpVogkC3Yk",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "USDT",
@@ -20,7 +20,7 @@
 		"tags": ["old-registry"]
 	},
 	{
-		"address": "8RVhiHaFQgW1xnoaTy5HWwm4N6aNt3ghtv9B7A7pakkF",
+		"address": "HZiDF1jVyssacdWBNNxCLbDsfn3sZu744SAb8HMM3XMd",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "USD Coin",
@@ -30,7 +30,7 @@
 		"tags": ["old-registry"]
 	},
 	{
-		"address": "GNULo2Ggms7n3LDYeJSidDGjUDczXTw7iY4gro5iH8ju",
+		"address": "4DWRoJJxSr4BmAsWt2xCVawqHrw12H1HPcfuaqFXAZty",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "Ether (Portal)",
@@ -40,7 +40,7 @@
 		"tags": ["old-registry", "wormhole"]
 	},
 	{
-		"address": "2ythvZbVqcDUenku556WWCodHwhWzZLetKyHwNHpkvM1",
+		"address": "FRURYBnaSUg4TL2cJ4f8sGGEWMVVse7DEL6M4LJUUgj5",
 		"chainId": 101,
 		"decimals": 6,
 		"name": "Marinade staked SOL (mSOL)",

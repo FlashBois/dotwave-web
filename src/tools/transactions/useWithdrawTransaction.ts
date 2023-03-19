@@ -39,7 +39,7 @@ export async function useWithdrawTransaction(
 
 		tx.add(
 			ComputeBudgetProgram.setComputeUnitLimit({
-				units: 1000000
+				units: 1400000
 			})
 		);
 

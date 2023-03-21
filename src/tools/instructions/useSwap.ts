@@ -8,7 +8,7 @@ import { createAssociatedTokenAccountInstruction, TOKEN_PROGRAM_ID } from '@sola
 import { ComputeBudgetProgram, PublicKey, Transaction, type Connection } from '@solana/web3.js';
 import Decimal from 'decimal.js';
 import { get } from 'svelte/store';
-import { findVault } from '../findVault';
+import { findVaultId } from '../findVault';
 import { useSignAndSendTransaction } from '../wallet/useSignAndSendTransaction';
 
 export async function useSwap(
@@ -27,9 +27,10 @@ export async function useSwap(
 
 	if (!vaultsAccounts) throw new Error('Vaults not loaded');
 
-	const foundFrom = findVault(vaultsSupport, new PublicKey(from.address));
-	const foundTo = findVault(vaultsSupport, new PublicKey(to.address));
-	if (!foundFrom || !foundTo) {
+	const foundFrom = findVaultId(vaultsSupport, new PublicKey(from.address));
+	const foundTo = findVaultId(vaultsSupport, new PublicKey(to.address));
+
+	if (!foundFrom && !foundTo) {
 		throw new Error('Vault not found');
 	}
 
@@ -43,18 +44,19 @@ export async function useSwap(
 		.floor()
 		.toString();
 
-	const double = foundFrom.base && foundTo.base;
+	const double = foundFrom && foundTo;
 
-	const accountFrom = gotUserStore.getTokenAccountAddress(
-		foundFrom.base
-			? vaultsSupport[foundFrom.index].baseTokenAddress
-			: vaultsSupport[foundFrom.index].quoteTokenAddress
-	);
-	const accountTo = gotUserStore.getTokenAccountAddress(
-		foundTo.base
-			? vaultsSupport[foundTo.index].baseTokenAddress
-			: vaultsSupport[foundFrom.index].quoteTokenAddress
-	);
+	const mintFrom = foundFrom
+		? vaultsSupport[foundFrom.id].baseTokenAddress
+		: vaultsSupport[foundTo!.id].quoteTokenAddress
+
+	const mintTo = foundTo
+		? vaultsSupport[foundTo.id].baseTokenAddress
+		: vaultsSupport[foundFrom!.id].quoteTokenAddress
+
+	const accountFrom = gotUserStore.getTokenAccountAddress(mintFrom);
+	const accountTo = gotUserStore.getTokenAccountAddress(mintTo);
+
 	if (!accountFrom || !accountTo) throw new Error("Couldn't find token account");
 
 	const tx = new Transaction();
@@ -71,44 +73,44 @@ export async function useSwap(
 				walletAddress,
 				accountTo,
 				walletAddress,
-				foundTo.base
-					? vaultsSupport[foundTo.index].baseTokenAddress
-					: vaultsSupport[foundFrom.index].quoteTokenAddress
+				mintTo
 			)
 		);
 	}
 
 
 	if (!double) {
+		const vault = foundFrom ? foundFrom.id : foundTo!.id
+
 		tx.add(
 			await program.methods
 				.singleSwap(
-					foundFrom.index,
+					vault,
 					new BN(parsedAmount),
 					new BN(parsedExpectedAmount),
-					foundFrom.base,
+					foundFrom ? true : false,
 					false
 				)
 				.accounts({
 					state: stateAddress,
 					vaults: vaultsAddress,
 					signer: walletAddress,
-					accountBase: foundFrom.base ? accountFrom : accountTo,
-					accountQuote: foundFrom.base ? accountTo : accountFrom,
-					reserveBase: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
-					reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
+					accountBase: foundFrom ? accountFrom : accountTo,
+					accountQuote: foundFrom ? accountTo : accountFrom,
+					reserveBase: new PublicKey(vaultsAccounts.base_reserve(vault)),
+					reserveQuote: new PublicKey(vaultsAccounts.quote_reserve(vault)),
 					tokenProgram: TOKEN_PROGRAM_ID
 				})
 				.remainingAccounts([
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundFrom.index].baseOracle
+						pubkey: vaultsSupport[vault].baseOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundFrom.index].quoteOracle
+						pubkey: vaultsSupport[vault].quoteOracle
 					}
 				])
 				.instruction()
@@ -117,8 +119,8 @@ export async function useSwap(
 		tx.add(
 			await program.methods
 				.doubleSwap(
-					foundFrom.index,
-					foundTo.index,
+					foundFrom.id,
+					foundTo.id,
 					new BN(parsedAmount),
 					new BN(parsedExpectedAmount),
 					false
@@ -129,32 +131,32 @@ export async function useSwap(
 					signer: walletAddress,
 					accountIn: accountFrom,
 					accountOut: accountTo,
-					reserveIn: new PublicKey(vaultsAccounts.base_reserve(foundFrom.index)),
-					reserveInQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.index)),
-					reserveOut: new PublicKey(vaultsAccounts.base_reserve(foundTo.index)),
-					reserveOutQuote: new PublicKey(vaultsAccounts.quote_reserve(foundTo.index)),
+					reserveIn: new PublicKey(vaultsAccounts.base_reserve(foundFrom.id)),
+					reserveInQuote: new PublicKey(vaultsAccounts.quote_reserve(foundFrom.id)),
+					reserveOut: new PublicKey(vaultsAccounts.base_reserve(foundTo.id)),
+					reserveOutQuote: new PublicKey(vaultsAccounts.quote_reserve(foundTo.id)),
 					tokenProgram: TOKEN_PROGRAM_ID
 				})
 				.remainingAccounts([
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundFrom.index].baseOracle
+						pubkey: vaultsSupport[foundFrom.id].baseOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundFrom.index].quoteOracle
+						pubkey: vaultsSupport[foundFrom.id].quoteOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundTo.index].baseOracle
+						pubkey: vaultsSupport[foundTo.id].baseOracle
 					},
 					{
 						isSigner: false,
 						isWritable: false,
-						pubkey: vaultsSupport[foundTo.index].quoteOracle
+						pubkey: vaultsSupport[foundTo.id].quoteOracle
 					}
 				])
 				.instruction()

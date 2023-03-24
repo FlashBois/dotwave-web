@@ -9,7 +9,7 @@ import { web3Store } from './web3Store';
 import { delay } from 'lodash';
 
 const STATE_SEED = 'state';
-export const PROGRAM_ID = new PublicKey('9BwQGEFjsVGHdLi4nZYpz4pJg8sVkeKFWkEQ8Kt2p4zi');
+export const PROGRAM_ID = new PublicKey('5RbdrG5jupcDJWrA9DdYVeKVSbe8RAWp15DY49ABXaxq');
 
 export interface ITokenInfo {
 	address: string;

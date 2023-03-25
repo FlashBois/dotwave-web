@@ -1,25 +1,45 @@
 <script lang="ts">
-    export let signature: string
+	export let signature: string;
 </script>
 
 <span>
-    <a href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}>Open explorer</a>
-    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="#ffffff9d" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-        <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
-      </svg>
+	<!-- svelte-ignore security-anchor-rel-noreferrer -->
+	<a href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`} target="_blank"
+		>Open explorer <svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="12"
+			height="12"
+			fill="#ffffff9d"
+			class="bi bi-box-arrow-up-right"
+			viewBox="0 0 16 16"
+		>
+			<path
+				fill-rule="evenodd"
+				d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"
+			/>
+			<path
+				fill-rule="evenodd"
+				d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"
+			/>
+		</svg></a
+	>
 </span>
 
 <style lang="scss">
-    span {
-        display: flex;
-        align-items: center;
+	span {
+		display: flex;
+		align-items: center;
 
-        a{
-            text-decoration: none;
-            color: #ffffff9d;
-            margin-right: 0.5rem;
-        }
-    }
+		a {
+			display: flex;
+			align-items: center;
 
+			text-decoration: none;
+			color: #ffffff9d;
+			
+            svg {
+                margin-left: 0.5rem;
+            }
+		}
+	}
 </style>

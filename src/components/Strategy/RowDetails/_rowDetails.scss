@@ -160,7 +160,7 @@
 
 	&__button-box {
 		width: 50%;
-		height: 20%;
+		height: 4rem;
 	}
 
 	&__switch {
@@ -171,6 +171,6 @@
 	}
 
 	&.delay-animation {
-		animation: change-opacity 1.5s ease-in-out;
+		animation: change-opacity 0.9s ease-in-out;
 	}
 }

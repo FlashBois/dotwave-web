@@ -20,7 +20,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 0 1.7rem;
+		padding: 4px 1.7rem;
 		font-size: 1.2rem;
 		color: var(--color-primary-white);
 
@@ -43,9 +43,12 @@
         align-content: center;
 
 		.input-box {
+			height: 100%;
 			border: none;
 			backdrop-filter: blur(0);
 			-webkit-backdrop-filter: blur(0);
+			display: flex;
+			align-items: center;
 
 			input {
 				grid-column: 1;

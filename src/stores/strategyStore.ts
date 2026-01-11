@@ -1,12 +1,12 @@
-import type { ISortable } from '$src/tools/useAdvancedSorting';
-import { get, writable } from 'svelte/store';
-import { protocolStateStore } from './protocolStateStore';
 import tokenListDevnet from '$src/assets/data/devnet-token-list.json';
-import type { PublicKey } from '@solana/web3.js';
-import { userStore } from './userStore';
+import { getDecimalFromBigint } from '$src/tools/decimal/getDecimalFromBigInt';
 import { getCurrentUnixTime } from '$src/tools/getCurrentUnixTime';
 import { getNumberFromBigInt } from '$src/tools/getNumberFromBigInt';
-import { getDecimalFromBigint } from '$src/tools/decimal/getDecimalFromBigInt';
+import type { ISortable } from '$src/tools/useAdvancedSorting';
+import type { PublicKey } from '@solana/web3.js';
+import { get, writable } from 'svelte/store';
+import { protocolStateStore } from './protocolStateStore';
+import { userStore } from './userStore';
 
 export interface IStrategyStore {
 	sort: { property: keyof IStrategyTable; type: ISortable } | null;
@@ -67,7 +67,7 @@ export async function loadStrategies(): Promise<void> {
 	let id = 0;
 
 	if (vaultsAccounts) {
-		for (const vault of vaultsSupport) {
+		for (const vault of vaultsSupport.slice(0, 3)) {
 			const countStrategy = vaultsAccounts.count_strategies(vault.id);
 
 			for (let strategyId = 0; strategyId < countStrategy; strategyId++) {

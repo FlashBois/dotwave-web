@@ -10,7 +10,6 @@
 // COMPONENTS
 @import '../components/Wallet/wallet';
 
-@import '../components/Inputs/Input/input';
 @import '../components/Inputs/DecimalInput/decimalInput';
 @import '../components/Inputs/UnderlineInput/underlineInput';
 
@@ -42,7 +41,8 @@
 
 // LAYOUT
 @import 'layout/header';
+@import 'layout/footer';
 
 :global(*) {
-	font-family: 'DM Sans', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-family: "Arial", sans-serif;
 }

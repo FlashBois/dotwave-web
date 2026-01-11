@@ -1,6 +1,6 @@
 .input-box {
     width: 100%;
-    border: 1px solid var(--color-primary-green);
+    // border: 1px solid var(--color-primary-green);
     background-color: transparent;
     backdrop-filter: blur(50px);
 	-webkit-backdrop-filter: blur(50px);
@@ -17,6 +17,7 @@
         font-size: 1.7rem;
         caret-color: var(--color-primary-white);
         color: var(--color-primary-white);
+        font-family: 'Arial', sans-serif;
     }
 
 	&:disabled {

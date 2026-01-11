@@ -9,10 +9,9 @@
     padding: 5rem;
     border-radius: 20px;
     overflow-y: hidden;
-    margin-top: 10rem;
+    margin-top: 5rem;
     
     @include background-blur;
-    border-bottom: none;
 
     .filters-section {
         grid-row: 1;

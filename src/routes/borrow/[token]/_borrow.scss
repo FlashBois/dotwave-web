@@ -1,5 +1,5 @@
 .borrow-page {
-	height: 80vh;
+	height: 82vh;
 	width: 100%;
 
 	grid-column: center-start / center-end;
@@ -26,6 +26,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+
+			padding: 2rem 0;
 		}
 
 		.borrow-header-section {

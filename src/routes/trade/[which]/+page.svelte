@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Trade from '$components/Trade/Trade.svelte';
 	import TokenList from '$components/TokenList/TokenList.svelte';
+	import Trade from '$components/Trade/Trade.svelte';
 
-	import { protocolStateStore } from '$src/stores/protocolStateStore';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { protocolStateStore } from '$src/stores/protocolStateStore';
 
 	$: selected = $protocolStateStore.vaultsSupport.find(
 		(s) =>
@@ -23,7 +23,7 @@
 	}
 </script>
 
-<svelte:head><title>Trade</title></svelte:head>
+<svelte:head><title>Trade - {selected?.baseTokenInfo.symbol}</title></svelte:head>
 
 <div class="trade-page">
 	<div class="trade-page-container">

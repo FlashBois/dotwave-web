@@ -6,7 +6,6 @@
 	font-size: 1.3rem;
 
 	&__header {
-		@include background-blur;
 		position: relative;
 
 		border-radius: 20px;
@@ -23,8 +22,8 @@
 			height: 25%;
 			bottom: 0;
 			position: absolute;
-			border-left: 1px solid rgba(255, 255, 255, 0.18);
-			border-right: 1px solid rgba(255, 255, 255, 0.18);
+			border-left: 1px solid rgba(255, 255, 255, 0.1);
+			border-right: 1px solid rgba(255, 255, 255, 0.1);
 		}
 	}
 
@@ -51,7 +50,7 @@
 	}
 
 	&__row {
-		@include background-blur;
+		border: 1px solid rgba(255, 255, 255, 0.1);
 
 		height: 9rem;
 		box-shadow: none;

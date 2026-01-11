@@ -129,7 +129,14 @@
 
 	function displayDetails(id: number) {
 		strategyStore.update((store) => {
-			store.strategyTable[id].withDetails = !store.strategyTable[id].withDetails;
+			const wasOpen = !store.strategyTable[id].withDetails;
+
+			for(let i = 0; i < store.strategyTable.length; i++){
+				store.strategyTable[i].withDetails = false;
+			}
+
+			if(wasOpen)
+				store.strategyTable[id].withDetails = !store.strategyTable[id].withDetails;
 			return store;
 		});
 	}

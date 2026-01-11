@@ -12,7 +12,7 @@
 		width: 80px;
 		max-width: 80%;
 		height: 7px;
-		box-shadow: 0px 0px 4px #ffffffd1;
+		border: 1px solid #5b5b5b;
 		border-radius: 20px;
 		position: relative;
 		overflow: hidden;

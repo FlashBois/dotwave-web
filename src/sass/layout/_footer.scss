@@ -1,0 +1,49 @@
+footer {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    @include background-blur;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    z-index: 1000;
+
+    ul {
+        list-style: none;
+        display: flex;
+        gap: 2.5rem;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+
+            a {
+                line-height: 0;
+            }
+
+            svg {
+                width: 24px;
+                height: 24px;
+                fill: rgba(255, 255, 255, 0.6);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+                &:hover {
+                    transform: translateY(-3px) scale(1.1);
+                    cursor: pointer;
+                }
+
+                &.twitter:hover  { fill: #1DA1F2; filter: drop-shadow(0 0 8px rgba(29, 161, 242, 0.5)); }
+                &.discord:hover  { fill: #5865F2; filter: drop-shadow(0 0 8px rgba(88, 101, 242, 0.5)); }
+                &.telegram:hover { fill: #0088cc; filter: drop-shadow(0 0 8px rgba(0, 136, 204, 0.5)); }
+                &.linkedin:hover { fill: #0077B5; filter: drop-shadow(0 0 8px rgba(0, 119, 181, 0.5)); }
+            }
+        }
+    }
+}

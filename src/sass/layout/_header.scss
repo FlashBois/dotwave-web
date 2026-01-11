@@ -1,60 +1,65 @@
 .header {
-    font-size: 1.4rem;
-
     grid-column: full-start / full-end;
     grid-row: 1;
-
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    padding: 0 4rem;
+    height: 80px;
 
     .nav {
-        font-size: 1.5rem;
-        font-weight: bold;
-
         display: flex;
         align-items: center;
+        width: 100%;
+        font-size: 1.4rem;
+        font-weight: bold;
+
+        .logo-box, .wallet-wrapper {
+            flex: 1;
+            display: flex;
+        }
+
+        .wallet-wrapper {
+            justify-content: flex-end;
+            .wallet-adapter-button {
+                width: auto;
+            }
+        }
 
         .logo-box {
-            padding: 0 4rem;
-            width: 150px;
+            padding: 0;
+            
             img {
-                width: 55px;
-                height: 55px;
+                width: 40px;
+                height: 40px;
             }
         }
 
         &__list {
             list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 2;
         }
     
         &__item {
-            display: inline-block;
+            display: block; 
     
             &:not(:last-child) {
-                margin-right: 4rem;
+                margin-right: 5rem;
             }
         }
     
         &__link {
-            &:link,
-            &:visited {
+            &:link, &:visited {
                 color: white;
                 text-decoration: none;
                 text-transform: uppercase;
-                display: inline-block;
                 transition: all .2s;
             }
-    
-            &:hover,
-            &:active {
-                color: var(--color-primary-green);
+            &:hover, &:active, &--active {
+                color: var(--color-primary-green) !important;
             }
         }
     }
-
-    .wallet-wrapper {
-        padding-right: 3rem;
-    }
 }
-

@@ -17,16 +17,13 @@ html {
 }
 
 :global(body) {
-	font-weight: 300;
+	font-weight: 200;
 	line-height: 1.6;
 }
 
 body {
-  	background-image: url('$src/assets/img/back.jpg');
-
-	@media only screen and (min-width: 1800px) {
-		background-image: url('$src/assets/img/back-large.jpg');
-	}
+	background: #141414;
+	background: linear-gradient(62deg, rgba(20, 20, 20, 1) 0%, rgba(53, 23, 61, 1) 100%);
 
 	background-size: cover;
 	background-repeat: no-repeat;

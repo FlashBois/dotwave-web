@@ -4,5 +4,5 @@
 </script>
 
 <div class="input-box">
-    <input type="text" value={value} placeholder={placeholder} disabled>
+    <input type="text" value={value} class:exchange__input--readonly={true} placeholder={placeholder} disabled>
 </div>

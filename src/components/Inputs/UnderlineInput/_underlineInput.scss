@@ -1,22 +1,50 @@
 .underline-input {
+    position: relative;
     width: 100%;
-    background-color: transparent;
+    margin: 1rem 0;
 
     input {
         width: 100%;
-        padding: 1rem;
+        padding: 1.2rem 0.5rem;
         border: none;
         background-color: transparent;
         outline: none;
         font-size: 1.7rem;
-        caret-color: var(--color-primary-white);
+        font-family: inherit;
+        caret-color: var(--color-primary-green);
         color: var(--color-primary-white);
-        border-bottom: 1px solid grey;
+        
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        
+        transition: all 0.3s ease;
 
-        transition: border-bottom 0.5s ease-in-out;
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            transition: opacity 0.3s ease;
+        }
 
         &:focus {
-            border-bottom: 1px solid var(--color-primary-green);
+            color: #fff;
+            
+            &::placeholder {
+                opacity: 0.5;
+            }
         }
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-primary-green);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(-50%);
+    }
+
+    &:focus-within::after {
+        width: 100%;
     }
 }

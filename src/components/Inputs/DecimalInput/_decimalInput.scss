@@ -5,6 +5,8 @@
     backdrop-filter: blur(50px);
 	-webkit-backdrop-filter: blur(50px);
     border-radius: 10px;
+    display: flex;
+    align-items: center;
 
     input {
         width: 100%;

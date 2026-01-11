@@ -4,21 +4,21 @@
 	import { swapStore, TokenListType } from '$src/stores/swapStore';
 	import { loadUserStoreAccounts, userStore } from '$src/stores/userStore';
 	import { walletStore } from '$stores/walletStore';
-	import { derived, get, writable } from 'svelte/store';
 	import Decimal from 'decimal.js';
+	import { derived, get, writable } from 'svelte/store';
 
+	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
 	import Input from '$components/Inputs/Input/Input.svelte';
 	import ReadonlyInput from '$components/Inputs/Input/ReadonlyInput.svelte';
-	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
-	import AnimateButton from '$components/Buttons/AnimateButton/AnimateButton.svelte';
-	import { swapOutput } from '$src/tools/swapOutput';
-	import { useSwap } from '$src/tools/instructions/useSwap';
-	import { anchorStore } from '$src/stores/anchorStore';
 	import {
 		createNotification,
 		updateNotification
 	} from '$components/Notification/notificationsStore';
+	import WalletMultiButton from '$components/Wallet/WalletMultiButton.svelte';
+	import { anchorStore } from '$src/stores/anchorStore';
 	import { loadProtocolState, type ITokenInfo } from '$src/stores/protocolStateStore';
+	import { useSwap } from '$src/tools/instructions/useSwap';
+	import { swapOutput } from '$src/tools/swapOutput';
 
 	export let fromToken: ITokenInfo;
 	export let toToken: ITokenInfo;
@@ -202,12 +202,13 @@
 			</div>
 		</div>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div class="exchange__replace" on:click={replaceTokens}>
+		<div class="exchange__replace">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="currentColor"
 				class="bi bi-arrow-down-up"
 				viewBox="0 0 16 16"
+				on:click={replaceTokens}
 			>
 				<path
 					fill-rule="evenodd"

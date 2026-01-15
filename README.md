@@ -111,12 +111,4 @@ The defining feature of Dotwave is the **bidirectional data flow** between the c
 
 <br/>
 
-## 🏁 Getting Started
-
-- **Documentation:** [Link to Docs]
-- **App:** [Link to dApp]
-- **Twitter:** [Link to Twitter]
-
----
-
-_Built with passion for the Solana ecosystem._
+_Built with passion for the Solana ecosystem. ❤️_

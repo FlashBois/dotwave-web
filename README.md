@@ -18,7 +18,7 @@ Every token deposited into the Dotwave pool acts as a **"liquidity multiplier,"*
   <div style="display: flex; justify-content: center; gap: 10px;">
     <div style="width: 49%; display: inline-block;">
       <a href="./docs/screenshots/Screenshot From 2026-01-12 11-51-24.png" target="_blank">
-        <img src="./docs/screenshots/Screenshot From 2026-01-12 11-51-07.png" style="border-radius: 10px; width: 100%; cursor: zoom-in;">
+        <img src="./docs/screenshots/Screenshot From 2026-01-12 11-51-24.png" style="border-radius: 10px; width: 100%; cursor: zoom-in;">
       </a>
       <p align="center"><b>🔄 Unified Swap</b></p>
     </div>
